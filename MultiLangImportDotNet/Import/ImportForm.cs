@@ -43,7 +43,8 @@ namespace MultiLangImportDotNet.Import
             var excelReader = new TextExcel.ExcelReader();
             if (excelReader.OpenExcel(filename))
             {
-
+                // ロードデータテーブル格納
+                SetDataToTable(excelReader);
             }
             else
             {
@@ -51,8 +52,6 @@ namespace MultiLangImportDotNet.Import
                 return;
             }
 
-            // ロードデータテーブル格納
-            SetDataToTable(null);
 
             // ファイルパスを表示
             this.textBoxImportFile.Text = filename;
@@ -88,8 +87,45 @@ namespace MultiLangImportDotNet.Import
             return result;
         }
 
-        private void SetDataToTable(object data)
+        private void SetDataToTable(TextExcel.ExcelReader reader)
         {
+            // datagridviewをリセット
+            this.dataGridViewTextMod.Rows.Clear();
+
+            // テーブルの列数（言語数）を設定
+            this.dataGridViewTextMod.ColumnCount = reader.TextTableColumn;
+
+            // テーブルの列表題（言語名）を設定
+            for(int colIndex = 0; colIndex < reader.TextTableColumn; colIndex++)
+            {
+                this.dataGridViewTextMod.Columns[colIndex].HeaderText = reader.LanguageNameList[colIndex];
+            }
+            
+            for(int rowIndex = 0; rowIndex < reader.TextTableRow; rowIndex++)
+            {
+                int currentRowIndex = this.dataGridViewTextMod.Rows.Add();
+                this.dataGridViewTextMod.Rows[currentRowIndex].HeaderCell.Value = reader.TextCastNameList[rowIndex];
+
+                for(int colIndex = 0; colIndex < reader.TextTableColumn; colIndex++)
+                {
+                    var textData = reader.TextDataTable[rowIndex, colIndex];
+                    var fontName = textData.FontName;
+                    var fontSize = textData.FontSize;
+                    FontStyle fontStyle = FontStyle.Regular;
+                    if (textData.IsBold) fontStyle |= FontStyle.Bold;
+                    if (textData.IsItalic) fontStyle |= FontStyle.Italic;
+                    if (textData.IsUnderline) fontStyle |= FontStyle.Underline;
+                    if (textData.IsStrike) fontStyle |= FontStyle.Strikeout;
+
+                    Font textFont = new Font(fontName, fontSize, fontStyle);
+
+                    this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Style.Font = textFont;
+                    this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Value = textData.Text;
+
+                }
+            }
+
+
 
         }
 

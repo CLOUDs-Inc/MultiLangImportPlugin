@@ -33,6 +33,11 @@ namespace MultiLangImportDotNet.TextExcel
         public List<string> LanguageNameList { get; private set; }
 
         /// <summary>
+        /// 言語列ごとにテキストに使用不可文字が含まれているかのリスト
+        /// </summary>
+        public List<bool> LangHasTextWithUnusableCharList { get; private set; }
+
+        /// <summary>
         /// テキストキャスト名リスト
         /// </summary>
         public List<string> TextCastNameList { get; private set; }
@@ -102,6 +107,7 @@ namespace MultiLangImportDotNet.TextExcel
             bool result = false;
 
             List<string> langNameList = new List<string>();
+            bool[] unusableCharLangNameFlags = null;
             List<string> textNameList = new List<string>();
             Import.TextData[,] textDataTable = null;
 
@@ -204,6 +210,9 @@ namespace MultiLangImportDotNet.TextExcel
                                     // テキストデータの行数と列数が確定したので、格納用データテーブルをnewする
                                     textDataTable = new Import.TextData[rowEnd - rowStart, colEnd - colStart];
 
+                                    // 列数が確定：言語数が確定したので、Subcast名として使えない単語が存在する言語かどうかのフラグ配列をnewする
+                                    unusableCharLangNameFlags = new bool[colEnd - colStart];
+
                                     // "A1:" + 言語名でブランクが見つかった列 + テキストキャスト名でブランクが見つかった行
                                     string ML_TEXT_TABLE_SHEET_RANGE =
                                         ML_TEXT_TABLE_SHEET_RANGE_pre + colEndLetter + rowEnd.ToString();
@@ -217,6 +226,7 @@ namespace MultiLangImportDotNet.TextExcel
                                         {
                                             var castNameCell = usedRange[rowIndex, 1];
                                             string castname = castNameCell.Value as string;
+                                            castname = Utils.ChangeUnusableCharToUnderscore(castname);
                                             textNameList.Add(castname);
 
                                             Marshal.ReleaseComObject(castNameCell);
@@ -226,7 +236,8 @@ namespace MultiLangImportDotNet.TextExcel
                                         for (int colIndex = colStart; colIndex < colEnd; colIndex++)
                                         {
                                             var langNameCell = usedRange[rowLang, colIndex];
-                                            string langName = (string)langNameCell.Value;
+                                            string langName = langNameCell.Value as string;
+                                            langName = Utils.ChangeUnusableCharToUnderscore(langName);
                                             langNameList.Add(langName);
 
                                             Marshal.ReleaseComObject(langNameCell);
@@ -246,6 +257,13 @@ namespace MultiLangImportDotNet.TextExcel
                                                     }
 
                                                     string text = dataCell.Value as string;
+                                                    
+                                                    // テキストにキャスト名使用不可文字が含まれていたら
+                                                    if (Utils.CheckNameHitUnusableChars(text))
+                                                    {
+                                                        // その言語列はsubcast名として使えないとしてフラグを立てる
+                                                        unusableCharLangNameFlags[colIndex - colStart] = true;
+                                                    }
 
                                                     var dataCellFirstChar = dataCell.Characters[1, 1];
                                                     try
@@ -294,7 +312,8 @@ namespace MultiLangImportDotNet.TextExcel
                                         this.TextDataTable = textDataTable;
                                         this.LanguageNameList = langNameList;
                                         this.TextCastNameList = textNameList;
-                                        
+                                        this.LangHasTextWithUnusableCharList = unusableCharLangNameFlags.ToList();
+
                                         // 処理成功
                                         result = true;
                                     }
