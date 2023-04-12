@@ -12,9 +12,54 @@ namespace MultiLangImportDotNet.Import
 {
     public partial class SelectLangForm : Form
     {
-        public SelectLangForm()
+        /// <summary>
+        /// 選択された言語インデックス
+        /// </summary>
+        public int SelectedLanguageIndex { get; private set; }
+
+        /// <summary>
+        /// 扱う言語名のリスト
+        /// </summary>
+        private List<string> langNameList;
+
+        /// <summary>
+        /// デフォルト言語選択フォーム
+        /// </summary>
+        /// <param name="langNameList">取り扱い言語名リスト</param>
+        /// <param name="selectedIndex">選択済み言語インデックス</param>
+        public SelectLangForm(List<string> langNameList, int selectedIndex)
         {
             InitializeComponent();
+
+            this.langNameList = langNameList;
+            this.SelectedLanguageIndex = (selectedIndex < 0 || langNameList.Count <= selectedIndex)
+                ? -1
+                : selectedIndex;
+        }
+
+        private void SelectLangForm_Load(object sender, EventArgs e)
+        {
+            if (this.langNameList == null) return;
+
+            this.listBoxLanguages.Items.AddRange(this.langNameList.ToArray());
+
+            if(0 <= this.SelectedLanguageIndex && this.SelectedLanguageIndex < this.listBoxLanguages.Items.Count)
+            {
+                this.listBoxLanguages.SelectedIndex = this.SelectedLanguageIndex;
+            }
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            // 選択されている言語のインデクスを保持して、フォームを閉じる
+            this.SelectedLanguageIndex = this.listBoxLanguages.SelectedIndex;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

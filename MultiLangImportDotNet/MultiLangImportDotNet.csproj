@@ -62,6 +62,7 @@
       <DependentUpon>SelectLangForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Import\TextData.cs" />
+    <Compile Include="OptionData.cs" />
     <Compile Include="TextExcel\ExcelReader.cs" />
     <Compile Include="Import\ImportForm.cs">
       <SubType>Form</SubType>

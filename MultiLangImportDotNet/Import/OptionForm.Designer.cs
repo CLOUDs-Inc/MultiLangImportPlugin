@@ -33,13 +33,13 @@ namespace MultiLangImportDotNet.Import
             this.buttonCancel = new System.Windows.Forms.Button();
             this.checkBoxUseSubcastName = new System.Windows.Forms.CheckBox();
             this.panelSubcast = new System.Windows.Forms.Panel();
-            this.checkBoxUseSubcastNameSearching = new System.Windows.Forms.CheckBox();
-            this.checkBoxAddSubcastNameCreating = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseUnderscore = new System.Windows.Forms.CheckBox();
-            this.labelConjunction = new System.Windows.Forms.Label();
+            this.listBoxSubcastName = new System.Windows.Forms.ListBox();
             this.textBoxConjunction = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBoxSubcastName = new System.Windows.Forms.ListBox();
+            this.labelConjunction = new System.Windows.Forms.Label();
+            this.checkBoxUseUnderscore = new System.Windows.Forms.CheckBox();
+            this.checkBoxAddSubcastNameCreating = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseSubcastNameSearching = new System.Windows.Forms.CheckBox();
             this.panelSubcast.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +52,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonOK.TabIndex = 0;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -62,6 +63,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // checkBoxUseSubcastName
             // 
@@ -92,51 +94,18 @@ namespace MultiLangImportDotNet.Import
             this.panelSubcast.Size = new System.Drawing.Size(350, 340);
             this.panelSubcast.TabIndex = 3;
             // 
-            // checkBoxUseSubcastNameSearching
+            // listBoxSubcastName
             // 
-            this.checkBoxUseSubcastNameSearching.AutoSize = true;
-            this.checkBoxUseSubcastNameSearching.Enabled = false;
-            this.checkBoxUseSubcastNameSearching.Location = new System.Drawing.Point(14, 10);
-            this.checkBoxUseSubcastNameSearching.Name = "checkBoxUseSubcastNameSearching";
-            this.checkBoxUseSubcastNameSearching.Size = new System.Drawing.Size(248, 16);
-            this.checkBoxUseSubcastNameSearching.TabIndex = 2;
-            this.checkBoxUseSubcastNameSearching.Text = "Use subcast-name when searching for cast";
-            this.checkBoxUseSubcastNameSearching.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAddSubcastNameCreating
-            // 
-            this.checkBoxAddSubcastNameCreating.AutoSize = true;
-            this.checkBoxAddSubcastNameCreating.Checked = true;
-            this.checkBoxAddSubcastNameCreating.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAddSubcastNameCreating.Enabled = false;
-            this.checkBoxAddSubcastNameCreating.Location = new System.Drawing.Point(14, 32);
-            this.checkBoxAddSubcastNameCreating.Name = "checkBoxAddSubcastNameCreating";
-            this.checkBoxAddSubcastNameCreating.Size = new System.Drawing.Size(256, 16);
-            this.checkBoxAddSubcastNameCreating.TabIndex = 2;
-            this.checkBoxAddSubcastNameCreating.Text = "Add subcast-name when creating a new cast";
-            this.checkBoxAddSubcastNameCreating.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxUseUnderscore
-            // 
-            this.checkBoxUseUnderscore.AutoSize = true;
-            this.checkBoxUseUnderscore.Checked = true;
-            this.checkBoxUseUnderscore.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseUnderscore.Enabled = false;
-            this.checkBoxUseUnderscore.Location = new System.Drawing.Point(14, 54);
-            this.checkBoxUseUnderscore.Name = "checkBoxUseUnderscore";
-            this.checkBoxUseUnderscore.Size = new System.Drawing.Size(274, 16);
-            this.checkBoxUseUnderscore.TabIndex = 2;
-            this.checkBoxUseUnderscore.Text = "Use underscore for conjunction in subcast-name";
-            this.checkBoxUseUnderscore.UseVisualStyleBackColor = true;
-            // 
-            // labelConjunction
-            // 
-            this.labelConjunction.AutoSize = true;
-            this.labelConjunction.Location = new System.Drawing.Point(31, 79);
-            this.labelConjunction.Name = "labelConjunction";
-            this.labelConjunction.Size = new System.Drawing.Size(67, 12);
-            this.labelConjunction.TabIndex = 3;
-            this.labelConjunction.Text = "Conjunction;";
+            this.listBoxSubcastName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxSubcastName.Enabled = false;
+            this.listBoxSubcastName.FormattingEnabled = true;
+            this.listBoxSubcastName.ItemHeight = 12;
+            this.listBoxSubcastName.Location = new System.Drawing.Point(14, 131);
+            this.listBoxSubcastName.Name = "listBoxSubcastName";
+            this.listBoxSubcastName.Size = new System.Drawing.Size(319, 196);
+            this.listBoxSubcastName.TabIndex = 5;
             // 
             // textBoxConjunction
             // 
@@ -157,18 +126,51 @@ namespace MultiLangImportDotNet.Import
             this.label1.TabIndex = 3;
             this.label1.Text = "Column to be the Subcast-name (gray is not selectable)";
             // 
-            // listBoxSubcastName
+            // labelConjunction
             // 
-            this.listBoxSubcastName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxSubcastName.Enabled = false;
-            this.listBoxSubcastName.FormattingEnabled = true;
-            this.listBoxSubcastName.ItemHeight = 12;
-            this.listBoxSubcastName.Location = new System.Drawing.Point(14, 131);
-            this.listBoxSubcastName.Name = "listBoxSubcastName";
-            this.listBoxSubcastName.Size = new System.Drawing.Size(319, 196);
-            this.listBoxSubcastName.TabIndex = 5;
+            this.labelConjunction.AutoSize = true;
+            this.labelConjunction.Location = new System.Drawing.Point(31, 79);
+            this.labelConjunction.Name = "labelConjunction";
+            this.labelConjunction.Size = new System.Drawing.Size(67, 12);
+            this.labelConjunction.TabIndex = 3;
+            this.labelConjunction.Text = "Conjunction;";
+            // 
+            // checkBoxUseUnderscore
+            // 
+            this.checkBoxUseUnderscore.AutoSize = true;
+            this.checkBoxUseUnderscore.Checked = true;
+            this.checkBoxUseUnderscore.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseUnderscore.Enabled = false;
+            this.checkBoxUseUnderscore.Location = new System.Drawing.Point(14, 54);
+            this.checkBoxUseUnderscore.Name = "checkBoxUseUnderscore";
+            this.checkBoxUseUnderscore.Size = new System.Drawing.Size(274, 16);
+            this.checkBoxUseUnderscore.TabIndex = 2;
+            this.checkBoxUseUnderscore.Text = "Use underscore for conjunction in subcast-name";
+            this.checkBoxUseUnderscore.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAddSubcastNameCreating
+            // 
+            this.checkBoxAddSubcastNameCreating.AutoSize = true;
+            this.checkBoxAddSubcastNameCreating.Checked = true;
+            this.checkBoxAddSubcastNameCreating.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAddSubcastNameCreating.Enabled = false;
+            this.checkBoxAddSubcastNameCreating.Location = new System.Drawing.Point(14, 32);
+            this.checkBoxAddSubcastNameCreating.Name = "checkBoxAddSubcastNameCreating";
+            this.checkBoxAddSubcastNameCreating.Size = new System.Drawing.Size(256, 16);
+            this.checkBoxAddSubcastNameCreating.TabIndex = 2;
+            this.checkBoxAddSubcastNameCreating.Text = "Add subcast-name when creating a new cast";
+            this.checkBoxAddSubcastNameCreating.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUseSubcastNameSearching
+            // 
+            this.checkBoxUseSubcastNameSearching.AutoSize = true;
+            this.checkBoxUseSubcastNameSearching.Enabled = false;
+            this.checkBoxUseSubcastNameSearching.Location = new System.Drawing.Point(14, 10);
+            this.checkBoxUseSubcastNameSearching.Name = "checkBoxUseSubcastNameSearching";
+            this.checkBoxUseSubcastNameSearching.Size = new System.Drawing.Size(248, 16);
+            this.checkBoxUseSubcastNameSearching.TabIndex = 2;
+            this.checkBoxUseSubcastNameSearching.Text = "Use subcast-name when searching for cast";
+            this.checkBoxUseSubcastNameSearching.UseVisualStyleBackColor = true;
             // 
             // OptionForm
             // 
@@ -181,6 +183,7 @@ namespace MultiLangImportDotNet.Import
             this.Controls.Add(this.buttonOK);
             this.Name = "OptionForm";
             this.Text = "Multi language import option";
+            this.Load += new System.EventHandler(this.OptionForm_Load);
             this.panelSubcast.ResumeLayout(false);
             this.panelSubcast.PerformLayout();
             this.ResumeLayout(false);

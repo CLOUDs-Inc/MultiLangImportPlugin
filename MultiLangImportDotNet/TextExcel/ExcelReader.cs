@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
@@ -282,6 +283,7 @@ namespace MultiLangImportDotNet.TextExcel
                                                                     fontsize = (float)dataCellFont.Size;
                                                                 }
 
+                                                                Color fontColor = ColorTranslator.FromOle((int)dataCellFont.Color);
                                                                 bool isBold = (bool)dataCellFont.Bold;
                                                                 bool isItalic = (bool)dataCellFont.Italic;
                                                                 Excel.XlUnderlineStyle underlineStyle = (Excel.XlUnderlineStyle)dataCellFont.Underline;
@@ -290,7 +292,7 @@ namespace MultiLangImportDotNet.TextExcel
 
                                                                 // 抽出したテキストデータをテーブルに格納する
                                                                 textDataTable[rowIndex - rowStart, colIndex - colStart]
-                                                                    = new Import.TextData(text, fontname, fontsize, isBold, isItalic, isUnderline, isStrike);
+                                                                    = new Import.TextData(text, fontname, fontsize, fontColor, isBold, isItalic, isUnderline, isStrike);
                                                             }
                                                             finally { Marshal.ReleaseComObject(dataCellFont); }
 

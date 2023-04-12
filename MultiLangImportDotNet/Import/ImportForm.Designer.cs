@@ -36,7 +36,7 @@ namespace MultiLangImportDotNet.Import
             this.labelImportedData = new System.Windows.Forms.Label();
             this.dataGridViewTextMod = new System.Windows.Forms.DataGridView();
             this.labelSelectedCellData = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxTextModification = new System.Windows.Forms.TextBox();
             this.buttonImport = new System.Windows.Forms.Button();
             this.groupBoxApplyLangAndCast = new System.Windows.Forms.GroupBox();
             this.checkBoxInheritOnlyNewLang = new System.Windows.Forms.CheckBox();
@@ -52,6 +52,7 @@ namespace MultiLangImportDotNet.Import
             this.checkBoxApplyFontname = new System.Windows.Forms.CheckBox();
             this.buttonDefaultLanguage = new System.Windows.Forms.Button();
             this.buttonOption = new System.Windows.Forms.Button();
+            this.labelTextModification = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTextMod)).BeginInit();
             this.groupBoxApplyLangAndCast.SuspendLayout();
             this.groupBoxApplyProperty.SuspendLayout();
@@ -109,15 +110,19 @@ namespace MultiLangImportDotNet.Import
             // 
             // dataGridViewTextMod
             // 
+            this.dataGridViewTextMod.AllowUserToAddRows = false;
+            this.dataGridViewTextMod.AllowUserToDeleteRows = false;
             this.dataGridViewTextMod.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewTextMod.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTextMod.Location = new System.Drawing.Point(12, 236);
             this.dataGridViewTextMod.Name = "dataGridViewTextMod";
+            this.dataGridViewTextMod.ReadOnly = true;
             this.dataGridViewTextMod.RowTemplate.Height = 21;
             this.dataGridViewTextMod.Size = new System.Drawing.Size(776, 228);
             this.dataGridViewTextMod.TabIndex = 5;
+            this.dataGridViewTextMod.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTextMod_CellClick);
             // 
             // labelSelectedCellData
             // 
@@ -129,15 +134,15 @@ namespace MultiLangImportDotNet.Import
             this.labelSelectedCellData.TabIndex = 2;
             this.labelSelectedCellData.Text = "Selected cell data";
             // 
-            // textBox1
+            // textBoxTextModification
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxTextModification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 493);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(776, 19);
-            this.textBox1.TabIndex = 3;
+            this.textBoxTextModification.Location = new System.Drawing.Point(12, 493);
+            this.textBoxTextModification.Name = "textBoxTextModification";
+            this.textBoxTextModification.ReadOnly = true;
+            this.textBoxTextModification.Size = new System.Drawing.Size(776, 19);
+            this.textBoxTextModification.TabIndex = 3;
             // 
             // buttonImport
             // 
@@ -149,6 +154,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonImport.TabIndex = 0;
             this.buttonImport.Text = "Import";
             this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
             // 
             // groupBoxApplyLangAndCast
             // 
@@ -168,6 +174,8 @@ namespace MultiLangImportDotNet.Import
             // checkBoxInheritOnlyNewLang
             // 
             this.checkBoxInheritOnlyNewLang.AutoSize = true;
+            this.checkBoxInheritOnlyNewLang.Checked = true;
+            this.checkBoxInheritOnlyNewLang.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxInheritOnlyNewLang.Location = new System.Drawing.Point(30, 137);
             this.checkBoxInheritOnlyNewLang.Name = "checkBoxInheritOnlyNewLang";
             this.checkBoxInheritOnlyNewLang.Size = new System.Drawing.Size(182, 16);
@@ -178,6 +186,8 @@ namespace MultiLangImportDotNet.Import
             // checkBoxCreateAsUnicode
             // 
             this.checkBoxCreateAsUnicode.AutoSize = true;
+            this.checkBoxCreateAsUnicode.Checked = true;
+            this.checkBoxCreateAsUnicode.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCreateAsUnicode.Location = new System.Drawing.Point(30, 71);
             this.checkBoxCreateAsUnicode.Name = "checkBoxCreateAsUnicode";
             this.checkBoxCreateAsUnicode.Size = new System.Drawing.Size(169, 16);
@@ -188,12 +198,15 @@ namespace MultiLangImportDotNet.Import
             // checkBoxInheritProperty
             // 
             this.checkBoxInheritProperty.AutoSize = true;
+            this.checkBoxInheritProperty.Checked = true;
+            this.checkBoxInheritProperty.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxInheritProperty.Location = new System.Drawing.Point(15, 115);
             this.checkBoxInheritProperty.Name = "checkBoxInheritProperty";
             this.checkBoxInheritProperty.Size = new System.Drawing.Size(247, 16);
             this.checkBoxInheritProperty.TabIndex = 0;
             this.checkBoxInheritProperty.Text = "Inherit properties of the first language page";
             this.checkBoxInheritProperty.UseVisualStyleBackColor = true;
+            this.checkBoxInheritProperty.CheckedChanged += new System.EventHandler(this.checkBoxInheritProperty_CheckedChanged);
             // 
             // checkBoxNotUpdate
             // 
@@ -208,16 +221,21 @@ namespace MultiLangImportDotNet.Import
             // checkBoxAddTextCast
             // 
             this.checkBoxAddTextCast.AutoSize = true;
+            this.checkBoxAddTextCast.Checked = true;
+            this.checkBoxAddTextCast.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAddTextCast.Location = new System.Drawing.Point(15, 49);
             this.checkBoxAddTextCast.Name = "checkBoxAddTextCast";
             this.checkBoxAddTextCast.Size = new System.Drawing.Size(170, 16);
             this.checkBoxAddTextCast.TabIndex = 0;
             this.checkBoxAddTextCast.Text = "Add if text cast is not found";
             this.checkBoxAddTextCast.UseVisualStyleBackColor = true;
+            this.checkBoxAddTextCast.CheckedChanged += new System.EventHandler(this.checkBoxAddTextCast_CheckedChanged);
             // 
             // checkBoxAddLangPage
             // 
             this.checkBoxAddLangPage.AutoSize = true;
+            this.checkBoxAddLangPage.Checked = true;
+            this.checkBoxAddLangPage.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAddLangPage.Location = new System.Drawing.Point(15, 27);
             this.checkBoxAddLangPage.Name = "checkBoxAddLangPage";
             this.checkBoxAddLangPage.Size = new System.Drawing.Size(197, 16);
@@ -241,6 +259,8 @@ namespace MultiLangImportDotNet.Import
             // checkBoxApplyString
             // 
             this.checkBoxApplyString.AutoSize = true;
+            this.checkBoxApplyString.Checked = true;
+            this.checkBoxApplyString.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxApplyString.Location = new System.Drawing.Point(15, 93);
             this.checkBoxApplyString.Name = "checkBoxApplyString";
             this.checkBoxApplyString.Size = new System.Drawing.Size(150, 16);
@@ -251,6 +271,9 @@ namespace MultiLangImportDotNet.Import
             // checkBoxApplyTextColor
             // 
             this.checkBoxApplyTextColor.AutoSize = true;
+            this.checkBoxApplyTextColor.Checked = true;
+            this.checkBoxApplyTextColor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxApplyTextColor.Enabled = false;
             this.checkBoxApplyTextColor.Location = new System.Drawing.Point(15, 71);
             this.checkBoxApplyTextColor.Name = "checkBoxApplyTextColor";
             this.checkBoxApplyTextColor.Size = new System.Drawing.Size(170, 16);
@@ -261,6 +284,9 @@ namespace MultiLangImportDotNet.Import
             // checkBoxApplyFontSize
             // 
             this.checkBoxApplyFontSize.AutoSize = true;
+            this.checkBoxApplyFontSize.Checked = true;
+            this.checkBoxApplyFontSize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxApplyFontSize.Enabled = false;
             this.checkBoxApplyFontSize.Location = new System.Drawing.Point(15, 49);
             this.checkBoxApplyFontSize.Name = "checkBoxApplyFontSize";
             this.checkBoxApplyFontSize.Size = new System.Drawing.Size(165, 16);
@@ -271,6 +297,9 @@ namespace MultiLangImportDotNet.Import
             // checkBoxApplyFontname
             // 
             this.checkBoxApplyFontname.AutoSize = true;
+            this.checkBoxApplyFontname.Checked = true;
+            this.checkBoxApplyFontname.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxApplyFontname.Enabled = false;
             this.checkBoxApplyFontname.Location = new System.Drawing.Point(15, 27);
             this.checkBoxApplyFontname.Name = "checkBoxApplyFontname";
             this.checkBoxApplyFontname.Size = new System.Drawing.Size(172, 16);
@@ -300,6 +329,17 @@ namespace MultiLangImportDotNet.Import
             this.buttonOption.UseVisualStyleBackColor = true;
             this.buttonOption.Click += new System.EventHandler(this.buttonOption_Click);
             // 
+            // labelTextModification
+            // 
+            this.labelTextModification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTextModification.AutoSize = true;
+            this.labelTextModification.Location = new System.Drawing.Point(742, 478);
+            this.labelTextModification.Name = "labelTextModification";
+            this.labelTextModification.Size = new System.Drawing.Size(46, 12);
+            this.labelTextModification.TabIndex = 2;
+            this.labelTextModification.Text = "Font: --";
+            this.labelTextModification.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // ImportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -308,8 +348,9 @@ namespace MultiLangImportDotNet.Import
             this.Controls.Add(this.groupBoxApplyProperty);
             this.Controls.Add(this.groupBoxApplyLangAndCast);
             this.Controls.Add(this.dataGridViewTextMod);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxTextModification);
             this.Controls.Add(this.textBoxImportFile);
+            this.Controls.Add(this.labelTextModification);
             this.Controls.Add(this.labelSelectedCellData);
             this.Controls.Add(this.labelImportedData);
             this.Controls.Add(this.labelImportFile);
@@ -320,6 +361,8 @@ namespace MultiLangImportDotNet.Import
             this.Controls.Add(this.buttonClose);
             this.Name = "ImportForm";
             this.Text = "Multi-language import [PLUGIN]";
+            this.Load += new System.EventHandler(this.ImportForm_Load);
+            this.Resize += new System.EventHandler(this.ImportForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTextMod)).EndInit();
             this.groupBoxApplyLangAndCast.ResumeLayout(false);
             this.groupBoxApplyLangAndCast.PerformLayout();
@@ -339,7 +382,7 @@ namespace MultiLangImportDotNet.Import
         private System.Windows.Forms.Label labelImportedData;
         private System.Windows.Forms.DataGridView dataGridViewTextMod;
         private System.Windows.Forms.Label labelSelectedCellData;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxTextModification;
         private System.Windows.Forms.Button buttonImport;
         private System.Windows.Forms.GroupBox groupBoxApplyLangAndCast;
         private System.Windows.Forms.CheckBox checkBoxInheritOnlyNewLang;
@@ -355,5 +398,6 @@ namespace MultiLangImportDotNet.Import
         private System.Windows.Forms.CheckBox checkBoxApplyFontname;
         private System.Windows.Forms.Button buttonDefaultLanguage;
         private System.Windows.Forms.Button buttonOption;
+        private System.Windows.Forms.Label labelTextModification;
     }
 }

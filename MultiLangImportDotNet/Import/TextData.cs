@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace MultiLangImportDotNet.Import
 {
@@ -22,6 +23,11 @@ namespace MultiLangImportDotNet.Import
         /// テキストのフォントサイズ
         /// </summary>
         public float FontSize { get; private set; }
+
+        /// <summary>
+        /// テキストの色
+        /// </summary>
+        public Color FontColor { get; private set; }
 
         /// <summary>
         /// テキストのBold状態
@@ -44,11 +50,12 @@ namespace MultiLangImportDotNet.Import
         public bool IsStrike { get; private set; }
 
 
-        public TextData(string text, string fontName, float fontSize, bool isBold, bool isItalic, bool isUnderline, bool isStrike)
+        public TextData(string text, string fontName, float fontSize, Color fontColor, bool isBold, bool isItalic, bool isUnderline, bool isStrike)
         {
             this.Text = text;
             this.FontName = fontName;
             this.FontSize = fontSize;
+            this.FontColor = fontColor;
             this.IsBold = isBold;
             this.IsItalic = isItalic;
             this.IsUnderline = isUnderline;

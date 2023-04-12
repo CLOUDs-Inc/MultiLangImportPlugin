@@ -32,8 +32,8 @@ namespace MultiLangImportDotNet.Import
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.panelSelectLang = new System.Windows.Forms.Panel();
-            this.listBoxLanguages = new System.Windows.Forms.ListBox();
             this.labelExplanation = new System.Windows.Forms.Label();
+            this.listBoxLanguages = new System.Windows.Forms.ListBox();
             this.panelSelectLang.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +46,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonOK.TabIndex = 0;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -56,6 +57,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonCancel.TabIndex = 0;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // panelSelectLang
             // 
@@ -70,6 +72,15 @@ namespace MultiLangImportDotNet.Import
             this.panelSelectLang.Size = new System.Drawing.Size(229, 234);
             this.panelSelectLang.TabIndex = 1;
             // 
+            // labelExplanation
+            // 
+            this.labelExplanation.AutoSize = true;
+            this.labelExplanation.Location = new System.Drawing.Point(3, 16);
+            this.labelExplanation.Name = "labelExplanation";
+            this.labelExplanation.Size = new System.Drawing.Size(154, 24);
+            this.labelExplanation.TabIndex = 1;
+            this.labelExplanation.Text = "Select language page for use\r\nas the default language.";
+            // 
             // listBoxLanguages
             // 
             this.listBoxLanguages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -82,15 +93,6 @@ namespace MultiLangImportDotNet.Import
             this.listBoxLanguages.Size = new System.Drawing.Size(221, 172);
             this.listBoxLanguages.TabIndex = 0;
             // 
-            // labelExplanation
-            // 
-            this.labelExplanation.AutoSize = true;
-            this.labelExplanation.Location = new System.Drawing.Point(3, 16);
-            this.labelExplanation.Name = "labelExplanation";
-            this.labelExplanation.Size = new System.Drawing.Size(154, 24);
-            this.labelExplanation.TabIndex = 1;
-            this.labelExplanation.Text = "Select language page for use\r\nas the default language.";
-            // 
             // SelectLangForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -101,6 +103,7 @@ namespace MultiLangImportDotNet.Import
             this.Controls.Add(this.buttonOK);
             this.Name = "SelectLangForm";
             this.Text = "Select default language";
+            this.Load += new System.EventHandler(this.SelectLangForm_Load);
             this.panelSelectLang.ResumeLayout(false);
             this.panelSelectLang.PerformLayout();
             this.ResumeLayout(false);

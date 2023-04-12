@@ -11,11 +11,6 @@ namespace MultiLangImportDotNet
     public class ManagedClass
     {
         /// <summary>
-        /// テキストキャスト名からキャスト番号を引く辞書
-        /// </summary>
-        Dictionary<string, int> textNameToIndexDict;
-
-        /// <summary>
         /// テキスト着せ替え用生成コード
         /// </summary>
         string outputTableCode;
@@ -29,6 +24,11 @@ namespace MultiLangImportDotNet
         /// SDKプロジェクト名
         /// </summary>
         string projectName;
+
+        /// <summary>
+        /// アプリケーション管理データ
+        /// </summary>
+        ApplicationData appData;
 
         public ManagedClass()
         {
@@ -50,10 +50,22 @@ namespace MultiLangImportDotNet
         {
             bool result = false;
 
+            // アプリ管理データを新規化
+            this.appData = new ApplicationData();
+            this.appData.OptionData = new OptionData()
+            {
+                FlagUseSubcastName = false,
+                FlagUseSubcastNameWhenSearchingForCast = false,
+                FlagAddSubcastNameWhenCreatingANewCast = true,
+                FlagUseUnderscoreForConjunctionInSubcastName = true,
+                ConjunctionString = "_",
+                SubcastIndex = -1
+            };
+
             //Logger.SetFilePath(Path.GetDirectoryName(projectFilePath) + "\\Plugin_DressUpTextCodeGen.log");
 
             // Open form
-            Import.ImportForm importForm = new Import.ImportForm();
+            Import.ImportForm importForm = new Import.ImportForm(this.appData);
             if(DialogResult.OK == importForm.ShowDialog())
             {
                 MessageBox.Show("Success");
