@@ -210,8 +210,7 @@ namespace MultiLangImportDotNet.Import
             // テーブルの列表題（言語名）を設定
             for (int langIndex = 0; langIndex < appData.LanguageNameList.Count; langIndex++)
             {
-                string defaultAppend = (langIndex == appData.DefaultLanguageIndex ? " (DEFAULT)" : string.Empty);
-                this.dataGridViewTextMod.Columns[langIndex].HeaderText = appData.LanguageNameList[langIndex] + defaultAppend;
+                this.dataGridViewTextMod.Columns[langIndex].HeaderText = GetTargetColumnHeaderText(langIndex);
             }
         }
 
@@ -238,6 +237,54 @@ namespace MultiLangImportDotNet.Import
             return targetLabel.Location.X + targetLabel.Size.Width; ;
         }
 
+
+        private string GetTargetColumnHeaderText(int colIndex)
+        {
+            string headerText;
+
+            if(colIndex == this.appData.DefaultLanguageIndex)
+            {
+                headerText = this.appData.LanguageNameList[colIndex] + " (DEFAULT)";
+            }
+            else if(this.appData.OptionData.FlagUseSubcastName && (colIndex == this.appData.OptionData.SubcastIndex))
+            {
+                headerText = string.Format("Subcast({0})", this.appData.LanguageNameList[colIndex]);
+            }
+            else
+            {
+                headerText = this.appData.LanguageNameList[colIndex];
+            }
+
+            return headerText;
+        }
+
+
+        private void PaintSubcastInfoToSelectedColumn(int targetColIndex)
+        {
+            // 列ごとにセルの修飾変更を行う
+            for(int colIndex = 0; colIndex < this.dataGridViewTextMod.Columns.Count; colIndex++)
+            {
+                // ターゲット列は黄色、それ以外の列はデフォルト色
+                Color headerCellColor = (colIndex == targetColIndex) ? Color.Yellow : this.dataGridViewTextMod.DefaultCellStyle.BackColor;
+                Color cellColor = (colIndex == targetColIndex) ? Color.LightGoldenrodYellow : this.dataGridViewTextMod.DefaultCellStyle.BackColor;
+
+                // ターゲット列のヘッダテキストは、"Subcast(言語名)"
+                string headerText = GetTargetColumnHeaderText(colIndex);
+
+                // 列ヘッダの色を変更する
+                this.dataGridViewTextMod.Columns[colIndex].HeaderCell.Style.BackColor = headerCellColor;
+                // 列ヘッダのテキストを変更する
+                this.dataGridViewTextMod.Columns[colIndex].HeaderText = headerText;
+
+                // 列ヘッダ以外のセルの修飾変更を行う
+                for(int rowIndex = 0; rowIndex < this.dataGridViewTextMod.Rows.Count; rowIndex++)
+                {
+                    // 各行のセルの色を変更する
+                    this.dataGridViewTextMod[colIndex, rowIndex].Style.BackColor = cellColor;
+                }
+            }
+        }
+
         private void buttonOption_Click(object sender, EventArgs e)
         {
             var optionForm = new OptionForm(this.appData);
@@ -246,14 +293,29 @@ namespace MultiLangImportDotNet.Import
                 return;
             }
 
+            if (this.appData.OptionData.FlagUseSubcastName)
+            {
+                // デフォルト言語とサブキャスト名選択が被った場合、デフォルト設定を解除する
+                if(this.appData.OptionData.SubcastIndex == this.appData.DefaultLanguageIndex)
+                {
+                    this.appData.DefaultLanguageIndex = -1;
+                }
 
+                // テーブル表示をサブキャスト名選択状態に変更する
+                PaintSubcastInfoToSelectedColumn(this.appData.OptionData.SubcastIndex);
+            }
+            else
+            {
+                // サブキャスト名設定を解除した状態でテーブルを表示する
+                PaintSubcastInfoToSelectedColumn(-1);
+            }
 
         }
 
         private void buttonDefaultLanguage_Click(object sender, EventArgs e)
         {
             // デフォルト言語選択フォームを展開する
-            var langForm = new SelectLangForm(this.appData.LanguageNameList, this.appData.DefaultLanguageIndex);
+            var langForm = new SelectLangForm(this.appData.LanguageNameList, this.appData.DefaultLanguageIndex, this.appData.OptionData.SubcastIndex);
             if (DialogResult.OK != langForm.ShowDialog(this))
             {
                 return;

@@ -18,16 +18,23 @@ namespace MultiLangImportDotNet.Import
         public int SelectedLanguageIndex { get; private set; }
 
         /// <summary>
+        /// サブキャスト扱い列インデックス
+        /// </summary>
+        private int subcastIndex;
+
+        /// <summary>
         /// 扱う言語名のリスト
         /// </summary>
         private List<string> langNameList;
+
 
         /// <summary>
         /// デフォルト言語選択フォーム
         /// </summary>
         /// <param name="langNameList">取り扱い言語名リスト</param>
         /// <param name="selectedIndex">選択済み言語インデックス</param>
-        public SelectLangForm(List<string> langNameList, int selectedIndex)
+        /// <param name="subcastIndex">サブキャスト扱い列インデックス</param>
+        public SelectLangForm(List<string> langNameList, int selectedIndex, int subcastIndex)
         {
             InitializeComponent();
 
@@ -35,6 +42,9 @@ namespace MultiLangImportDotNet.Import
             this.SelectedLanguageIndex = (selectedIndex < 0 || langNameList.Count <= selectedIndex)
                 ? -1
                 : selectedIndex;
+            this.subcastIndex = (subcastIndex < 0 || langNameList.Count <= subcastIndex)
+                ? -1
+                : subcastIndex;
         }
 
         private void SelectLangForm_Load(object sender, EventArgs e)
@@ -51,9 +61,14 @@ namespace MultiLangImportDotNet.Import
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            // 選択されている言語のインデクスを保持して、フォームを閉じる
-            this.SelectedLanguageIndex = this.listBoxLanguages.SelectedIndex;
-            this.DialogResult = DialogResult.OK;
+            // サブキャスト扱いの言語を選択した場合はキャンセル処理と同等とする
+            if(this.listBoxLanguages.SelectedIndex != this.subcastIndex)
+            {
+                // 選択されている言語のインデクスを保持して、フォームを閉じる
+                this.SelectedLanguageIndex = this.listBoxLanguages.SelectedIndex;
+                this.DialogResult = DialogResult.OK;
+            }
+
             this.Close();
         }
 
