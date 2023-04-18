@@ -84,16 +84,6 @@ namespace MultiLangImportDotNet.TextExcel
         /// </summary>
         public string OutputCode { get; private set; }
 
-        /// <summary>
-        /// テキストキャスト名からキャスト番号を引く辞書
-        /// </summary>
-        private Dictionary<string, int> nameToIndexDictionary;
-
-        /// <summary>
-        /// テキストキャスト名の数（リストの空白も含む）
-        /// </summary>
-        private int textCastCountWithEmpty;
-
         public ExcelReader()
         {
         }

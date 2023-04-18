@@ -10,10 +10,7 @@ namespace MultiLangImportDotNet
 {
     public class ManagedClass
     {
-        /// <summary>
-        /// テキスト着せ替え用生成コード
-        /// </summary>
-        string outputTableCode;
+        Type typeCLITextData;
 
         /// <summary>
         /// SDKプロジェクトファイルパス
@@ -32,10 +29,14 @@ namespace MultiLangImportDotNet
 
         public ManagedClass()
         {
+            // 当GUI dllパス
             string location = Assembly.GetExecutingAssembly().Location;
+            // wrapper dllのパスを作成する
             location = Path.GetDirectoryName(location) + "\\" + Properties.Resources.WRAPPER_DLL_FILENAME;
 
             Assembly a = Assembly.LoadFrom(location);
+            // TextDataクラス情報をc++/cliラッパーdllから取得する
+            this.typeCLITextData = a.GetType("CLITextData");
 
             // 設定ファイルパスと配置フォルダ
             //this.localToolFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + Properties.Resources.TOOL_NAME;
@@ -52,15 +53,9 @@ namespace MultiLangImportDotNet
 
             // アプリ管理データを新規化
             this.appData = new ApplicationData();
-            this.appData.OptionData = new OptionData()
-            {
-                FlagUseSubcastName = false,
-                FlagUseSubcastNameWhenSearchingForCast = false,
-                FlagAddSubcastNameWhenCreatingANewCast = true,
-                FlagUseUnderscoreForConjunctionInSubcastName = true,
-                ConjunctionString = "_",
-                SubcastIndex = -1
-            };
+            this.appData.OptionData = new OptionData();
+            // オプションデータのデフォルト設定を行う
+            this.appData.OptionData.Default();
 
             //Logger.SetFilePath(Path.GetDirectoryName(projectFilePath) + "\\Plugin_DressUpTextCodeGen.log");
 
@@ -68,12 +63,10 @@ namespace MultiLangImportDotNet
             Import.ImportForm importForm = new Import.ImportForm(this.appData);
             if(DialogResult.OK == importForm.ShowDialog())
             {
-                MessageBox.Show("Success");
                 result = true;
             }
             else
             {
-                MessageBox.Show("Not yet.");
                 result = false;
             }
 
@@ -101,12 +94,87 @@ namespace MultiLangImportDotNet
         }
 
         /// <summary>
-        /// dll側へテキスト着せ替え用生成コードを転送
+        /// dll側へデフォルト言語インデックスを転送
         /// </summary>
-        /// <returns>スクリプトキャストコード</returns>
-        public string DownloadFontColorTableScriptCode()
+        /// <returns></returns>
+        public int DownloadDefaultLanguageIndex()
         {
-            return this.outputTableCode;
+            return this.appData.DefaultLanguageIndex;
+        }
+
+        public int DownloadSubcastNameIndex()
+        {
+            return this.appData.SubcastNameIndex;
+        }
+
+        public int DownloadLanguageNameCount()
+        {
+            return this.appData.LanguageNameList.Count;
+        }
+
+        public string[] DownloadLanguageNameArray()
+        {
+            return this.appData.LanguageNameList.ToArray();
+        }
+
+        public int DownloadTextCastNameCount()
+        {
+            return this.appData.TextCastNameList.Count;
+        }
+
+        public string[] DownloadTextCastNameArray()
+        {
+            return this.appData.TextCastNameList.ToArray();
+        }
+
+        public object[,] DownloadTextDataTable()
+        {
+            int rowCount = this.appData.TextCastNameList.Count;
+            int colCount = this.appData.LanguageNameList.Count;
+
+            object[,] dlTextDataTable = new Object[rowCount,colCount];
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < colCount; colIndex++)
+                {
+                    var textData = this.appData.TextDataTable[rowIndex, colIndex];
+
+                    dlTextDataTable[rowIndex, colIndex] = Activator.CreateInstance(this.typeCLITextData, new object[] {
+                            textData.Text,
+                            textData.FontName,
+                            textData.FontSize,
+                            (int)textData.FontColor.R,
+                            (int)textData.FontColor.G,
+                            (int)textData.FontColor.B,
+                            textData.IsBold,
+                            textData.IsItalic,
+                            textData.IsUnderline,
+                            textData.IsStrike
+                        });
+                }
+            }
+
+            return dlTextDataTable;
+        }
+
+        public bool DownloadFlag(object flagName)
+        {
+            string keyStr = flagName as string;
+
+            if(keyStr != null)
+            {
+                if (this.appData.Flags.ContainsKey(keyStr))
+                {
+                    return this.appData.Flags[keyStr];
+                }
+
+                if (this.appData.OptionData.Flags.ContainsKey(keyStr))
+                {
+                    return this.appData.OptionData.Flags[keyStr];
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -17,6 +17,4 @@ public:
 
 	bool GetProjectInfo(SdkData& data);
 	void GetTextCastNames(SdkData& data);
-
-	bool WriteFontColorTableScript(WriteData& data);
 };

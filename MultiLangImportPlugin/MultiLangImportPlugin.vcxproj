@@ -160,6 +160,7 @@
     <ClInclude Include="SdkData.h" />
     <ClInclude Include="WrapperIf.h" />
     <ClInclude Include="WriteData.h" />
+    <ClInclude Include="TextData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataAccessor.cpp" />

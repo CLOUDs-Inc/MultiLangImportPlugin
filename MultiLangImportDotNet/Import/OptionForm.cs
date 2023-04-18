@@ -24,10 +24,10 @@ namespace MultiLangImportDotNet.Import
 
         private void SetOptionFormSettingToAppData(OptionData optionData)
         {
-            optionData.FlagUseSubcastName = this.checkBoxUseSubcastName.Checked;
-            optionData.FlagUseSubcastNameWhenSearchingForCast = this.checkBoxUseSubcastNameSearching.Checked;
-            optionData.FlagAddSubcastNameWhenCreatingANewCast = this.checkBoxAddSubcastNameCreating.Checked;
-            optionData.FlagUseUnderscoreForConjunctionInSubcastName = this.checkBoxUseUnderscore.Checked;
+            optionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME] = this.checkBoxUseSubcastName.Checked;
+            optionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST] = this.checkBoxUseSubcastNameSearching.Checked;
+            optionData.Flags[OptionData.FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST] = this.checkBoxAddSubcastNameCreating.Checked;
+            optionData.Flags[OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME] = this.checkBoxUseUnderscore.Checked;
             optionData.ConjunctionString = this.textBoxConjunction.Text.Trim();
             optionData.SubcastIndex = this.listBoxSubcastName.SelectedIndex;
         }
@@ -80,10 +80,10 @@ namespace MultiLangImportDotNet.Import
         private void OptionForm_Load(object sender, EventArgs e)
         {
             var optionData = this.appData.OptionData;
-            this.checkBoxUseSubcastName.Checked = optionData.FlagUseSubcastName;
-            this.checkBoxUseSubcastNameSearching.Checked = optionData.FlagUseSubcastNameWhenSearchingForCast;
-            this.checkBoxAddSubcastNameCreating.Checked = optionData.FlagAddSubcastNameWhenCreatingANewCast;
-            this.checkBoxUseUnderscore.Checked = optionData.FlagUseUnderscoreForConjunctionInSubcastName;
+            this.checkBoxUseSubcastName.Checked = optionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME];
+            this.checkBoxUseSubcastNameSearching.Checked = optionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST];
+            this.checkBoxAddSubcastNameCreating.Checked = optionData.Flags[OptionData.FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST];
+            this.checkBoxUseUnderscore.Checked = optionData.Flags[OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME];
             this.textBoxConjunction.Text = optionData.ConjunctionString;
 
             this.listBoxSubcastName.Items.AddRange(this.appData.LanguageNameList.ToArray());

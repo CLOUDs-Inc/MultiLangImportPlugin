@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationData.cs" />
+    <Compile Include="ColorExtensions.cs" />
     <Compile Include="Import\OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -11,6 +11,85 @@ WrapperIf::WrapperIf(HWND hWnd, HINSTANCE hinstDLL, LPVOID lpvReserved)
 }
 
 /// <summary>
+/// UIからのデータ引き出し処理まとめ
+/// </summary>
+/// <param name="writeData">書き込み用データ保持領域</param>
+void WrapperIf::DownloadAllUIData(WriteData& writeData)
+{
+	writeData.selectedLanguageIndex = DownloadInteger("DefaultLanguageIndex");
+	writeData.subcastNameIndex = DownloadInteger("SubcastNameIndex");
+	int textCastNameCount = DownloadInteger("TextCastNameCount");
+	int languageNameCount = DownloadInteger("LanguageNameCount");
+
+	bool flagAddIfLangPageNotFound = DownloadFlag("AddIfLangPageNotFound");
+	bool flagUseSubcastName = DownloadFlag("UseSubcastName");
+
+	// テキストキャスト名リストをUIから下ろす
+	char** textCastNameArray = DownloadStringArray("TextCastNameArray");
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++)
+	{
+		std::string textCastName = std::string(textCastNameArray[castIndex]);
+
+		// テキストキャスト名リストに保持
+		writeData.textCastNameList.push_back(textCastName);
+	}
+
+	// テキストキャスト名リストのメモリ解放
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++) {
+		delete[] textCastNameArray[castIndex];
+	}
+	delete[] textCastNameArray;
+
+
+
+	// 言語名リストをUIから下ろす
+	char** languageNameArray = DownloadStringArray("LanguageNameArray");
+	for (int langIndex = 0; langIndex < languageNameCount; langIndex++)
+	{
+		std::string languageName = std::string(languageNameArray[langIndex]);
+
+		// 言語名リストに保持
+		writeData.languageNameList.push_back(languageName);
+	}
+
+	// 言語名リストのメモリ解放
+	for (int langIndex = 0; langIndex < languageNameCount; langIndex++) {
+		delete[] languageNameArray[langIndex];
+	}
+	delete[] languageNameArray;
+
+
+
+	// 多言語インポートテキストデータをUIから下ろす
+	TextData** textDataTable = DownloadTextDataTable();
+
+	for (int rowIndex = 0; rowIndex < textCastNameCount; rowIndex++) {
+		TextData* textDataRow = textDataTable[rowIndex];
+
+		for (int colIndex = 0; colIndex < languageNameCount; colIndex++) {
+			TextData textData = textDataRow[colIndex];
+		}
+	}
+
+	// 多言語インポートデータを保持
+	// CODE HERE
+
+
+
+
+	// 多言語インポートテキストデータのメモリ解放
+	for (int rowIndex = 0; rowIndex < textCastNameCount; rowIndex++)
+	{
+		// 一行ずつ解放
+		delete[] textDataTable[rowIndex];
+	}
+	// テーブル全体を解放
+	delete[] textDataTable;
+}
+
+
+
+/// <summary>
 /// 初期化処理
 /// </summary>
 /// <returns>成否</returns>
@@ -50,7 +129,12 @@ bool WrapperIf::init()
 
 	PROC_ATTACH(UploadProjectInfo, PProcUploadProjectInfo, hModule, result, INIT_ERROR);
 
+	PROC_ATTACH(DownloadTextDataTable, PProcDownloadTextDataTable, hModule, result, INIT_ERROR);
+	PROC_ATTACH(DownloadStringArray, PProcDownloadStringArray, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadString, PProcDownloadString, hModule, result, INIT_ERROR);
+	PROC_ATTACH(DownloadInteger, PProcDownloadInteger, hModule, result, INIT_ERROR);
+	PROC_ATTACH(DownloadFloat, PProcDownloadFloat, hModule, result, INIT_ERROR);
+	PROC_ATTACH(DownloadFlag, PProcDownloadFlag, hModule, result, INIT_ERROR);
 
 INIT_ERROR:
 
@@ -111,18 +195,24 @@ void WrapperIf::execute()
 	// SDKへの書き込み用データ
 	WriteData writeData;
 
+	// UIのデータを全て下ろして書き込み用データ領域に移動
+	DownloadAllUIData(writeData);
+
+	
+
 	// 出力スクリプトキャスト名取得
-	char* pScriptName = DownloadString("DownloadFontColorTableScriptName");
-	writeData.scriptName = string(pScriptName);
-	delete[] pScriptName;
+	//char* pScriptName = DownloadString("DownloadFontColorTableScriptName");
+	//writeData.scriptName = string(pScriptName);
+	//delete[] pScriptName;
 
 	// 出力スクリプトキャストコード取得
-	char* pScriptCode = DownloadString("DownloadFontColorTableScriptCode");
-	writeData.tableScriptCode = string(pScriptCode);
-	delete[] pScriptCode;
+	//char* pScriptCode = DownloadString("DownloadFontColorTableScriptCode");
+	//writeData.tableScriptCode = string(pScriptCode);
+	//delete[] pScriptCode;
 
 	// 出力スクリプトキャストコードをSDKで書き込み
-	bool write_result = dataAccessor.WriteFontColorTableScript(writeData);
+	//bool write_result = dataAccessor.WriteFontColorTableScript(writeData);
+	bool write_result = false;
 	if (!write_result) {
 		MessageBox(this->hWnd, L"Writing script cast failed.", L"Error", MB_OK);
 	}

@@ -22,6 +22,7 @@
 #include <codecvt>
 
 #include "Const.h"
+#include "TextData.h"
 #include "SdkData.h"
 #include "WriteData.h"
 #include "MxPluginLib.h"

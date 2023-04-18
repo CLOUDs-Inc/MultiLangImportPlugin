@@ -3,6 +3,7 @@
 #include "MultiLangImportWrapper.h"
 #pragma managed
 
+#include "CLITextData.h"
 #include <iostream>
 #include <string>
 #include <gcroot.h>
@@ -86,6 +87,7 @@ namespace MultiLangImportWrapper
 
 			managedObject = obj;
 			managedType = type;
+			managedTypeTextData = assembly->GetType("MultiLangImportDotNet.Import.TextData");
 			//DEBUG_LOG("WrapperImpl::WrapperImpl end");
 			//MessageBox::Show("WrapperImpl::WrapperImpl end");
 		}
@@ -119,12 +121,85 @@ namespace MultiLangImportWrapper
 				projectnameStr = gcnew String(projectname);
 			}
 
-			array<Object^>^ arg = gcnew array<Object^>(2);
-			arg[0] = filepathStr;
-			arg[1] = projectnameStr;
-			methodInfo->Invoke(managedObject, arg);
+			cli::array<Object^>^ args = gcnew cli::array<Object^>(2);
+			args[0] = filepathStr;
+			args[1] = projectnameStr;
+			methodInfo->Invoke(managedObject, args);
 
 			return;
+		}
+
+		/// <summary>
+		/// .Net側からテキストキャストデータ（二次元配列）を取得する
+		/// 受け取り側は二次元配列を解放すること
+		/// </summary>
+		/// <returns>TextData二次元配列(vector_vector)</returns>
+		TextData** DownloadTextDataTable() override {
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>("DownloadTextDataTable");
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+			Object^ obj = methodInfo->Invoke(managedObject, nullptr);
+			cli::array<Object^, 2>^ tableManaged = safe_cast<cli::array<Object^, 2>^>(obj);
+
+			int rowCount = tableManaged->GetLength(0);
+			int colCount = tableManaged->GetLength(1);
+
+			TextData** textDataTable = new TextData*[rowCount]; // 行を確保
+			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+				textDataTable[rowIndex] = new TextData[colCount]; // 列を確保
+			}
+
+			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+				for (int colIndex = 0; colIndex < colCount; colIndex++) {
+					Object^ objManaged = tableManaged->GetValue(rowIndex, colIndex);
+					
+					CLITextData^ textDataManaged = safe_cast<CLITextData^>(objManaged);
+					auto textManaged = textDataManaged->text;
+					auto fontNameManaged = textDataManaged->fontName;
+
+					TextData textData;
+					textData.text = marshal_as<std::string>(textManaged);
+					textData.fontName = marshal_as<std::string>(fontNameManaged);
+					textData.fontSize = textDataManaged->fontSize;
+					textData.colorR = textDataManaged->colorR;
+					textData.colorG = textDataManaged->colorB;
+					textData.colorB = textDataManaged->colorB;
+					textData.isBold = textDataManaged->isBold;
+					textData.isItalic = textDataManaged->isItalic;
+					textData.isUnderline = textDataManaged->isUnderline;
+					textData.isStrike = textDataManaged->isStrike;
+
+					textDataTable[rowIndex][colIndex] = textData;
+				}
+			}
+
+			return textDataTable;
+		}
+
+		/// <summary>
+		/// .Net側より文字列配列データを取得する（戻り値受け取り側でdelete[]が必要
+		/// </summary>
+		/// <param name="arrayName">文字列配列名</param>
+		/// <returns>文字列配列データ</returns>
+		char** DownloadStringArray(const std::string& arrayName) override {
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>("Download" + arrayName);
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+			Object^ obj = methodInfo->Invoke(managedObject, nullptr);
+			cli::array<String^>^ strArrayManaged = safe_cast<cli::array<String^>^>(obj);
+			
+			int arrayCount = strArrayManaged->GetLength(0);
+
+			char** strArray = new char* [arrayCount];
+			for (int index = 0; index < arrayCount; index++)
+			{
+				auto strManaged = strArrayManaged[index];
+				std::string stringUnmanaged = marshal_as<std::string>(strManaged);
+				size_t bufLen = stringUnmanaged.length() + 1;
+				char* pStr = new char[bufLen];
+				strcpy_s(pStr, bufLen, stringUnmanaged.c_str());
+				strArray[index] = pStr;
+			}
+
+			return strArray;
 		}
 
 		/// <summary>
@@ -146,10 +221,60 @@ namespace MultiLangImportWrapper
 			return pStr;
 		}
 
+		/// <summary>
+		/// .Net側からintegerデータを取得する
+		/// </summary>
+		/// <param name="variableName">取得先変数名</param>
+		/// <returns>intデータ</returns>
+		int DownloadInteger(const std::string& variableName) override {
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>("Download" + variableName);
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+			Object^ obj = methodInfo->Invoke(managedObject, nullptr);
+			int val = safe_cast<int>(obj);
+			return val;
+		}
+
+		/// <summary>
+		/// .Net側からfloatデータを取得する
+		/// </summary>
+		/// <param name="variableName">取得先変数名</param>
+		/// <returns>floatデータ</returns>
+		float DownloadFloat(const std::string& variableName) override {
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>("Download" + variableName);
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+			Object^ obj = methodInfo->Invoke(managedObject, nullptr);
+			float val = safe_cast<float>(obj);
+			return val;
+		}
+
+		/// <summary>
+		/// .Net側からフラグデータを取得する
+		/// </summary>
+		/// <param name="flagName"></param>
+		/// <returns></returns>
+		bool DownloadFlag(const std::string& flagName) override {
+			bool flag = false;
+
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>("DownloadFlag");
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+
+			String^ flagNameStr = nullptr;
+			flagNameStr = gcnew String(flagName.c_str());
+			if (flagNameStr != nullptr) {
+				cli::array<Object^>^ args = gcnew cli::array<Object^>(1);
+				args[0] = flagNameStr;
+				Object^ obj = methodInfo->Invoke(managedObject, args);
+				flag = safe_cast<bool>(obj);
+			}
+
+			return flag;
+		}
+
 
 	private:
 		gcroot<Object^> managedObject;
 		gcroot<Type^> managedType;
+		gcroot<Type^> managedTypeTextData;
 	};
 
 	/// <summary>
@@ -219,6 +344,31 @@ void UploadProjectInfo(char* filepath, char* projectname)
 }
 
 /// <summary>
+/// .Net側からの多言語インポートテキストキャストデータの取得
+/// </summary>
+/// <returns>テキストキャストデータテーブル（二次元配列。受け取り側でdelete解放すること）</returns>
+TextData** DownloadTextDataTable()
+{
+	if (wrapper != nullptr) {
+		return wrapper->DownloadTextDataTable();
+	}
+	return nullptr;
+}
+
+/// <summary>
+/// .Net側からの文字列配列の取得
+/// </summary>
+/// <param name="arrayName">文字列配列名</param>
+/// <returns>文字列配列（受け取り側でdelete解放すること）</returns>
+char** DownloadStringArray(const std::string& arrayName)
+{
+	if (wrapper != nullptr) {
+		return DownloadStringArray(arrayName);
+	}
+	return nullptr;
+}
+
+/// <summary>
 /// .NET側からの文字列の取得
 /// </summary>
 /// <param name="methodName">.NET側文字列出力メソッド名</param>
@@ -229,4 +379,43 @@ char* DownloadString(const std::string& methodName)
 		return wrapper->DownloadString(methodName);
 	}
 	return nullptr;
+}
+
+/// <summary>
+/// .Net側からの整数の取得
+/// </summary>
+/// <param name="variableName">.Net側変数名</param>
+/// <returns>整数値</returns>
+int DownloadInteger(const std::string& variableName)
+{
+	if (wrapper != nullptr) {
+		return wrapper->DownloadInteger(variableName);
+	}
+	return -1;
+}
+
+/// <summary>
+/// .Net側からのfloat値の取得
+/// </summary>
+/// <param name="variableName">.Net側変数名</param>
+/// <returns>float値</returns>
+float DownloadFloat(const std::string& variableName)
+{
+	if (wrapper != nullptr) {
+		return wrapper->DownloadFloat(variableName);
+	}
+	return -1.0f;
+}
+
+/// <summary>
+/// .Net側からフラグ(bool)値の取得
+/// </summary>
+/// <param name="flagName">フラグ名</param>
+/// <returns>フラグ真偽値</returns>
+bool DownloadFlag(const std::string& flagName)
+{
+	if (wrapper != nullptr) {
+		return wrapper->DownloadFlag(flagName);
+	}
+	return false;
 }

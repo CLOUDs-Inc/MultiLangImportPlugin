@@ -27,54 +27,6 @@ namespace MultiLangImportDotNet.Import
             this.appData = appData;
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void buttonImportFile_Click(object sender, EventArgs e)
-        {
-            // ファイルパス取得
-            string filename = GetFileNameFromOpenFileDialog();
-            if(string.Empty == filename)
-            {
-                return;
-            }
-
-            // ファイル存在チェック
-            if (!File.Exists(filename))
-            {
-                MessageBox.Show("File not exists.");
-                return;
-            }
-
-            // xlsxファイルロード
-            var excelReader = new TextExcel.ExcelReader();
-            if (!excelReader.OpenExcel(filename))
-            {
-                MessageBox.Show("Excel file: read failed.");
-                return;
-            }
-
-            // ロードデータテーブル格納
-            SetDataToTable(excelReader);
-
-            // Excel読み取りを行ったデータを管理クラスに移す
-            SetApplicationDataToManageClass(appData, excelReader);
-
-
-            // デフォルト言語指定、サブキャスト機能、インポート機能を有効に
-            this.buttonDefaultLanguage.Enabled = true;
-            this.buttonOption.Enabled = true;
-            this.buttonImport.Enabled = true;
-
-
-            // ファイルパスを表示
-            this.textBoxImportFile.Text = filename;
-        }
-
-
-
         private string GetFileNameFromOpenFileDialog()
         {
             string filename = string.Empty;
@@ -158,6 +110,7 @@ namespace MultiLangImportDotNet.Import
             Font textFont = new Font(textData.FontName, fontSizeTextBox, fontStyle);
             this.textBoxTextModification.Font = textFont;
             this.textBoxTextModification.ForeColor = textData.FontColor;
+            this.textBoxTextModification.BackColor = SystemColors.Control;
             this.textBoxTextModification.Text = textData.Text;
         }
 
@@ -188,7 +141,7 @@ namespace MultiLangImportDotNet.Import
             }
 
             // フォント色文字列の作成
-            string colorStr = ", Color: " + ColorTranslator.ToHtml(textData.FontColor);
+            string colorStr = ", Color: #" + textData.FontColor.ToHexRGBString();
             sb.Append(colorStr);
 
             // フォント情報表示ラベルにセット
@@ -217,17 +170,17 @@ namespace MultiLangImportDotNet.Import
 
         private void SetImportFormSettingToAppData(ApplicationData appData)
         {
-            appData.FlagAddIfLangPageNotFound = this.checkBoxAddLangPage.Checked;
-            appData.FlagAddIfTextCastNotFound = this.checkBoxAddTextCast.Checked;
-            appData.FlagCreateAsUnicodeTextCast = this.checkBoxCreateAsUnicode.Checked;
-            appData.FlagNotUpdateExistingTextCast = this.checkBoxNotUpdate.Checked;
-            appData.FlagInheritPropertiesOfTheFirstLangPage = this.checkBoxInheritProperty.Checked;
-            appData.FlagInheritOnlyNewLangPage = this.checkBoxInheritOnlyNewLang.Checked;
+            appData.Flags[ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND] = this.checkBoxAddLangPage.Checked;
+            appData.Flags[ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND] = this.checkBoxAddTextCast.Checked;
+            appData.Flags[ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST] = this.checkBoxCreateAsUnicode.Checked;
+            appData.Flags[ApplicationData.FLAG_NOT_UPDATE_EXISTING_TEXT_CAST] = this.checkBoxNotUpdate.Checked;
+            appData.Flags[ApplicationData.FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE] = this.checkBoxInheritProperty.Checked;
+            appData.Flags[ApplicationData.FLAG_INHERIT_ONLY_NEW_LANG_PAGE] = this.checkBoxInheritOnlyNewLang.Checked;
 
-            appData.FlagApplyFontName = this.checkBoxApplyFontname.Checked;
-            appData.FlagApplyFontSize = this.checkBoxApplyFontSize.Checked;
-            appData.FlagApplyTextColor = this.checkBoxApplyTextColor.Checked;
-            appData.FlagApplyString = this.checkBoxApplyString.Checked;
+            appData.Flags[ApplicationData.FLAG_APPLY_FONT_NAME] = this.checkBoxApplyFontname.Checked;
+            appData.Flags[ApplicationData.FLAG_APPLY_FONT_SIZE] = this.checkBoxApplyFontSize.Checked;
+            appData.Flags[ApplicationData.FLAG_APPLY_TEXT_COLOR] = this.checkBoxApplyTextColor.Checked;
+            appData.Flags[ApplicationData.FLAG_APPLY_STRING] = this.checkBoxApplyString.Checked;
         }
 
 
@@ -246,7 +199,8 @@ namespace MultiLangImportDotNet.Import
             {
                 headerText = this.appData.LanguageNameList[colIndex] + " (DEFAULT)";
             }
-            else if(this.appData.OptionData.FlagUseSubcastName && (colIndex == this.appData.OptionData.SubcastIndex))
+            else if(this.appData.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME] &&
+                (colIndex == this.appData.OptionData.SubcastIndex))
             {
                 headerText = string.Format("Subcast({0})", this.appData.LanguageNameList[colIndex]);
             }
@@ -285,6 +239,52 @@ namespace MultiLangImportDotNet.Import
             }
         }
 
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void buttonImportFile_Click(object sender, EventArgs e)
+        {
+            // ファイルパス取得
+            string filename = GetFileNameFromOpenFileDialog();
+            if (string.Empty == filename)
+            {
+                return;
+            }
+
+            // ファイル存在チェック
+            if (!File.Exists(filename))
+            {
+                MessageBox.Show("File not exists.");
+                return;
+            }
+
+            // xlsxファイルロード
+            var excelReader = new TextExcel.ExcelReader();
+            if (!excelReader.OpenExcel(filename))
+            {
+                MessageBox.Show("Excel file: read failed.");
+                return;
+            }
+
+            // ロードデータテーブル格納
+            SetDataToTable(excelReader);
+
+            // Excel読み取りを行ったデータを管理クラスに移す
+            SetApplicationDataToManageClass(appData, excelReader);
+
+
+            // デフォルト言語指定、サブキャスト機能、インポート機能を有効に
+            this.buttonDefaultLanguage.Enabled = true;
+            this.buttonOption.Enabled = true;
+            this.buttonImport.Enabled = true;
+
+
+            // ファイルパスを表示
+            this.textBoxImportFile.Text = filename;
+        }
+
         private void buttonOption_Click(object sender, EventArgs e)
         {
             var optionForm = new OptionForm(this.appData);
@@ -293,7 +293,7 @@ namespace MultiLangImportDotNet.Import
                 return;
             }
 
-            if (this.appData.OptionData.FlagUseSubcastName)
+            if (this.appData.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME])
             {
                 // デフォルト言語とサブキャスト名選択が被った場合、デフォルト設定を解除する
                 if(this.appData.OptionData.SubcastIndex == this.appData.DefaultLanguageIndex)
@@ -335,6 +335,8 @@ namespace MultiLangImportDotNet.Import
 
             // フォーム呼び出し元に通知OK
             this.DialogResult = DialogResult.OK;
+
+            this.Close();
         }
 
         private void dataGridViewTextMod_CellClick(object sender, DataGridViewCellEventArgs e)

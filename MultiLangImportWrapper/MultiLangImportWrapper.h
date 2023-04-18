@@ -1,8 +1,9 @@
 ﻿#pragma once
 #pragma unmanaged
-#include <memory>
 #include <vector>
+#include <memory>
 #include <string>
+#include"../MultiLangImportPlugin/TextData.h"
 
 #ifdef WRAPPER
 #define DLLAPI __declspec(dllexport)
@@ -21,7 +22,12 @@ namespace MultiLangImportWrapper {
 
 		virtual void UploadProjectInfo(char* filepath, char* projectname) = 0;
 
+		virtual TextData** DownloadTextDataTable() = 0;
+		virtual char** DownloadStringArray(const std::string& arrayName) = 0;
 		virtual char* DownloadString(const std::string& methodName) = 0;
+		virtual int DownloadInteger(const std::string& variableName) = 0;
+		virtual float DownloadFloat(const std::string& variableName) = 0;
+		virtual bool DownloadFlag(const std::string& flagName) = 0;
 
 
 	private:
@@ -41,5 +47,11 @@ extern "C" {
 
 	DLLAPI void UploadProjectInfo(char* filepath, char* projectname);
 
+	DLLAPI TextData** DownloadTextDataTable();
+	DLLAPI char** DownloadStringArray(const std::string& arrayName);
 	DLLAPI char* DownloadString(const std::string& methodName);
+	DLLAPI int DownloadInteger(const std::string& variableName);
+	DLLAPI float DownloadFloat(const std::string& variableName);
+	DLLAPI bool DownloadFlag(const std::string& flagName);
+
 }

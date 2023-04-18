@@ -63,52 +63,52 @@ void DataAccessor::GetTextCastNames(SdkData& data)
 	return;
 }
 
-bool DataAccessor::WriteFontColorTableScript(WriteData& writeData)
-{
-	bool result = true;
-	int mxResult;
-	int castNo;
-
-	// 同じ名前のスクリプトキャストの有無を確認する
-	mxResult = MxPluginPort_Cast_FindCast(ct_Script, (char*)writeData.scriptName.c_str());
-	if (mxResult >= 0) {
-		// 見つかった
-		// キャスト番号を設定
-		castNo = mxResult;
-	}
-	else
-	{
-		// キャストが見つからない
-
-		// スクリプトキャストの（ブランクも含んだ）数を取得する
-		mxResult = MxPluginPort_Cast_GetCastCount(ct_Script);
-		if (mxResult < 0) {
-			// キャスト番号がない
-			result = false;
-			goto FUNC_ERROR;
-		}
-
-		// キャスト番号として末尾に一つブランクを空けた番号を指定する
-		castNo = mxResult + 1;
-
-		// スクリプトキャストの作成
-		mxResult = MxPluginPort_Cast_CreateScript(castNo, (char*)writeData.scriptName.c_str());
-		if (mxResult < 0) {
-			// キャスト作成失敗
-			result = false;
-			goto FUNC_ERROR;
-		}
-	}
-
-	// コード書き込み
-	mxResult = MxCast_Script_SetCode(castNo, (void*)writeData.tableScriptCode.c_str());
-	if (mxResult < 0) {
-		result = false;
-		goto FUNC_ERROR;
-	}
-
-
-FUNC_ERROR:
-
-	return result;
-}
+//bool DataAccessor::WriteFontColorTableScript(WriteData& writeData)
+//{
+//	bool result = true;
+//	int mxResult;
+//	int castNo;
+//
+//	// 同じ名前のスクリプトキャストの有無を確認する
+//	mxResult = MxPluginPort_Cast_FindCast(ct_Script, (char*)writeData.scriptName.c_str());
+//	if (mxResult >= 0) {
+//		// 見つかった
+//		// キャスト番号を設定
+//		castNo = mxResult;
+//	}
+//	else
+//	{
+//		// キャストが見つからない
+//
+//		// スクリプトキャストの（ブランクも含んだ）数を取得する
+//		mxResult = MxPluginPort_Cast_GetCastCount(ct_Script);
+//		if (mxResult < 0) {
+//			// キャスト番号がない
+//			result = false;
+//			goto FUNC_ERROR;
+//		}
+//
+//		// キャスト番号として末尾に一つブランクを空けた番号を指定する
+//		castNo = mxResult + 1;
+//
+//		// スクリプトキャストの作成
+//		mxResult = MxPluginPort_Cast_CreateScript(castNo, (char*)writeData.scriptName.c_str());
+//		if (mxResult < 0) {
+//			// キャスト作成失敗
+//			result = false;
+//			goto FUNC_ERROR;
+//		}
+//	}
+//
+//	// コード書き込み
+//	mxResult = MxCast_Script_SetCode(castNo, (void*)writeData.tableScriptCode.c_str());
+//	if (mxResult < 0) {
+//		result = false;
+//		goto FUNC_ERROR;
+//	}
+//
+//
+//FUNC_ERROR:
+//
+//	return result;
+//}

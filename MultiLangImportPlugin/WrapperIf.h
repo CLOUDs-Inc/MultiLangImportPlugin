@@ -14,6 +14,11 @@
 	delete[] (pInfo)->name; \
 	delete pInfo;
 
+#define DELETE_TEXT_DATA(pData) \
+	delete[] (pData)->text; \
+	delete[] (pData)->fontName; \
+	delete pData;
+
 
 typedef bool(*PProcCreateWrapper)();
 typedef bool(*PProcBeginProcess)();
@@ -21,7 +26,12 @@ typedef bool(*PProcBeginProcess)();
 typedef void(*PProcUploadProjectInfo)(const char* filepath, const char* projectName);
 typedef void(*PProcUploadTextCastNames)(int names_len, char** names);
 
+typedef TextData** (*PProcDownloadTextDataTable)();
+typedef char** (*PProcDownloadStringArray)(const std::string& ArrayName);
 typedef char* (*PProcDownloadString)(const std::string& methodName);
+typedef int(*PProcDownloadInteger)(const std::string& variableName);
+typedef float(*PProcDownloadFloat)(const std::string& variableName);
+typedef bool(*PProcDownloadFlag)(const std::string& flagName);
 
 
 using namespace std;
@@ -37,7 +47,12 @@ class WrapperIf {
 
 	PProcUploadProjectInfo UploadProjectInfo = nullptr;
 
+	PProcDownloadTextDataTable DownloadTextDataTable = nullptr;
+	PProcDownloadStringArray DownloadStringArray = nullptr;
 	PProcDownloadString DownloadString = nullptr;
+	PProcDownloadInteger DownloadInteger = nullptr;
+	PProcDownloadFloat DownloadFloat = nullptr;
+	PProcDownloadFlag DownloadFlag = nullptr;
 
 	HWND hWnd;
 	HINSTANCE hinstDLL;
@@ -48,6 +63,7 @@ class WrapperIf {
 
 	HMODULE hModule = 0;
 
+	void DownloadAllUIData(WriteData& writeData);
 
 public:
 	WrapperIf(HWND hWnd, HINSTANCE hinstDLL, LPVOID lpvReserved);

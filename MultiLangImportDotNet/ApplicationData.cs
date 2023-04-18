@@ -34,57 +34,68 @@ namespace MultiLangImportDotNet
         public Import.TextData[,] TextDataTable { get; set; }
 
         /// <summary>
-        /// チェックボックスAdd if language page is not foundの状態
+        /// 各チェックボックス名をキーにした辞書（値：各チェックボックスの状態）
         /// </summary>
-        public bool FlagAddIfLangPageNotFound { get; set; }
+        public Dictionary<string, bool> Flags { get; set; }
 
         /// <summary>
-        /// チェックボックスAdd if text cast is not foundの状態
+        /// チェックボックスAdd if language page is not foundの状態キー
         /// </summary>
-        public bool FlagAddIfTextCastNotFound { get; set; }
+        public static readonly string FLAG_ADD_IF_LANG_PAGE_NOT_FOUND = "AddIfLangPageNotFound";
 
         /// <summary>
-        /// チェックボックスCreate as Unicode text castの状態
+        /// チェックボックスAdd if text cast is not foundの状態キー
         /// </summary>
-        public bool FlagCreateAsUnicodeTextCast { get; set; }
+        public static readonly string FLAG_ADD_IF_TEXT_CAST_NOT_FOUND = "AddIfTextCastNotFound";
 
         /// <summary>
-        /// チェックボックスNot update existing text castの状態
+        /// チェックボックスCreate as Unicode text castの状態キー
         /// </summary>
-        public bool FlagNotUpdateExistingTextCast { get; set; }
+        public static readonly string FLAG_CREATE_AS_UNICODE_TEXT_CAST = "CreateAsUnicodeTextCast";
 
         /// <summary>
-        /// チェックボックスInherit properties of the first language pageの状態
+        /// チェックボックスNot update existing text castの状態キー
         /// </summary>
-        public bool FlagInheritPropertiesOfTheFirstLangPage { get; set; }
+        public static readonly string FLAG_NOT_UPDATE_EXISTING_TEXT_CAST = "NotUpdateExistingTextCast";
 
         /// <summary>
-        /// チェックボックスInherit only new language pageの状態
+        /// チェックボックスInherit properties of the first language pageの状態キー
         /// </summary>
-        public bool FlagInheritOnlyNewLangPage { get; set; }
+        public static readonly string FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE = "InheritPropertiesOfTheFirstLangPage";
 
         /// <summary>
-        /// チェックボックスApply font name to text castの状態
+        /// チェックボックスInherit only new language pageの状態キー
         /// </summary>
-        public bool FlagApplyFontName { get; set; }
+        public static readonly string FLAG_INHERIT_ONLY_NEW_LANG_PAGE = "InheritOnlyNewLangPage";
 
         /// <summary>
-        /// チェックボックスApply font size to text castの状態
+        /// チェックボックスApply font name to text castの状態キー
         /// </summary>
-        public bool FlagApplyFontSize { get; set; }
+        public static readonly string FLAG_APPLY_FONT_NAME = "ApplyFontName";
 
         /// <summary>
-        /// チェックボックスApply text color to text castの状態
+        /// チェックボックスApply font size to text castの状態キー
         /// </summary>
-        public bool FlagApplyTextColor { get; set; }
+        public static readonly string FLAG_APPLY_FONT_SIZE = "ApplyFontSize";
 
         /// <summary>
-        /// チェックボックスApply string to text castの状態
+        /// チェックボックスApply text color to text castの状態キー
         /// </summary>
-        public bool FlagApplyString { get; set; }
+        public static readonly string FLAG_APPLY_TEXT_COLOR = "ApplyTextColor";
 
+        /// <summary>
+        /// チェックボックスApply string to text castの状態キー
+        /// </summary>
+        public static readonly string FLAG_APPLY_STRING = "ApplyString";
 
         public OptionData OptionData { get; set; }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public ApplicationData()
+        {
+            this.Flags = new Dictionary<string, bool>();
+        }
     }
 }
