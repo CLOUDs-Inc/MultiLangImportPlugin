@@ -53,5 +53,4 @@ extern "C" {
 	DLLAPI int DownloadInteger(const std::string& variableName);
 	DLLAPI float DownloadFloat(const std::string& variableName);
 	DLLAPI bool DownloadFlag(const std::string& flagName);
-
 }

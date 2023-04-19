@@ -419,3 +419,9 @@ bool DownloadFlag(const std::string& flagName)
 	}
 	return false;
 }
+
+std::string TestGetString()
+{
+	std::string test = std::string("test");
+	return test;
+}

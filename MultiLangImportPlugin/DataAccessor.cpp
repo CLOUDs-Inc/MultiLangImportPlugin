@@ -35,32 +35,42 @@ bool DataAccessor::GetProjectInfo(SdkData& data)
 	return true;
 }
 
-void DataAccessor::GetTextCastNames(SdkData& data)
+/// <summary>
+/// デフォルト言語設定
+/// </summary>
+/// <param name="writeData">書き込み管理データ</param>
+/// <returns>処理成否</returns>
+bool DataAccessor::SetDefaultLanguage(WriteData& writeData)
 {
-	const int CAST_TYPE = ct_Text;
-	int api_ret = 0;
+	bool result = true;
+	int mxResult;
 
-	data.textCastNames.clear();
-
-	// テキストキャストの（ブランクも含んだ）数を取得する
-	data.textCastCount = MxPluginPort_Cast_GetCastCount(CAST_TYPE);
-
-	// キャスト番号の最大値までキャスト番号を０からインクリメントしながら走査
-	for (int castIndex = 0; castIndex < data.textCastCount; castIndex++)
-	{
-		// テキストキャスト名の取得
-		char name_buffer[MAX_PATH] = { 0 };
-
-		api_ret = MxPluginPort_Cast_GetCastName(CAST_TYPE, castIndex, name_buffer, MAX_PATH);
-
-		// テキストキャスト欄の空欄も把握する必要があるので、
-		// 取得に失敗した場合、長さ０の文字列とする
-
-		string castname = string(name_buffer);
-		data.textCastNames.push_back(castname);
+	// デフォルト言語が設定されていなければ(-1)、trueで終了
+	if (writeData.selectedLanguageIndex < 0) {
+		return result;
 	}
 
-	return;
+	// デフォルト言語インデックス
+	int defaultLangIndex = writeData.selectedLanguageIndex;
+	
+	// デフォルト言語設定
+
+
+	return result;
+}
+
+/// <summary>
+/// テキストキャストデータ書き込み
+/// </summary>
+/// <param name="writeData">書き込み管理データ</param>
+/// <returns>処理成否</returns>
+bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData)
+{
+	bool result = true;
+	int mxResult;
+
+
+	return result;
 }
 
 //bool DataAccessor::WriteFontColorTableScript(WriteData& writeData)

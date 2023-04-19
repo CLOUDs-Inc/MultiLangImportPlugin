@@ -16,15 +16,26 @@ public:
 	vector<string> languageNameList;
 
 	/// <summary>
-	/// サブキャスト名指定インデックス
-	/// </summary>
-	int subcastNameIndex;
-
-	/// <summary>
 	/// テキストキャスト名リスト
 	/// </summary>
 	vector<string> textCastNameList;
 
+
+	vector<vector<TextData>> textDataTable;
+
+	// Apply languages and casts設定 =============
+	bool flagAddIfLanguagePageNotFound;
+	bool flagAddIfTextCastNotFound;
+	bool flagCreateAsUnicodeTextCast;
+	bool flagNotUpdateExistingTextCast;
+	bool flagInheritPropertiesOfTheFirstLangPage;
+	bool flagInheritOnlyNewLangPage;
+
+	// Apply properties設定 ======================
+	bool flagApplyFontNameToTextCast;
+	bool flagApplyFontSizeToTextCast;
+	bool flagApplyTextColorToTextCast;
+	bool flagApplyStringToTextCast;
 
 	// サブキャスト設定 ==========================
 	bool flagUseSubcastName;
@@ -32,5 +43,9 @@ public:
 	bool flagAddSubcastNameWhenCreatingANewCast;
 	bool flagUseUnderscoreForConjunctionInSubcastName;
 	string conjunctionString;
-	int subcastIndex;
+	/// <summary>
+	/// サブキャスト名指定インデックス
+	/// </summary>
+	int subcastNameIndex;
+
 };

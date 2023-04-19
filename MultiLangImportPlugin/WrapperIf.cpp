@@ -16,8 +16,34 @@ WrapperIf::WrapperIf(HWND hWnd, HINSTANCE hinstDLL, LPVOID lpvReserved)
 /// <param name="writeData">書き込み用データ保持領域</param>
 void WrapperIf::DownloadAllUIData(WriteData& writeData)
 {
+	// デフォルト言語インデックス
 	writeData.selectedLanguageIndex = DownloadInteger("DefaultLanguageIndex");
+	// サブキャスト扱い列インデックス
 	writeData.subcastNameIndex = DownloadInteger("SubcastNameIndex");
+
+	// Apply languages and casts設定 =============
+	writeData.flagAddIfLanguagePageNotFound = DownloadFlag("AddIfLangPageNotFound");
+	writeData.flagAddIfTextCastNotFound = DownloadFlag("AddIfTextCastNotFound");
+	writeData.flagCreateAsUnicodeTextCast = DownloadFlag("CreateAsUnicodeTextCast");
+	writeData.flagNotUpdateExistingTextCast = DownloadFlag("NotUpdateExistingTextCast");
+	writeData.flagInheritPropertiesOfTheFirstLangPage = DownloadFlag("InheritPropertiesOfTheFirstLangPage");
+	writeData.flagInheritOnlyNewLangPage = DownloadFlag("InheritOnlyNewLangPage");
+
+	// Apply properties設定 ======================
+	writeData.flagApplyFontNameToTextCast = DownloadFlag("ApplyFontName");
+	writeData.flagApplyFontSizeToTextCast = DownloadFlag("ApplyFontSize");
+	writeData.flagApplyTextColorToTextCast = DownloadFlag("ApplyTextColor");
+	writeData.flagApplyStringToTextCast = DownloadFlag("ApplyString");
+
+	// サブキャスト設定 ==========================
+	writeData.flagUseSubcastName = DownloadFlag("UseSubcastName");
+	writeData.flagUseSubcastNameWhenSearchingForCast = DownloadFlag("UseSubcastNameWhenSearchingForCast");
+	writeData.flagAddSubcastNameWhenCreatingANewCast = DownloadFlag("AddSubcastNameWhenCreatingANewCast");
+	writeData.flagUseUnderscoreForConjunctionInSubcastName = DownloadFlag("FlagUseUnderscoreForConjunctionInSubcastName");
+	char* pConjunctionStr = DownloadString("DownloadSubcastConjunctionString");
+	writeData.conjunctionString = std::string(pConjunctionStr);
+	delete[] pConjunctionStr;
+
 	int textCastNameCount = DownloadInteger("TextCastNameCount");
 	int languageNameCount = DownloadInteger("LanguageNameCount");
 
@@ -63,19 +89,17 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 	// 多言語インポートテキストデータをUIから下ろす
 	TextData** textDataTable = DownloadTextDataTable();
 
+	// 多言語インポートデータを保持
 	for (int rowIndex = 0; rowIndex < textCastNameCount; rowIndex++) {
 		TextData* textDataRow = textDataTable[rowIndex];
 
+		vector<TextData> textDataRowVector;
 		for (int colIndex = 0; colIndex < languageNameCount; colIndex++) {
 			TextData textData = textDataRow[colIndex];
+			textDataRowVector.push_back(textData);
 		}
+		writeData.textDataTable.push_back(textDataRowVector);
 	}
-
-	// 多言語インポートデータを保持
-	// CODE HERE
-
-
-
 
 	// 多言語インポートテキストデータのメモリ解放
 	for (int rowIndex = 0; rowIndex < textCastNameCount; rowIndex++)
@@ -167,23 +191,6 @@ void WrapperIf::execute()
 	// (char*に切り替えた)プロジェクト情報を.NET側に転送
 	UploadProjectInfo(sdkData.projectPath.c_str(), sdkData.projectName.c_str());
 
-	// SDKからテキストキャスト名を取得し、.net側にアップする
-	dataAccessor.GetTextCastNames(sdkData);
-
-	// vector<string>からvector<char*>に変換
-	vector<char*> namePointers;
-	for (size_t idx = 0; idx < sdkData.textCastNames.size(); idx++) {
-		char* pc = (char*)sdkData.textCastNames[idx].c_str();
-		namePointers.push_back(pc);
-	}
-
-	// 送信用テキストキャスト名ポインタ配列
-	char** sentNamePointers = nullptr;
-	// テキストキャスト名の実データを割り当て
-	if (0 < namePointers.size()) {
-		sentNamePointers = &(namePointers[0]);
-	}
-
 
 	// UI側に生成処理開始を依頼
 	process_result = BeginProcess();
@@ -197,18 +204,6 @@ void WrapperIf::execute()
 
 	// UIのデータを全て下ろして書き込み用データ領域に移動
 	DownloadAllUIData(writeData);
-
-	
-
-	// 出力スクリプトキャスト名取得
-	//char* pScriptName = DownloadString("DownloadFontColorTableScriptName");
-	//writeData.scriptName = string(pScriptName);
-	//delete[] pScriptName;
-
-	// 出力スクリプトキャストコード取得
-	//char* pScriptCode = DownloadString("DownloadFontColorTableScriptCode");
-	//writeData.tableScriptCode = string(pScriptCode);
-	//delete[] pScriptCode;
 
 	// 出力スクリプトキャストコードをSDKで書き込み
 	//bool write_result = dataAccessor.WriteFontColorTableScript(writeData);

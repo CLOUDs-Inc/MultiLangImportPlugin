@@ -127,6 +127,11 @@ namespace MultiLangImportDotNet
             return this.appData.TextCastNameList.ToArray();
         }
 
+        public string DownloadSubcastConjunctionString()
+        {
+            return this.appData.OptionData.ConjunctionString;
+        }
+
         public object[,] DownloadTextDataTable()
         {
             int rowCount = this.appData.TextCastNameList.Count;
