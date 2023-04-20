@@ -363,7 +363,7 @@ TextData** DownloadTextDataTable()
 char** DownloadStringArray(const std::string& arrayName)
 {
 	if (wrapper != nullptr) {
-		return DownloadStringArray(arrayName);
+		return wrapper->DownloadStringArray(arrayName);
 	}
 	return nullptr;
 }
@@ -418,10 +418,4 @@ bool DownloadFlag(const std::string& flagName)
 		return wrapper->DownloadFlag(flagName);
 	}
 	return false;
-}
-
-std::string TestGetString()
-{
-	std::string test = std::string("test");
-	return test;
 }

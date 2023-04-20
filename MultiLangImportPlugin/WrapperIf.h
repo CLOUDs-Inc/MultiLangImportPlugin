@@ -27,7 +27,7 @@ typedef void(*PProcUploadProjectInfo)(const char* filepath, const char* projectN
 typedef void(*PProcUploadTextCastNames)(int names_len, char** names);
 
 typedef TextData** (*PProcDownloadTextDataTable)();
-typedef char** (*PProcDownloadStringArray)(const std::string& ArrayName);
+typedef char** (*PProcDownloadStringArray)(const std::string& arrayName);
 typedef char* (*PProcDownloadString)(const std::string& methodName);
 typedef int(*PProcDownloadInteger)(const std::string& variableName);
 typedef float(*PProcDownloadFloat)(const std::string& variableName);

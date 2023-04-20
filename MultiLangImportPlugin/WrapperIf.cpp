@@ -21,6 +21,11 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 	// サブキャスト扱い列インデックス
 	writeData.subcastNameIndex = DownloadInteger("SubcastNameIndex");
 
+	// インポートExcelファイルフルパス文字列
+	char* pExcelFullPathStr = DownloadString("DownloadImportExcelFilePath");
+	writeData.importExcelFileFullPath = std::string(pExcelFullPathStr);
+	delete[] pExcelFullPathStr;
+
 	// Apply languages and casts設定 =============
 	writeData.flagAddIfLanguagePageNotFound = DownloadFlag("AddIfLangPageNotFound");
 	writeData.flagAddIfTextCastNotFound = DownloadFlag("AddIfTextCastNotFound");
@@ -35,6 +40,9 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 	writeData.flagApplyTextColorToTextCast = DownloadFlag("ApplyTextColor");
 	writeData.flagApplyStringToTextCast = DownloadFlag("ApplyString");
 
+	// ロギング設定 ==============================
+	writeData.flagLogOutput = DownloadFlag("LogOutput");
+
 	// サブキャスト設定 ==========================
 	writeData.flagUseSubcastName = DownloadFlag("UseSubcastName");
 	writeData.flagUseSubcastNameWhenSearchingForCast = DownloadFlag("UseSubcastNameWhenSearchingForCast");
@@ -46,9 +54,6 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 
 	int textCastNameCount = DownloadInteger("TextCastNameCount");
 	int languageNameCount = DownloadInteger("LanguageNameCount");
-
-	bool flagAddIfLangPageNotFound = DownloadFlag("AddIfLangPageNotFound");
-	bool flagUseSubcastName = DownloadFlag("UseSubcastName");
 
 	// テキストキャスト名リストをUIから下ろす
 	char** textCastNameArray = DownloadStringArray("TextCastNameArray");
@@ -205,14 +210,13 @@ void WrapperIf::execute()
 	// UIのデータを全て下ろして書き込み用データ領域に移動
 	DownloadAllUIData(writeData);
 
-	// 出力スクリプトキャストコードをSDKで書き込み
-	//bool write_result = dataAccessor.WriteFontColorTableScript(writeData);
-	bool write_result = false;
-	if (!write_result) {
-		MessageBox(this->hWnd, L"Writing script cast failed.", L"Error", MB_OK);
+	// 多言語テキストキャストデータをSDKで書き込み
+	bool write_result = dataAccessor.SetTextCastDataInMultiLanguage(writeData);
+	if (write_result) {
+		MessageBox(this->hWnd, L"Multi-language text casts import succeeded.", L"Error", MB_OK);
 	}
 	else {
-		MessageBox(this->hWnd, L"Writing script cast succeeded.", L"Error", MB_OK);
+		MessageBox(this->hWnd, L"Multi-language text casts import failed.", L"Error", MB_OK);
 	}
 
 	return;

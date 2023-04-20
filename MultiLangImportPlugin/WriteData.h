@@ -20,6 +20,7 @@ public:
 	/// </summary>
 	vector<string> textCastNameList;
 
+	string importExcelFileFullPath;
 
 	vector<vector<TextData>> textDataTable;
 
@@ -37,12 +38,16 @@ public:
 	bool flagApplyTextColorToTextCast;
 	bool flagApplyStringToTextCast;
 
+	// ロギング設定 ==============================
+	bool flagLogOutput;
+
 	// サブキャスト設定 ==========================
 	bool flagUseSubcastName;
 	bool flagUseSubcastNameWhenSearchingForCast;
 	bool flagAddSubcastNameWhenCreatingANewCast;
 	bool flagUseUnderscoreForConjunctionInSubcastName;
 	string conjunctionString;
+	
 	/// <summary>
 	/// サブキャスト名指定インデックス
 	/// </summary>

@@ -89,5 +89,62 @@ namespace MultiLangImportDotNet.Import
             this.listBoxSubcastName.Items.AddRange(this.appData.LanguageNameList.ToArray());
             this.listBoxSubcastName.SelectedIndex = optionData.SubcastIndex;
         }
+
+        private void checkBoxUseUnderscore_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            if (checkbox == null) return;
+
+            // 接続文字に"_"を使うかどうか
+            if (checkbox.Checked)
+            {
+                // 使うならば、接続文字のテキストボックスは不要
+                this.textBoxConjunction.Enabled = false;
+                this.labelConjunction.Enabled = false;
+            }
+            else
+            {
+                if (this.checkBoxUseSubcastName.Checked)
+                {
+                    // 使わないなら、接続文字を指定するのでテキストボックスを有効化
+                    this.textBoxConjunction.Enabled = true;
+                    this.labelConjunction.Enabled = true;
+                }
+            }
+        }
+
+        private void listBoxSubcastName_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var listBox = sender as ListBox;
+
+            // 背景描画指示
+            e.DrawBackground();
+            // 描画アイテムのインデックス
+            int index = e.Index;
+
+            // インデックスチェック
+            if (this.appData.LangHasTextWithUnusableCharList.Count <= index) return;
+
+            // 使用不可能フラグ
+            bool langUnusable = this.appData.LangHasTextWithUnusableCharList[index];
+            
+            // 使用可否で色を変更
+            Color bgColor = langUnusable ? Color.DarkGray : SystemColors.Window;
+            Color fgColor = langUnusable ? Color.Silver : SystemColors.WindowText;
+
+            // ListBoxアイテムの背景色を設定
+            using (SolidBrush brush = new SolidBrush(bgColor))
+            {
+                e.Graphics.FillRectangle(brush, e.Bounds);
+            }
+
+            // ListBoxアイテムの文字色を設定
+            using (SolidBrush brush = new SolidBrush(fgColor))
+            {
+                e.Graphics.DrawString(listBox.Items[index].ToString(), e.Font, brush, e.Bounds);
+            }
+
+            e.DrawFocusRectangle();
+        }
     }
 }

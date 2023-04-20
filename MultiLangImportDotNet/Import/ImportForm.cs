@@ -55,6 +55,7 @@ namespace MultiLangImportDotNet.Import
         {
             appData.DefaultLanguageIndex = -1;
             appData.LanguageNameList = reader.LanguageNameList;
+            appData.LangHasTextWithUnusableCharList = reader.LangHasTextWithUnusableCharList;
             appData.TextCastNameList = reader.TextCastNameList;
             appData.TextDataTable = reader.TextDataTable;
         }
@@ -170,6 +171,8 @@ namespace MultiLangImportDotNet.Import
 
         private void SetImportFormSettingToAppData(ApplicationData appData)
         {
+            appData.ImportExcelFilePath = this.textBoxImportFile.Text;
+
             appData.Flags[ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND] = this.checkBoxAddLangPage.Checked;
             appData.Flags[ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND] = this.checkBoxAddTextCast.Checked;
             appData.Flags[ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST] = this.checkBoxCreateAsUnicode.Checked;
@@ -181,6 +184,20 @@ namespace MultiLangImportDotNet.Import
             appData.Flags[ApplicationData.FLAG_APPLY_FONT_SIZE] = this.checkBoxApplyFontSize.Checked;
             appData.Flags[ApplicationData.FLAG_APPLY_TEXT_COLOR] = this.checkBoxApplyTextColor.Checked;
             appData.Flags[ApplicationData.FLAG_APPLY_STRING] = this.checkBoxApplyString.Checked;
+            appData.Flags[ApplicationData.FLAG_LOG_OUTPUT] = this.checkBoxLogOutput.Checked;
+        }
+
+
+        private void SetEnableUIAfterExcelImport()
+        {
+            // デフォルト言語指定機能、サブキャスト機能、インポート機能を有効に
+            this.buttonDefaultLanguage.Enabled = true;
+            this.buttonOption.Enabled = true;
+            this.buttonImport.Enabled = true;
+            // Apply propertiesを有効に
+            this.checkBoxApplyFontname.Enabled = true;
+            this.checkBoxApplyFontSize.Enabled = true;
+            this.checkBoxApplyTextColor.Enabled = true;
         }
 
 
@@ -276,10 +293,7 @@ namespace MultiLangImportDotNet.Import
 
 
             // デフォルト言語指定、サブキャスト機能、インポート機能を有効に
-            this.buttonDefaultLanguage.Enabled = true;
-            this.buttonOption.Enabled = true;
-            this.buttonImport.Enabled = true;
-
+            SetEnableUIAfterExcelImport();
 
             // ファイルパスを表示
             this.textBoxImportFile.Text = filename;

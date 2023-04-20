@@ -93,6 +93,16 @@ namespace MultiLangImportDotNet
             return "";
         }
 
+
+        /// <summary>
+        /// dll側へインポートExcelファイルフルパスを転送
+        /// </summary>
+        /// <returns></returns>
+        public string DownloadImportExcelFilePath()
+        {
+            return this.appData.ImportExcelFilePath;
+        }
+
         /// <summary>
         /// dll側へデフォルト言語インデックスを転送
         /// </summary>
@@ -104,7 +114,7 @@ namespace MultiLangImportDotNet
 
         public int DownloadSubcastNameIndex()
         {
-            return this.appData.SubcastNameIndex;
+            return this.appData.OptionData.SubcastIndex;
         }
 
         public int DownloadLanguageNameCount()

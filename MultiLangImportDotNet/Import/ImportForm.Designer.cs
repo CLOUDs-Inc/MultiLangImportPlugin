@@ -53,6 +53,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonDefaultLanguage = new System.Windows.Forms.Button();
             this.buttonOption = new System.Windows.Forms.Button();
             this.labelTextModification = new System.Windows.Forms.Label();
+            this.checkBoxLogOutput = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTextMod)).BeginInit();
             this.groupBoxApplyLangAndCast.SuspendLayout();
             this.groupBoxApplyProperty.SuspendLayout();
@@ -152,7 +153,7 @@ namespace MultiLangImportDotNet.Import
             this.buttonImport.Name = "buttonImport";
             this.buttonImport.Size = new System.Drawing.Size(117, 37);
             this.buttonImport.TabIndex = 0;
-            this.buttonImport.Text = "Import";
+            this.buttonImport.Text = "Run Import";
             this.buttonImport.UseVisualStyleBackColor = true;
             this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
             // 
@@ -340,11 +341,25 @@ namespace MultiLangImportDotNet.Import
             this.labelTextModification.Text = "Font: --";
             this.labelTextModification.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // checkBoxLogOutput
+            // 
+            this.checkBoxLogOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxLogOutput.AutoSize = true;
+            this.checkBoxLogOutput.Checked = true;
+            this.checkBoxLogOutput.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxLogOutput.Location = new System.Drawing.Point(151, 538);
+            this.checkBoxLogOutput.Name = "checkBoxLogOutput";
+            this.checkBoxLogOutput.Size = new System.Drawing.Size(78, 16);
+            this.checkBoxLogOutput.TabIndex = 0;
+            this.checkBoxLogOutput.Text = "Log output";
+            this.checkBoxLogOutput.UseVisualStyleBackColor = true;
+            // 
             // ImportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 576);
+            this.Controls.Add(this.checkBoxLogOutput);
             this.Controls.Add(this.groupBoxApplyProperty);
             this.Controls.Add(this.groupBoxApplyLangAndCast);
             this.Controls.Add(this.dataGridViewTextMod);
@@ -399,5 +414,6 @@ namespace MultiLangImportDotNet.Import
         private System.Windows.Forms.Button buttonDefaultLanguage;
         private System.Windows.Forms.Button buttonOption;
         private System.Windows.Forms.Label labelTextModification;
+        private System.Windows.Forms.CheckBox checkBoxLogOutput;
     }
 }

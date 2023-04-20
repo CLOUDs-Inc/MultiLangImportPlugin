@@ -9,6 +9,11 @@ namespace MultiLangImportDotNet
     public class ApplicationData
     {
         /// <summary>
+        /// 多言語インポートExcelファイルフルパス
+        /// </summary>
+        public string ImportExcelFilePath { get; set; }
+
+        /// <summary>
         /// デフォルト設定言語インデクス
         /// </summary>
         public int DefaultLanguageIndex { get; set; }
@@ -17,6 +22,12 @@ namespace MultiLangImportDotNet
         /// 言語名リスト
         /// </summary>
         public List<string> LanguageNameList { get; set; }
+
+        /// <summary>
+        /// 言語毎名称使用不可文字含有フラグリスト
+        /// （フラグONと同じインデックスの言語は使用不可文字を含むテキストがあるので、サブキャスト名として使用不可能）
+        /// </summary>
+        public List<bool> LangHasTextWithUnusableCharList { get; set; }
 
         /// <summary>
         /// サブキャスト名指定インデクス
@@ -87,6 +98,11 @@ namespace MultiLangImportDotNet
         /// チェックボックスApply string to text castの状態キー
         /// </summary>
         public static readonly string FLAG_APPLY_STRING = "ApplyString";
+
+        /// <summary>
+        /// チェックボックスLog outputの状態キー
+        /// </summary>
+        public static readonly string FLAG_LOG_OUTPUT = "LogOutput";
 
         public OptionData OptionData { get; set; }
 

@@ -99,6 +99,7 @@ namespace MultiLangImportDotNet.Import
             this.listBoxSubcastName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxSubcastName.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.listBoxSubcastName.Enabled = false;
             this.listBoxSubcastName.FormattingEnabled = true;
             this.listBoxSubcastName.ItemHeight = 12;
@@ -106,11 +107,13 @@ namespace MultiLangImportDotNet.Import
             this.listBoxSubcastName.Name = "listBoxSubcastName";
             this.listBoxSubcastName.Size = new System.Drawing.Size(319, 196);
             this.listBoxSubcastName.TabIndex = 5;
+            this.listBoxSubcastName.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxSubcastName_DrawItem);
             // 
             // textBoxConjunction
             // 
             this.textBoxConjunction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxConjunction.Enabled = false;
             this.textBoxConjunction.Location = new System.Drawing.Point(104, 76);
             this.textBoxConjunction.Name = "textBoxConjunction";
             this.textBoxConjunction.Size = new System.Drawing.Size(231, 19);
@@ -129,6 +132,7 @@ namespace MultiLangImportDotNet.Import
             // labelConjunction
             // 
             this.labelConjunction.AutoSize = true;
+            this.labelConjunction.Enabled = false;
             this.labelConjunction.Location = new System.Drawing.Point(31, 79);
             this.labelConjunction.Name = "labelConjunction";
             this.labelConjunction.Size = new System.Drawing.Size(67, 12);
@@ -147,6 +151,7 @@ namespace MultiLangImportDotNet.Import
             this.checkBoxUseUnderscore.TabIndex = 2;
             this.checkBoxUseUnderscore.Text = "Use underscore for conjunction in subcast-name";
             this.checkBoxUseUnderscore.UseVisualStyleBackColor = true;
+            this.checkBoxUseUnderscore.CheckedChanged += new System.EventHandler(this.checkBoxUseUnderscore_CheckedChanged);
             // 
             // checkBoxAddSubcastNameCreating
             // 
