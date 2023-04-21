@@ -29,7 +29,11 @@ namespace MultiLangImportDotNet.Import
             optionData.Flags[OptionData.FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST] = this.checkBoxAddSubcastNameCreating.Checked;
             optionData.Flags[OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME] = this.checkBoxUseUnderscore.Checked;
             optionData.ConjunctionString = this.textBoxConjunction.Text.Trim();
-            optionData.SubcastIndex = this.listBoxSubcastName.SelectedIndex;
+
+            // 使用不可言語を選択している場合は、選択を解除(index:-1)とする
+            optionData.SubcastIndex = appData.LangHasTextWithUnusableCharList[this.listBoxSubcastName.SelectedIndex]
+                ? -1
+                : optionData.SubcastIndex = this.listBoxSubcastName.SelectedIndex;
         }
 
         private void checkBoxUseSubcastName_CheckedChanged(object sender, EventArgs e)
@@ -123,14 +127,34 @@ namespace MultiLangImportDotNet.Import
             int index = e.Index;
 
             // インデックスチェック
-            if (this.appData.LangHasTextWithUnusableCharList.Count <= index) return;
+            if (index < 0 || this.appData.LangHasTextWithUnusableCharList.Count <= index) return;
 
             // 使用不可能フラグ
             bool langUnusable = this.appData.LangHasTextWithUnusableCharList[index];
+
+            Color bgColor = SystemColors.Window;
+            Color fgColor = SystemColors.WindowText;
+            // サブキャストとして使用可能な言語か確認する
+            if (langUnusable)
+            {
+                // 使用不可の時
+                // 選択状態に限らずグレー化（グレーを選択した場合はOKボタンの際にインデクス指定解除処理を行う）
+                bgColor = Color.DarkGray;
+                fgColor = Color.Silver;
+            }
+            // アイテムの選択状態を確認する
+            else if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                // 選択されている時
+                bgColor = SystemColors.Highlight;
+                fgColor = SystemColors.HighlightText;
+            }
+            else
+            {
+                // 選択されていない時
+                // 色はすでに指定済み
+            }
             
-            // 使用可否で色を変更
-            Color bgColor = langUnusable ? Color.DarkGray : SystemColors.Window;
-            Color fgColor = langUnusable ? Color.Silver : SystemColors.WindowText;
 
             // ListBoxアイテムの背景色を設定
             using (SolidBrush brush = new SolidBrush(bgColor))
