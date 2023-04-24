@@ -69,6 +69,51 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData)
 	bool result = true;
 	int mxResult;
 
+	// ログ：日時
+
+
+	// ログ：インポートExcelファイルパス情報
+
+
+
+	// 言語ページ追加処理
+	// ログ：追加言語
+
+
+
+
+	// キャスト毎追加処理
+
+
+	// 既存同一キャスト名検索
+
+	// キャスト追加 or 参照
+
+	// 文字コード指定
+
+	// 言語ページ指定
+
+	// テキスト
+
+	// フォント名
+
+	// フォントサイズ
+
+	// フォント色(RGB)
+
+	// フォントスタイル
+
+
+
+
+
+
+
+
+
+
+	// キャスト毎追加処理ここまで
+
 
 	return result;
 }

@@ -84,6 +84,11 @@ namespace MultiLangImportDotNet.Import
                 {
                     var textData = reader.TextDataTable[rowIndex, colIndex];
                     this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Value = textData.Text;
+                    if (!textData.CanConvertToANSI)
+                    {
+                        // ANSI(shift_jis)変換出来ないテキストは赤色表示
+                        this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Style.ForeColor = Color.Red;
+                    }
                 }
             }
         }

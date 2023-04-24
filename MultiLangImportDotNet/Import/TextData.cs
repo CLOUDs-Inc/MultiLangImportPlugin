@@ -49,8 +49,13 @@ namespace MultiLangImportDotNet.Import
         /// </summary>
         public bool IsStrike { get; private set; }
 
+        /// <summary>
+        /// ANSI(Shift-JIS)への変換可否
+        /// </summary>
+        public bool CanConvertToANSI { get; private set; }
 
-        public TextData(string text, string fontName, float fontSize, Color fontColor, bool isBold, bool isItalic, bool isUnderline, bool isStrike)
+
+        public TextData(string text, string fontName, float fontSize, Color fontColor, bool isBold, bool isItalic, bool isUnderline, bool isStrike, bool canConvToANSI)
         {
             this.Text = text;
             this.FontName = fontName;
@@ -60,6 +65,7 @@ namespace MultiLangImportDotNet.Import
             this.IsItalic = isItalic;
             this.IsUnderline = isUnderline;
             this.IsStrike = isStrike;
+            this.CanConvertToANSI = canConvToANSI;
         }
     }
 }

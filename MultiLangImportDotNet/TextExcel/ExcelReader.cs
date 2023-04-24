@@ -248,13 +248,20 @@ namespace MultiLangImportDotNet.TextExcel
                                                     }
 
                                                     string text = dataCell.Value as string;
-                                                    
+
+                                                    // テキストにキャスト名使用不可文字含有チェック
+                                                    bool hasUnusableChar = Utils.CheckNameHitUnusableChars(text);
+                                                    // テキスト：ANSI変換可否チェック
+                                                    bool canConvToANSI = Utils.ANSIConvertTest(text);
+
                                                     // テキストにキャスト名使用不可文字が含まれていたら
-                                                    if (Utils.CheckNameHitUnusableChars(text))
+                                                    // テキストがANSI変換不可能だったら
+                                                    if (hasUnusableChar || !canConvToANSI)
                                                     {
                                                         // その言語列はsubcast名として使えないとしてフラグを立てる
                                                         unusableCharLangNameFlags[colIndex - colStart] = true;
                                                     }
+
 
                                                     var dataCellFirstChar = dataCell.Characters[1, 1];
                                                     try
@@ -282,7 +289,10 @@ namespace MultiLangImportDotNet.TextExcel
 
                                                                 // 抽出したテキストデータをテーブルに格納する
                                                                 textDataTable[rowIndex - rowStart, colIndex - colStart]
-                                                                    = new Import.TextData(text, fontname, fontsize, fontColor, isBold, isItalic, isUnderline, isStrike);
+                                                                    = new Import.TextData(
+                                                                        text, fontname, fontsize, fontColor,
+                                                                        isBold, isItalic, isUnderline, isStrike, canConvToANSI
+                                                                        );
                                                             }
                                                             finally { Marshal.ReleaseComObject(dataCellFont); }
 
@@ -290,11 +300,13 @@ namespace MultiLangImportDotNet.TextExcel
                                                     }
                                                     finally { Marshal.ReleaseComObject(dataCellFirstChar); }
                                                 }
+#if DEBUG
                                                 catch (Exception ex)
                                                 {
                                                     string msg = "Ex:" + ex.Message;
                                                     MessageBox.Show(msg);
                                                 }
+#endif
                                                 finally { Marshal.ReleaseComObject(dataCell); }
                                             }
                                         }
