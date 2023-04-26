@@ -248,57 +248,59 @@ namespace MultiLangImportDotNet.TextExcel
                                                     }
 
                                                     string text = dataCell.Value as string;
-
-                                                    // テキストにキャスト名使用不可文字含有チェック
-                                                    bool hasUnusableChar = Utils.CheckNameHitUnusableChars(text);
-                                                    // テキスト：ANSI変換可否チェック
-                                                    bool canConvToANSI = Utils.ANSIConvertTest(text);
-
-                                                    // テキストにキャスト名使用不可文字が含まれていたら
-                                                    // テキストがANSI変換不可能だったら
-                                                    if (hasUnusableChar || !canConvToANSI)
+                                                    if(text != null)
                                                     {
-                                                        // その言語列はsubcast名として使えないとしてフラグを立てる
-                                                        unusableCharLangNameFlags[colIndex - colStart] = true;
-                                                    }
+                                                        // テキストにキャスト名使用不可文字含有チェック
+                                                        bool hasUnusableChar = Utils.CheckNameHitUnusableChars(text);
+                                                        // テキスト：ANSI変換可否チェック
+                                                        bool canConvToANSI = Utils.ANSIConvertTest(text);
 
-
-                                                    var dataCellFirstChar = dataCell.Characters[1, 1];
-                                                    try
-                                                    {
-                                                        if (dataCellFirstChar != null)
+                                                        // テキストにキャスト名使用不可文字が含まれていたら
+                                                        // テキストがANSI変換不可能だったら
+                                                        if (hasUnusableChar || !canConvToANSI)
                                                         {
-                                                            var dataCellFont = dataCellFirstChar.Font;
-                                                            try
-                                                            {
-                                                                string fontname = dataCellFont.Name as string;
-                                                                fontname = (fontname == null ? string.Empty : fontname);
-
-                                                                float fontsize = 9f;
-                                                                if (dataCellFont.Size != null)
-                                                                {
-                                                                    fontsize = (float)dataCellFont.Size;
-                                                                }
-
-                                                                Color fontColor = ColorTranslator.FromOle((int)dataCellFont.Color);
-                                                                bool isBold = (bool)dataCellFont.Bold;
-                                                                bool isItalic = (bool)dataCellFont.Italic;
-                                                                Excel.XlUnderlineStyle underlineStyle = (Excel.XlUnderlineStyle)dataCellFont.Underline;
-                                                                bool isUnderline = (underlineStyle != Excel.XlUnderlineStyle.xlUnderlineStyleNone);
-                                                                bool isStrike = (bool)dataCellFont.Strikethrough;
-
-                                                                // 抽出したテキストデータをテーブルに格納する
-                                                                textDataTable[rowIndex - rowStart, colIndex - colStart]
-                                                                    = new Import.TextData(
-                                                                        text, fontname, fontsize, fontColor,
-                                                                        isBold, isItalic, isUnderline, isStrike, canConvToANSI
-                                                                        );
-                                                            }
-                                                            finally { Marshal.ReleaseComObject(dataCellFont); }
-
+                                                            // その言語列はsubcast名として使えないとしてフラグを立てる
+                                                            unusableCharLangNameFlags[colIndex - colStart] = true;
                                                         }
+
+
+                                                        var dataCellFirstChar = dataCell.Characters[1, 1];
+                                                        try
+                                                        {
+                                                            if (dataCellFirstChar != null)
+                                                            {
+                                                                var dataCellFont = dataCellFirstChar.Font;
+                                                                try
+                                                                {
+                                                                    string fontname = dataCellFont.Name as string;
+                                                                    fontname = (fontname == null ? string.Empty : fontname);
+
+                                                                    float fontsize = 9f;
+                                                                    if (dataCellFont.Size != null)
+                                                                    {
+                                                                        fontsize = (float)dataCellFont.Size;
+                                                                    }
+
+                                                                    Color fontColor = ColorTranslator.FromOle((int)dataCellFont.Color);
+                                                                    bool isBold = (bool)dataCellFont.Bold;
+                                                                    bool isItalic = (bool)dataCellFont.Italic;
+                                                                    Excel.XlUnderlineStyle underlineStyle = (Excel.XlUnderlineStyle)dataCellFont.Underline;
+                                                                    bool isUnderline = (underlineStyle != Excel.XlUnderlineStyle.xlUnderlineStyleNone);
+                                                                    bool isStrike = (bool)dataCellFont.Strikethrough;
+
+                                                                    // 抽出したテキストデータをテーブルに格納する
+                                                                    textDataTable[rowIndex - rowStart, colIndex - colStart]
+                                                                        = new Import.TextData(
+                                                                            text, fontname, fontsize, fontColor,
+                                                                            isBold, isItalic, isUnderline, isStrike, canConvToANSI
+                                                                            );
+                                                                }
+                                                                finally { Marshal.ReleaseComObject(dataCellFont); }
+
+                                                            }
+                                                        }
+                                                        finally { Marshal.ReleaseComObject(dataCellFirstChar); }
                                                     }
-                                                    finally { Marshal.ReleaseComObject(dataCellFirstChar); }
                                                 }
 #if DEBUG
                                                 catch (Exception ex)

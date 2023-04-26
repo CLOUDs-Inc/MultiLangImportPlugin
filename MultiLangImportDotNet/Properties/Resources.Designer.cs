@@ -61,6 +61,26 @@ namespace MultiLangImportDotNet.Properties {
         }
         
         /// <summary>
+        ///   Have a language page or cast name that contains characters that cannot be converted to ANSI.
+        ///Characters that cannot be converted will be replaced with underscores, is that okay? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string WARN_NAME_CONTAINS_NOT_ANSI {
+            get {
+                return ResourceManager.GetString("WARN_NAME_CONTAINS_NOT_ANSI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Content of the textcast contains a string that cannot be converted to ANSI.
+        ///The corresponding textcast will be changed to Unicode textcast, is that okay? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string WARN_TEXTCAST_CONTAINS_NOT_ANSI {
+            get {
+                return ResourceManager.GetString("WARN_TEXTCAST_CONTAINS_NOT_ANSI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   MultiLangImportWrapper.dll に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string WRAPPER_DLL_FILENAME {

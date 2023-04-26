@@ -53,9 +53,6 @@ namespace MultiLangImportDotNet
 
             // アプリ管理データを新規化
             this.appData = new ApplicationData();
-            this.appData.OptionData = new OptionData();
-            // オプションデータのデフォルト設定を行う
-            this.appData.OptionData.Default();
 
             //Logger.SetFilePath(Path.GetDirectoryName(projectFilePath) + "\\Plugin_DressUpTextCodeGen.log");
 
@@ -153,8 +150,9 @@ namespace MultiLangImportDotNet
                 for (int colIndex = 0; colIndex < colCount; colIndex++)
                 {
                     var textData = this.appData.TextDataTable[rowIndex, colIndex];
-
-                    dlTextDataTable[rowIndex, colIndex] = Activator.CreateInstance(this.typeCLITextData, new object[] {
+                    if (textData != null)
+                    {
+                        dlTextDataTable[rowIndex, colIndex] = Activator.CreateInstance(this.typeCLITextData, new object[] {
                             textData.Text,
                             textData.FontName,
                             textData.FontSize,
@@ -164,8 +162,10 @@ namespace MultiLangImportDotNet
                             textData.IsBold,
                             textData.IsItalic,
                             textData.IsUnderline,
-                            textData.IsStrike
+                            textData.IsStrike,
+                            textData.CanConvertToANSI
                         });
+                    }
                 }
             }
 

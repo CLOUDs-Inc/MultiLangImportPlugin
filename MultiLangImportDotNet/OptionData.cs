@@ -49,6 +49,7 @@ namespace MultiLangImportDotNet
         public OptionData()
         {
             this.Flags = new Dictionary<string, bool>();
+            Default();
         }
 
         public void Default()

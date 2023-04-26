@@ -153,20 +153,29 @@ namespace MultiLangImportWrapper
 					Object^ objManaged = tableManaged->GetValue(rowIndex, colIndex);
 					
 					CLITextData^ textDataManaged = safe_cast<CLITextData^>(objManaged);
-					auto textManaged = textDataManaged->text;
-					auto fontNameManaged = textDataManaged->fontName;
-
+					
 					TextData textData;
-					textData.text = marshal_as<std::string>(textManaged);
-					textData.fontName = marshal_as<std::string>(fontNameManaged);
-					textData.fontSize = textDataManaged->fontSize;
-					textData.colorR = textDataManaged->colorR;
-					textData.colorG = textDataManaged->colorB;
-					textData.colorB = textDataManaged->colorB;
-					textData.isBold = textDataManaged->isBold;
-					textData.isItalic = textDataManaged->isItalic;
-					textData.isUnderline = textDataManaged->isUnderline;
-					textData.isStrike = textDataManaged->isStrike;
+					if (textDataManaged == nullptr) {
+						// 操作非対象データを明記
+						textData.isValidData = false;
+					}
+					else {
+						auto textManaged = textDataManaged->text;
+						auto fontNameManaged = textDataManaged->fontName;
+
+						textData.text = marshal_as<std::string>(textManaged);
+						textData.fontName = marshal_as<std::string>(fontNameManaged);
+						textData.fontSize = textDataManaged->fontSize;
+						textData.colorR = textDataManaged->colorR;
+						textData.colorG = textDataManaged->colorB;
+						textData.colorB = textDataManaged->colorB;
+						textData.isValidData = true;
+						textData.isBold = textDataManaged->isBold;
+						textData.isItalic = textDataManaged->isItalic;
+						textData.isUnderline = textDataManaged->isUnderline;
+						textData.isStrike = textDataManaged->isStrike;
+						textData.canConvToANSI = textDataManaged->canConvToANSI;
+					}
 
 					textDataTable[rowIndex][colIndex] = textData;
 				}

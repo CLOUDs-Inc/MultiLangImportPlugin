@@ -6,6 +6,16 @@ DataAccessor::DataAccessor(HINSTANCE hinstDLL, LPVOID lpvReserved)
 	this->lpvReserved = lpvReserved;
 }
 
+string DataAccessor::GetDirectoryFromPath(const string& filepath) {
+
+	char buffer[MAX_PATH];
+	GetFullPathNameA(filepath.c_str(), MAX_PATH, buffer, nullptr);
+	PathRemoveFileSpecA(buffer);
+	string directory = string(buffer);
+	return directory;
+}
+
+
 /// <summary>
 /// SDKのプロジェクト情報の取得・格納
 /// </summary>
@@ -64,11 +74,14 @@ bool DataAccessor::SetDefaultLanguage(WriteData& writeData)
 /// </summary>
 /// <param name="writeData">書き込み管理データ</param>
 /// <returns>処理成否</returns>
-bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData)
+bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData& sdkData)
 {
 	bool result = true;
 	int mxResult;
 
+	string logDir = GetDirectoryFromPath(sdkData.projectPath);
+	// ロガーを取得
+	//SingleLogger* logger = SingleLogger::getLogger()
 	// ログ：日時
 
 
@@ -83,7 +96,7 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData)
 
 
 	// キャスト毎追加処理
-
+	// CastNum=MxPluginPort_Cast_CreateText(CastNum,NULL);
 
 	// 既存同一キャスト名検索
 

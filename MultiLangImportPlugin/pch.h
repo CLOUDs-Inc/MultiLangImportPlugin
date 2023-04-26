@@ -14,12 +14,15 @@
 #include <UserEnv.h>
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <Shlwapi.h>
+#include <fileapi.h>
 
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <codecvt>
+#include <filesystem>
 
 #include "Const.h"
 #include "TextData.h"
@@ -29,5 +32,6 @@
 #include "dllmain.h"
 #include "WrapperIf.h"
 #include "DataAccessor.h"
+#include "SingleLogger.h"
 
 #endif //PCH_H

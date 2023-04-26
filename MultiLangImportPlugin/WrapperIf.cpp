@@ -211,8 +211,8 @@ void WrapperIf::execute()
 	DownloadAllUIData(writeData);
 
 	// 多言語テキストキャストデータをSDKで書き込み
-	//bool write_result = dataAccessor.SetTextCastDataInMultiLanguage(writeData);
-	bool write_result = true;
+	bool write_result = dataAccessor.SetTextCastDataInMultiLanguage(writeData, sdkData);
+	//bool write_result = true;
 	if (write_result) {
 		MessageBox(this->hWnd, L"Multi-language text casts import succeeded.", L"Error", MB_OK);
 	}

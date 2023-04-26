@@ -82,18 +82,17 @@ namespace MultiLangImportDotNet
             bool result = false;
             try
             {
-                byte[] unicodeBytes = Encoding.Unicode.GetBytes(testedString);
                 Encoding encodeSJIS = Encoding.GetEncoding("shift_jis");
 
-                // utf16 -> SJIS
+                // デフォルトUnicodeバイトデータ
+                byte[] unicodeBytes = Encoding.Unicode.GetBytes(testedString);
+                // utf16 -> SJIS 変換
                 byte[] bytesUTF16toSJIS = Encoding.Convert(Encoding.Unicode, encodeSJIS, unicodeBytes);
-
+                // SJIS文字コードデータを文字列化
                 string targetString = encodeSJIS.GetString(bytesUTF16toSJIS);
 
-                // 変換前と変換後で'?'の数が同じなら変換成功
-                int qCountOfTested = testedString.Count((c) => c == '?');
-                int qCountOfTarget = targetString.Count((c) => c == '?');
-                if (qCountOfTested == qCountOfTarget)
+                // 変換前と変換後で文字列が同じなら変換成功
+                if(0 == string.Compare(testedString, targetString))
                 {
                     result = true;
                 }

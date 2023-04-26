@@ -53,11 +53,15 @@ namespace MultiLangImportDotNet.Import
         /// <param name="reader">Excelリーダーオブジェクト</param>
         private void SetApplicationDataToManageClass(ApplicationData appData, TextExcel.ExcelReader reader)
         {
+            // デフォルト言語指定をリセット
             appData.DefaultLanguageIndex = -1;
             appData.LanguageNameList = reader.LanguageNameList;
             appData.LangHasTextWithUnusableCharList = reader.LangHasTextWithUnusableCharList;
             appData.TextCastNameList = reader.TextCastNameList;
             appData.TextDataTable = reader.TextDataTable;
+            // サブキャスト列指定をリセット
+            appData.SubcastNameIndex = -1;
+            appData.OptionData.SubcastIndex = -1;
         }
 
         private void SetDataToTable(TextExcel.ExcelReader reader)
@@ -83,11 +87,14 @@ namespace MultiLangImportDotNet.Import
                 for(int colIndex = 0; colIndex < reader.TextTableColumn; colIndex++)
                 {
                     var textData = reader.TextDataTable[rowIndex, colIndex];
-                    this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Value = textData.Text;
-                    if (!textData.CanConvertToANSI)
+                    if(textData != null)
                     {
-                        // ANSI(shift_jis)変換出来ないテキストは赤色表示
-                        this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Style.ForeColor = Color.Red;
+                        this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Value = textData.Text;
+                        if (!textData.CanConvertToANSI)
+                        {
+                            // ANSI(shift_jis)変換出来ないテキストは赤色表示
+                            this.dataGridViewTextMod.Rows[rowIndex].Cells[colIndex].Style.ForeColor = Color.Red;
+                        }
                     }
                 }
             }
@@ -296,8 +303,7 @@ namespace MultiLangImportDotNet.Import
             // Excel読み取りを行ったデータを管理クラスに移す
             SetApplicationDataToManageClass(appData, excelReader);
 
-
-            // デフォルト言語指定、サブキャスト機能、インポート機能を有効に
+            // デフォルト言語指定機能、サブキャスト機能、インポート機能を有効に
             SetEnableUIAfterExcelImport();
 
             // ファイルパスを表示
@@ -349,6 +355,32 @@ namespace MultiLangImportDotNet.Import
 
         private void buttonImport_Click(object sender, EventArgs e)
         {
+            // 言語ページ、キャスト名はANSI指定
+            // ページ名候補（列タイトル）、キャスト名（行タイトル）、サブキャストセルデータにANSI変換できないフラグが１つでも
+            // あれば、ユーザに確認し、アンダーラインへの変換を許可できなければ、処理中止
+            bool ansiUnconvertableFlag = appData.NamesANSIUnconvertableFlag;
+            if (ansiUnconvertableFlag)
+            {
+                if (MessageBox.Show(this, Properties.Resources.WARN_NAME_CONTAINS_NOT_ANSI, "Question", MessageBoxButtons.OKCancel)
+                    != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
+            // 「テキストキャストをUnicode作る」チェックを付けていない（ANSIで作る）時、
+            // ANSIにコンバート出来ないテキストが１つでもあれば、ユーザに確認し、Unicodeでの作成に転向したくなければ処理中止
+            bool flagCreateAsUnicode = this.checkBoxCreateAsUnicode.Checked;
+            bool hasUnconvertableTextFlag = true; // test
+            if((!flagCreateAsUnicode) && hasUnconvertableTextFlag)
+            {
+                if (MessageBox.Show(this, Properties.Resources.WARN_TEXTCAST_CONTAINS_NOT_ANSI, "Question", MessageBoxButtons.OKCancel)
+                    != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
             // フォームのチェックボックス設定をアプリ管理データにセットする
             SetImportFormSettingToAppData(this.appData);
 

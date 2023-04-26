@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WARN_NAME_CONTAINS_NOT_ANSI" xml:space="preserve">
+    <value>Have a language page or cast name that contains characters that cannot be converted to ANSI.
+Characters that cannot be converted will be replaced with underscores, is that okay?</value>
+  </data>
+  <data name="WARN_TEXTCAST_CONTAINS_NOT_ANSI" xml:space="preserve">
+    <value>Content of the textcast contains a string that cannot be converted to ANSI.
+The corresponding textcast will be changed to Unicode textcast, is that okay?</value>
+  </data>
   <data name="WRAPPER_DLL_FILENAME" xml:space="preserve">
     <value>MultiLangImportWrapper.dll</value>
   </data>

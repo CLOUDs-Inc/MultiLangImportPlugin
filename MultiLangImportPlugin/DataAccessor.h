@@ -9,7 +9,8 @@ class DataAccessor {
 
 	HINSTANCE hinstDLL;
 	LPVOID lpvReserved;
-	std::vector<string> writeFailedModules;
+
+	string GetDirectoryFromPath(const string& filepath);
 
 public:
 	DataAccessor(HINSTANCE hinstDLL, LPVOID lpvReserved);
@@ -18,5 +19,5 @@ public:
 	bool GetProjectInfo(SdkData& data);
 
 	bool SetDefaultLanguage(WriteData& writeData);
-	bool SetTextCastDataInMultiLanguage(WriteData& writeData);
+	bool SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData& sdkData);
 };

@@ -50,6 +50,58 @@ namespace MultiLangImportDotNet
         public Dictionary<string, bool> Flags { get; set; }
 
         /// <summary>
+        /// 名前のANSI変換不可能フラグ
+        /// ページ名、キャスト名、サブキャストセルデータにANSI変換できないデータが
+        /// １つでもあればフラグON
+        /// </summary>
+        public bool NamesANSIUnconvertableFlag
+        {
+            get
+            {
+                // ページ名に１つでもANSI変換できない名前があった場合
+                for (int index = 0; index < LanguageNameList.Count; index++)
+                {
+                    // 列をサブキャスト用に指定している場合はチェック不要
+                    if (index == SubcastNameIndex) continue;
+
+                    // ページ名に１つでもANSI変換できない名前があった場合
+                    if (!Utils.ANSIConvertTest(LanguageNameList[index]))
+                    {
+                        // 変換不可フラグON
+                        return true;
+                    }
+                }
+
+                if(TextCastNameList != null)
+                {
+                    // キャスト名に１つでもANSI変換できない名前があった場合
+                    if (TextCastNameList.Any(name => !Utils.ANSIConvertTest(name)))
+                    {
+                        // 変換不可フラグON
+                        return true;
+                    }
+                }
+
+                // サブキャスト名としての指定があり
+                if(0 <= SubcastNameIndex)
+                {
+                    // サブキャスト名の列のデータに
+                    for(int index = 0; index < TextCastNameList.Count; index++)
+                    {
+                        // １つでもANSI変換できない名前があった場合
+                        if(!TextDataTable[index, SubcastNameIndex].CanConvertToANSI)
+                        {
+                            // 変換不可フラグON
+                            return true;
+                        }
+                    }
+                }
+
+                // 変換不可フラグOFF
+                return false;
+            }
+        }
+        /// <summary>
         /// チェックボックスAdd if language page is not foundの状態キー
         /// </summary>
         public static readonly string FLAG_ADD_IF_LANG_PAGE_NOT_FOUND = "AddIfLangPageNotFound";
@@ -112,6 +164,9 @@ namespace MultiLangImportDotNet
         public ApplicationData()
         {
             this.Flags = new Dictionary<string, bool>();
+            this.SubcastNameIndex = -1;
+            this.DefaultLanguageIndex = -1;
+            this.OptionData = new OptionData();
         }
     }
 }
