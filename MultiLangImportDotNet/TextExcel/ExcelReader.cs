@@ -34,6 +34,11 @@ namespace MultiLangImportDotNet.TextExcel
         public List<string> LanguageNameList { get; private set; }
 
         /// <summary>
+        /// 言語名ANSI変換不可フラグ（赤表示）リスト
+        /// </summary>
+        public List<bool> LangNameANSIUnconvertableFlagList { get; private set; }
+
+        /// <summary>
         /// 言語列ごとにテキストに使用不可文字が含まれているかのリスト
         /// </summary>
         public List<bool> LangHasTextWithUnusableCharList { get; private set; }
@@ -42,6 +47,11 @@ namespace MultiLangImportDotNet.TextExcel
         /// テキストキャスト名リスト
         /// </summary>
         public List<string> TextCastNameList { get; private set; }
+
+        /// <summary>
+        /// テキストキャスト名ANSI変換不可フラグ（赤表示）リスト
+        /// </summary>
+        public List<bool> TextNameANSIUnconvertableFlagList { get; private set; }
 
         /// <summary>
         /// インポートテキストテーブルの行数（テキストキャストの数）
@@ -98,8 +108,10 @@ namespace MultiLangImportDotNet.TextExcel
             bool result = false;
 
             List<string> langNameList = new List<string>();
+            List<bool> langNameANSIUnconvertableFlagList = new List<bool>();
             bool[] unusableCharLangNameFlags = null;
             List<string> textNameList = new List<string>();
+            List<bool> textNameANSIUnconvertableFlagList = new List<bool>();
             Import.TextData[,] textDataTable = null;
 
             string ML_TEXT_TABLE_SHEET_RANGE_pre = "A1:"; // Multi-lang text table 多言語テキスト対応シート使用レンジテンプレート
@@ -217,8 +229,10 @@ namespace MultiLangImportDotNet.TextExcel
                                         {
                                             var castNameCell = usedRange[rowIndex, 1];
                                             string castname = castNameCell.Value as string;
-                                            castname = Utils.ChangeUnusableCharToUnderscore(castname);
+                                            bool ansiConvertable = Utils.ANSIConvertTest(castname);
+                                            castname = Utils.CorrectCastNameForGrid(castname);
                                             textNameList.Add(castname);
+                                            textNameANSIUnconvertableFlagList.Add(!ansiConvertable);
 
                                             Marshal.ReleaseComObject(castNameCell);
                                         }
@@ -228,8 +242,10 @@ namespace MultiLangImportDotNet.TextExcel
                                         {
                                             var langNameCell = usedRange[rowLang, colIndex];
                                             string langName = langNameCell.Value as string;
-                                            langName = Utils.ChangeUnusableCharToUnderscore(langName);
+                                            bool ansiConvertable = Utils.ANSIConvertTest(langName);
+                                            //langName = Utils.ChangeUnusableCharToUnderscore(langName);
                                             langNameList.Add(langName);
+                                            langNameANSIUnconvertableFlagList.Add(!ansiConvertable);
 
                                             Marshal.ReleaseComObject(langNameCell);
                                         }
@@ -317,7 +333,9 @@ namespace MultiLangImportDotNet.TextExcel
                                         // 収集データをインターフェース用プロパティにセット
                                         this.TextDataTable = textDataTable;
                                         this.LanguageNameList = langNameList;
+                                        this.LangNameANSIUnconvertableFlagList = langNameANSIUnconvertableFlagList;
                                         this.TextCastNameList = textNameList;
+                                        this.TextNameANSIUnconvertableFlagList = textNameANSIUnconvertableFlagList;
                                         this.LangHasTextWithUnusableCharList = unusableCharLangNameFlags.ToList();
 
                                         // 処理成功

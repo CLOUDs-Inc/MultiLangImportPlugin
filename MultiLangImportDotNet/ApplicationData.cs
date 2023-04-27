@@ -101,6 +101,30 @@ namespace MultiLangImportDotNet
                 return false;
             }
         }
+
+
+        public bool TextDataANSIUnconvertableFlag
+        {
+            get
+            {
+                int rowNum = TextDataTable.GetLength(0);
+                int colNum = TextDataTable.GetLength(1);
+
+                for(int r = 0; r < rowNum; r++)
+                {
+                    for(int c = 0; c < colNum; c++)
+                    {
+                        if(!TextDataTable[r, c].CanConvertToANSI)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         /// <summary>
         /// チェックボックスAdd if language page is not foundの状態キー
         /// </summary>

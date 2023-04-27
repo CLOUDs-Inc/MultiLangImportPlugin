@@ -3,6 +3,7 @@
 class TextData {
 public:
 	std::string text;
+	std::wstring wtext;
 	std::string fontName;
 	float fontSize;
 	int   colorR;

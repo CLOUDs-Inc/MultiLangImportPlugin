@@ -10,11 +10,18 @@ namespace MultiLangImportDotNet
     public class Utils
     {
         /// <summary>
+        /// ページ名に使用できない文字
+        /// </summary>
+        public static string UNUSABLE_CHARS_STR_FOR_NAME = "!\"#$%&'()*+,-./:;<=>?@[\\]^{|}~";
+
+        /// <summary>
         /// キャスト名に使用できない文字
         /// </summary>
-        public static string UNUSABLE_CHARS_STR_BY_CASTNAME = " !\"#$%&'()*+,-./:;<=>?@[\\]^{|}~";
+        public static string UNUSABLE_CHARS_STR_FOR_CASTNAME = " !\"#$%&'()*+,-./:;<=>?@[\\]^{|}~";
 
-        public static char[] UNUSABLE_CHARS_BY_CASTNAME = UNUSABLE_CHARS_STR_BY_CASTNAME.ToCharArray();
+        public static char[] UNUSABLE_CHARS_BY_CASTNAME = UNUSABLE_CHARS_STR_FOR_NAME.ToCharArray();
+
+        public static Encoding EncodeSJIS = Encoding.GetEncoding("shift_jis");
 
         /// <summary>
         /// Excel列番号の文字列変換(1->"A", 26->"Z", 27->"AA", 28->"AB"...)
@@ -45,7 +52,7 @@ namespace MultiLangImportDotNet
 
             foreach(var c in testedString)
             {
-                if (UNUSABLE_CHARS_STR_BY_CASTNAME.Contains(c))
+                if (UNUSABLE_CHARS_STR_FOR_NAME.Contains(c))
                 {
                     return true;
                 }
@@ -65,7 +72,7 @@ namespace MultiLangImportDotNet
             foreach(var c in testedString)
             {
                 sb.Append(
-                    UNUSABLE_CHARS_STR_BY_CASTNAME.Contains(c) ? '_' : c
+                    UNUSABLE_CHARS_STR_FOR_NAME.Contains(c) ? '_' : c
                 );
             }
 
@@ -76,23 +83,17 @@ namespace MultiLangImportDotNet
         /// ANSI(Shift-JIS)変換可否チェック
         /// </summary>
         /// <param name="testedString">変換対象文字列</param>
-        /// <returns>変換可否</returns>
+        /// <returns>変換可否（変換前後で文字に差異がないか）</returns>
         public static bool ANSIConvertTest(string testedString)
         {
             bool result = false;
+
             try
             {
-                Encoding encodeSJIS = Encoding.GetEncoding("shift_jis");
-
-                // デフォルトUnicodeバイトデータ
-                byte[] unicodeBytes = Encoding.Unicode.GetBytes(testedString);
-                // utf16 -> SJIS 変換
-                byte[] bytesUTF16toSJIS = Encoding.Convert(Encoding.Unicode, encodeSJIS, unicodeBytes);
-                // SJIS文字コードデータを文字列化
-                string targetString = encodeSJIS.GetString(bytesUTF16toSJIS);
-
+                // SJIS文字に変換
+                string converted = ForcelyConvertToANSI(testedString);
                 // 変換前と変換後で文字列が同じなら変換成功
-                if(0 == string.Compare(testedString, targetString))
+                if(0 == string.Compare(testedString, converted))
                 {
                     result = true;
                 }
@@ -105,41 +106,83 @@ namespace MultiLangImportDotNet
             return result;
         }
 
-        public static string CorrectCastName(string castName)
+        /// <summary>
+        /// C#のデフォルトUnicode文字列を強制的にShift_JISにする
+        /// </summary>
+        /// <param name="targetStr">変換対象文字列</param>
+        /// <returns>変換後文字列、変換できない文字は'?'になる</returns>
+        public static string ForcelyConvertToANSI(string targetStr)
         {
-            string result = castName;
-            if (string.IsNullOrEmpty(result)) return result;
+            if (string.IsNullOrEmpty(targetStr)) return targetStr;
 
+            string sjisString;
             try
             {
-                byte[] unicodeBytes = Encoding.Unicode.GetBytes(result);
-                Encoding encodeSJIS = Encoding.GetEncoding("shift_jis");
-
+                // Unicode状態でのbyte列に変換
+                byte[] unicodeBytes = Encoding.Unicode.GetBytes(targetStr);
                 // utf16 -> SJIS
-                byte[] bytesUTF16toSJIS = Encoding.Convert(Encoding.Unicode, encodeSJIS, unicodeBytes);
-
-                string targetString = encodeSJIS.GetString(bytesUTF16toSJIS);
-                // 変換できず"?"となった箇所は"_"に変換する
-                // 使用できない記号についても"_"に変換する
-                foreach(char c in UNUSABLE_CHARS_STR_BY_CASTNAME)
-                {
-                    result = result.Replace(c, '_');
-                }
+                byte[] bytesUTF16toSJIS = Encoding.Convert(Encoding.Unicode, EncodeSJIS, unicodeBytes);
+                
+                // SJISエンコード文字列の取得
+                sjisString = EncodeSJIS.GetString(bytesUTF16toSJIS);
             }
-            catch
+            catch(Exception ex)
             {
-                result = "CorrectError";
+                throw ex;
             }
 
-            // 先頭に数字がある場合"TXT_"を頭に付与する
-            if(char.IsDigit(result[0]))
-            {
-                result = "TXT_" + result;
-            }
-            return result;
+            return sjisString;
         }
 
 
+        public static bool CorrectCastName(out string correctedName, string castName)
+        {
+            bool result;
 
+            try
+            {
+                string sjisName = ForcelyConvertToANSI(castName);
+
+                // 変換できず"?"となった箇所は"_"に変換する
+                // 使用できない記号についても"_"に変換する
+                foreach (char c in UNUSABLE_CHARS_STR_FOR_CASTNAME)
+                {
+                    sjisName = sjisName.Replace(c, '_');
+                }
+
+                // 先頭に数字がある場合"TXT_"を頭に付与する
+                if (!string.IsNullOrEmpty(sjisName) && char.IsDigit(sjisName[0]))
+                {
+                    sjisName = "TXT_" + sjisName;
+                }
+
+                correctedName = sjisName;
+                result = true;
+            }
+            catch
+            {
+                correctedName = null;
+                result = false;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// UIのグリッド表示用にキャスト名を修正する
+        /// </summary>
+        /// <param name="castname">修正前キャスト名</param>
+        /// <returns>修正後キャスト名</returns>
+        public static string CorrectCastNameForGrid(string castname)
+        {
+            string result = castname;
+            // 使用できない記号について"_"に変換する
+            foreach (char c in UNUSABLE_CHARS_STR_FOR_CASTNAME)
+            {
+                result = result.Replace(c, '_');
+            }
+
+            return result;
+        }
     }
 }

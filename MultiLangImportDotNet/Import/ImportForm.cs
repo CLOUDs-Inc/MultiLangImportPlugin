@@ -67,6 +67,7 @@ namespace MultiLangImportDotNet.Import
         private void SetDataToTable(TextExcel.ExcelReader reader)
         {
             // datagridviewをリセット
+            this.dataGridViewTextMod.Columns.Clear();
             this.dataGridViewTextMod.Rows.Clear();
 
             // テーブルの列数（言語数）を設定
@@ -77,12 +78,20 @@ namespace MultiLangImportDotNet.Import
             {
                 this.dataGridViewTextMod.Columns[colIndex].SortMode = DataGridViewColumnSortMode.NotSortable;
                 this.dataGridViewTextMod.Columns[colIndex].HeaderText = reader.LanguageNameList[colIndex];
+                if (reader.LangNameANSIUnconvertableFlagList[colIndex])
+                {
+                    this.dataGridViewTextMod.Columns[colIndex].HeaderCell.Style.ForeColor = Color.Red;
+                }
             }
             
             for(int rowIndex = 0; rowIndex < reader.TextTableRow; rowIndex++)
             {
                 int currentRowIndex = this.dataGridViewTextMod.Rows.Add();
                 this.dataGridViewTextMod.Rows[currentRowIndex].HeaderCell.Value = reader.TextCastNameList[rowIndex];
+                if (reader.TextNameANSIUnconvertableFlagList[rowIndex])
+                {
+                    this.dataGridViewTextMod.Rows[currentRowIndex].HeaderCell.Style.ForeColor = Color.Red;
+                }
 
                 for(int colIndex = 0; colIndex < reader.TextTableColumn; colIndex++)
                 {
@@ -371,7 +380,7 @@ namespace MultiLangImportDotNet.Import
             // 「テキストキャストをUnicode作る」チェックを付けていない（ANSIで作る）時、
             // ANSIにコンバート出来ないテキストが１つでもあれば、ユーザに確認し、Unicodeでの作成に転向したくなければ処理中止
             bool flagCreateAsUnicode = this.checkBoxCreateAsUnicode.Checked;
-            bool hasUnconvertableTextFlag = true; // test
+            bool hasUnconvertableTextFlag = appData.TextDataANSIUnconvertableFlag;
             if((!flagCreateAsUnicode) && hasUnconvertableTextFlag)
             {
                 if (MessageBox.Show(this, Properties.Resources.WARN_TEXTCAST_CONTAINS_NOT_ANSI, "Question", MessageBoxButtons.OKCancel)

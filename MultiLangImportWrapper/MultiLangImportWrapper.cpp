@@ -164,6 +164,7 @@ namespace MultiLangImportWrapper
 						auto fontNameManaged = textDataManaged->fontName;
 
 						textData.text = marshal_as<std::string>(textManaged);
+						textData.wtext = marshal_as<std::wstring>(textManaged);
 						textData.fontName = marshal_as<std::string>(fontNameManaged);
 						textData.fontSize = textDataManaged->fontSize;
 						textData.colorR = textDataManaged->colorR;

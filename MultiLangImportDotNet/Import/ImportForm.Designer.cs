@@ -105,9 +105,9 @@ namespace MultiLangImportDotNet.Import
             this.labelImportedData.AutoSize = true;
             this.labelImportedData.Location = new System.Drawing.Point(12, 221);
             this.labelImportedData.Name = "labelImportedData";
-            this.labelImportedData.Size = new System.Drawing.Size(79, 12);
+            this.labelImportedData.Size = new System.Drawing.Size(296, 12);
             this.labelImportedData.TabIndex = 2;
-            this.labelImportedData.Text = "Imported Data:";
+            this.labelImportedData.Text = "Imported data (Red letters cannot be converted to ANSI)";
             // 
             // dataGridViewTextMod
             // 
