@@ -26,6 +26,10 @@
 #define	IDMxPluginPort_Event_Score_GetSelectedCount		0x301
 #define	IDMxPluginPort_Event_Score_GetSelectedTrack		0x302
 
+#define	IDMxPluginPort_Event_ScoreRename_GetNumber		0x310
+#define	IDMxPluginPort_Event_ScoreRename_GetOldName		0x311
+#define	IDMxPluginPort_Event_ScoreRename_GetNewName		0x312
+
 #define	IDMxPluginPort_Event_Cast_GetCastType			0x400
 #define	IDMxPluginPort_Event_Cast_GetCastNumber			0x401
 #define	IDMxPluginPort_Event_Cast_GetOldName			0x402
@@ -55,6 +59,48 @@
 #define	IDMxPluginPort_CLang_GetFileNameConst			0x505
 #define	IDMxPluginPort_CLang_GetFileNameEventSource		0x506
 #define	IDMxPluginPort_CLang_GetFileNameEventHeader		0x507
+
+#define	IDMxPluginPort_CLang_GetInitEvent_Enabled		0x510
+#define	IDMxPluginPort_CLang_GetInitEvent_Type			0x511
+#define	IDMxPluginPort_CLang_GetInitEvent_Name			0x512
+#define	IDMxPluginPort_CLang_GetFinallyEvent_Enabled	0x513
+#define	IDMxPluginPort_CLang_GetFinallyEvent_Type		0x514
+#define	IDMxPluginPort_CLang_GetFinallyEvent_Name		0x515
+#define	IDMxPluginPort_CLang_GetInitEventFuncName		0x516
+#define	IDMxPluginPort_CLang_GetFinallyEventFuncName	0x517
+
+#define	IDMxPluginPort_CLang_SetEnabled					0x580
+#define	IDMxPluginPort_CLang_SetPathSRCNative			0x581
+#define	IDMxPluginPort_CLang_SetPathEventNative			0x582
+#define	IDMxPluginPort_CLang_SetPathLibNative			0x583
+#define	IDMxPluginPort_CLang_SetPathOBJNative			0x584
+#define	IDMxPluginPort_CLang_GetPathSRCNative			0x585
+#define	IDMxPluginPort_CLang_GetPathEventNative			0x586
+#define	IDMxPluginPort_CLang_GetPathLibNative			0x587
+#define	IDMxPluginPort_CLang_GetPathOBJNative			0x588
+
+#define	IDMxPluginPort_CLang_SetInitEvent_Enabled		0x590
+#define	IDMxPluginPort_CLang_SetInitEvent_Type			0x591
+#define	IDMxPluginPort_CLang_SetInitEvent_Name			0x592
+#define	IDMxPluginPort_CLang_SetFinallyEvent_Enabled	0x593
+#define	IDMxPluginPort_CLang_SetFinallyEvent_Type		0x594
+#define	IDMxPluginPort_CLang_SetFinallyEvent_Name		0x595
+
+#define	IDMxPluginPort_CLang_SetEventListName_Type		0x598
+#define	IDMxPluginPort_CLang_SetEventListName_Name		0x599
+#define	IDMxPluginPort_CLang_SetEventSymbolName_Type	0x59A
+#define	IDMxPluginPort_CLang_SetEventSymbolName_Name	0x59B
+#define	IDMxPluginPort_CLang_SetEventTableName_Type		0x59C
+#define	IDMxPluginPort_CLang_SetEventTableName_Name		0x59D
+#define	IDMxPluginPort_CLang_SetEventTableName_Alias	0x59E
+
+#define	IDMxPluginPort_Project_MultiLang_GetEnabled		0x8000
+#define	IDMxPluginPort_Project_MultiLang_SetEnabled		0x8001
+#define	IDMxPluginPort_Project_MultiLang_GetCount		0x8002
+#define	IDMxPluginPort_Project_MultiLang_GetName		0x8003
+#define	IDMxPluginPort_Project_MultiLang_SetName		0x8004
+#define	IDMxPluginPort_Project_MultiLang_Add			0x8005
+#define	IDMxPluginPort_Project_MultiLang_Remove			0x8006
 
 #define IDMxPluginPort_Cast_FindBlank					0x20
 #define IDMxPluginPort_Cast_FindBlankSince				0x21
@@ -125,6 +171,9 @@
 #define IDMxPluginPort_Track_SetCastNumber				0x6D	//2014.10.07
 #define IDMxPluginPort_Track_FindTrackLabel				0x6E	//2015.11.27
 
+#define IDMxPluginPort_TrackProperty_SetData			0x70
+#define IDMxPluginPort_TrackProperty_GetData			0x71
+
 #define IDMxPluginPort_LoopTrack_GetLength				0x80
 #define IDMxPluginPort_LoopTrack_GetValue				0x81
 #define IDMxPluginPort_LoopTrack_SetValue				0x82
@@ -136,6 +185,16 @@
 #define IDMxPluginPort_CastPropety_SetData3				0x93
 
 #define IDMxPluginPort_Primitive_QuadPolygon			0xA0
+
+#define IDMxPluginPort_Project_SetPropertyInt			0x700
+#define IDMxPluginPort_Project_GetPropertyInt			0x701
+
+#define	IDMxPluginPort_Cast_Text_GetLineCount			0x1000
+#define	IDMxPluginPort_Cast_Text_GetLineString			0x1001
+
+#define	IDMxPluginPort_Cast_TextML_GetLangAssigned		0x1800
+#define	IDMxPluginPort_Cast_TextML_CreateLanguage		0x1801
+#define	IDMxPluginPort_Cast_TextML_RemoveLanguage		0x1802
 
 #define	IDMxPluginPort_End								0xFF
 
@@ -166,6 +225,10 @@ typedef BOOL(_cdecl* TMxPluginPort_Event_Score_GetScoreTrack)(HINSTANCE hinstDLL
 typedef BOOL(_cdecl* TMxPluginPort_Event_Score_GetSelectedCount)(HINSTANCE hinstDLL, int* SelectedCount);
 typedef BOOL(_cdecl* TMxPluginPort_Event_Score_GetSelectedTrack)(HINSTANCE hinstDLL, int Index, int* TrackNum);
 
+typedef BOOL(_cdecl* TMxPluginPort_Event_ScoreRename_GetNumber)(HINSTANCE hinstDLL, int* ScoreNum);
+typedef BOOL(_cdecl* TMxPluginPort_Event_ScoreRename_GetOldName)(HINSTANCE hinstDLL, char** OldName);
+typedef BOOL(_cdecl* TMxPluginPort_Event_ScoreRename_GetNewName)(HINSTANCE hinstDLL, char** NewName);
+
 typedef BOOL(_cdecl* TMxPluginPort_Event_Cast_GetCastType)(HINSTANCE hinstDLL, int* CastType);
 typedef BOOL(_cdecl* TMxPluginPort_Event_Cast_GetCastNumber)(HINSTANCE hinstDLL, int* CastNumber);
 typedef BOOL(_cdecl* TMxPluginPort_Event_Cast_GetOldName)(HINSTANCE hinstDLL, char** OldName);
@@ -195,6 +258,48 @@ typedef BOOL(_cdecl* TMxPluginPort_CLang_GetPathOBJ)(char** FileName);
 typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFileNameConst)(char** FileName);
 typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFileNameEventSource)(char** FileName);
 typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFileNameEventHeader)(char** FileName);
+
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetInitEvent_Enabled)(BOOL* Enabled);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetInitEvent_Type)(int* Type);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetInitEvent_Name)(char** Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFinallyEvent_Enabled)(BOOL* Enabled);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFinallyEvent_Type)(int* Type);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFinallyEvent_Name)(char** Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetInitEventFuncName)(char** Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetFinallyEventFuncName)(char** Name);
+
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEnabled)(BOOL Enabled);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetPathSRCNative)(char* FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetPathEventNative)(char* FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetPathLibNative)(char* FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetPathOBJNative)(char* FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetPathSRCNative)(char** FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetPathEventNative)(char** FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetPathLibNative)(char** FileName);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_GetPathOBJNative)(char** FileName);
+
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetInitEvent_Enabled)(BOOL Enabled);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetInitEvent_Type)(int  Type);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetInitEvent_Name)(char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetFinallyEvent_Enabled)(BOOL Enabled);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetFinallyEvent_Type)(int  Type);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetFinallyEvent_Name)(char* Name);
+
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventListName_Type)(int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventListName_Name)(char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventSymbolName_Type)(int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventSymbolName_Name)(char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventTableName_Type)(int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventTableName_Name)(char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_CLang_SetEventTableName_Alias)(BOOL Enabled);
+
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_GetEnabled)(BOOL* Enabled);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_SetEnabled)(BOOL	Enabled);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_GetCount)(int* Count);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_GetName)(int	Index, char** Name);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_SetName)(int	Index, const char* Name);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_Add)(const char* Name);
+typedef	BOOL(_cdecl* TMxPluginPort_Project_MultiLang_Remove)(int	Index);
 
 typedef int(_cdecl* TMxPluginPort_Cast_FindBlank)(int CastType);
 typedef int(_cdecl* TMxPluginPort_Cast_FindBlankSince)(int CastType, int CastNumber);
@@ -265,6 +370,9 @@ typedef int(_cdecl* TMxPluginPort_Track_GetLabelName)(int ScoreNumber, int Track
 typedef BOOL(_cdecl* TMxPluginPort_Track_SetLabelName)(int ScoreNumber, int TrackNumber, char* LabelName, int Reserved);
 typedef int(_cdecl* TMxPluginPort_Track_FindTrackLabel)(int ScoreNumber, char* LabelName);
 
+typedef BOOL(_cdecl* TMxPluginPort_TrackProperty_SetData)(int ScoreNumber, int TrackNumber, int IDNum, int Value);
+typedef BOOL(_cdecl* TMxPluginPort_TrackProperty_GetData)(int ScoreNumber, int TrackNumber, int IDNum, void* Value);
+
 typedef int(_cdecl* TMxPluginPort_LoopTrack_GetLength)(int ScoreNumbe);
 typedef BOOL(_cdecl* TMxPluginPort_LoopTrack_GetValue)(int ScoreNumber, int FrameNumber, int* Value);
 typedef BOOL(_cdecl* TMxPluginPort_LoopTrack_SetValue)(int ScoreNumber, int FrameNumber, int Value);
@@ -276,6 +384,15 @@ typedef BOOL(_cdecl* TMxPluginPort_CastPropety_SetDataPtr)(int CastType, int Cas
 typedef BOOL(_cdecl* TMxPluginPort_CastPropety_SetDataFloat)(int CastType, int CastNumber, int PropertyType, float Value);
 typedef BOOL(_cdecl* TMxPluginPort_CastPropety_GetData)(int CastType, int CastNumber, int PropertyType, void* Value);
 typedef BOOL(_cdecl* TMxPluginPort_Primitive_QuadPolygon)(int CastNumber, char* CastName, MXPLUGIN_VECTOR3D V1, MXPLUGIN_VECTOR3D V2, MXPLUGIN_VECTOR3D V3, MXPLUGIN_VECTOR3D V4);
+
+typedef BOOL(_cdecl* TMxPluginPort_Project_SetPropertyInt)(int ID, int Value);
+typedef BOOL(_cdecl* TMxPluginPort_Project_GetPropertyInt)(int ID, int* Value);
+
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineCount)(int CastNumber, int LangNum, int* Count);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineString)(int CastNumber, int LineNumber, int LangNum, void** St);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_GetLangAssigned)(int CastNumber, int LangNum, BOOL* Result);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_CreateLanguage)(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_RemoveLanguage)(int CastNumber, int LangNum);
 
 //DLLÇÃä÷êîÇíËã`
 TMxPluginPort_System_AddMemu				subMxPluginPort_System_AddMemu = NULL;
@@ -300,6 +417,10 @@ TMxPluginPort_Event_GetMXPFileName			subMxPluginPort_Event_GetMXPFileName = NULL
 TMxPluginPort_Event_Score_GetScoreTrack		subMxPluginPort_Event_Score_GetScoreTrack = NULL;
 TMxPluginPort_Event_Score_GetSelectedCount	subMxPluginPort_Event_Score_GetSelectedCount = NULL;
 TMxPluginPort_Event_Score_GetSelectedTrack	subMxPluginPort_Event_Score_GetSelectedTrack = NULL;
+
+TMxPluginPort_Event_ScoreRename_GetNumber	subMxPluginPort_Event_ScoreRename_GetNumber = NULL;
+TMxPluginPort_Event_ScoreRename_GetOldName	subMxPluginPort_Event_ScoreRename_GetOldName = NULL;
+TMxPluginPort_Event_ScoreRename_GetNewName	subMxPluginPort_Event_ScoreRename_GetNewName = NULL;
 
 TMxPluginPort_Event_Cast_GetCastType		subMxPluginPort_Event_Cast_GetCastType = NULL;
 TMxPluginPort_Event_Cast_GetCastNumber		subMxPluginPort_Event_Cast_GetCastNumber = NULL;
@@ -330,6 +451,48 @@ TMxPluginPort_CLang_GetPathOBJ				subMxPluginPort_CLang_GetPathOBJ = NULL;
 TMxPluginPort_CLang_GetFileNameConst		subMxPluginPort_CLang_GetFileNameConst = NULL;
 TMxPluginPort_CLang_GetFileNameEventSource	subMxPluginPort_CLang_GetFileNameEventSource = NULL;
 TMxPluginPort_CLang_GetFileNameEventHeader	subMxPluginPort_CLang_GetFileNameEventHeader = NULL;
+
+TMxPluginPort_CLang_GetInitEvent_Enabled    subMxPluginPort_CLang_GetInitEvent_Enabled = NULL;
+TMxPluginPort_CLang_GetInitEvent_Type       subMxPluginPort_CLang_GetInitEvent_Type = NULL;
+TMxPluginPort_CLang_GetInitEvent_Name       subMxPluginPort_CLang_GetInitEvent_Name = NULL;
+TMxPluginPort_CLang_GetFinallyEvent_Enabled subMxPluginPort_CLang_GetFinallyEvent_Enabled = NULL;
+TMxPluginPort_CLang_GetFinallyEvent_Type    subMxPluginPort_CLang_GetFinallyEvent_Type = NULL;
+TMxPluginPort_CLang_GetFinallyEvent_Name    subMxPluginPort_CLang_GetFinallyEvent_Name = NULL;
+TMxPluginPort_CLang_GetInitEventFuncName    subMxPluginPort_CLang_GetInitEventFuncName = NULL;
+TMxPluginPort_CLang_GetFinallyEventFuncName	subMxPluginPort_CLang_GetFinallyEventFuncName = NULL;
+
+TMxPluginPort_CLang_SetEnabled				subMxPluginPort_CLang_SetEnabled = NULL;
+TMxPluginPort_CLang_SetPathSRCNative		subMxPluginPort_CLang_SetPathSRCNative = NULL;
+TMxPluginPort_CLang_SetPathEventNative		subMxPluginPort_CLang_SetPathEventNative = NULL;
+TMxPluginPort_CLang_SetPathLibNative		subMxPluginPort_CLang_SetPathLibNative = NULL;
+TMxPluginPort_CLang_SetPathOBJNative		subMxPluginPort_CLang_SetPathOBJNative = NULL;
+TMxPluginPort_CLang_GetPathSRCNative		subMxPluginPort_CLang_GetPathSRCNative = NULL;
+TMxPluginPort_CLang_GetPathEventNative		subMxPluginPort_CLang_GetPathEventNative = NULL;
+TMxPluginPort_CLang_GetPathLibNative		subMxPluginPort_CLang_GetPathLibNative = NULL;
+TMxPluginPort_CLang_GetPathOBJNative		subMxPluginPort_CLang_GetPathOBJNative = NULL;
+
+TMxPluginPort_CLang_SetInitEvent_Enabled    subMxPluginPort_CLang_SetInitEvent_Enabled = NULL;
+TMxPluginPort_CLang_SetInitEvent_Type       subMxPluginPort_CLang_SetInitEvent_Type = NULL;
+TMxPluginPort_CLang_SetInitEvent_Name       subMxPluginPort_CLang_SetInitEvent_Name = NULL;
+TMxPluginPort_CLang_SetFinallyEvent_Enabled subMxPluginPort_CLang_SetFinallyEvent_Enabled = NULL;
+TMxPluginPort_CLang_SetFinallyEvent_Type    subMxPluginPort_CLang_SetFinallyEvent_Type = NULL;
+TMxPluginPort_CLang_SetFinallyEvent_Name    subMxPluginPort_CLang_SetFinallyEvent_Name = NULL;
+
+TMxPluginPort_CLang_SetEventListName_Type	subMxPluginPort_CLang_SetEventListName_Type = NULL;
+TMxPluginPort_CLang_SetEventListName_Name	subMxPluginPort_CLang_SetEventListName_Name = NULL;
+TMxPluginPort_CLang_SetEventSymbolName_Type	subMxPluginPort_CLang_SetEventSymbolName_Type = NULL;
+TMxPluginPort_CLang_SetEventSymbolName_Name	subMxPluginPort_CLang_SetEventSymbolName_Name = NULL;
+TMxPluginPort_CLang_SetEventTableName_Type	subMxPluginPort_CLang_SetEventTableName_Type = NULL;
+TMxPluginPort_CLang_SetEventTableName_Name	subMxPluginPort_CLang_SetEventTableName_Name = NULL;
+TMxPluginPort_CLang_SetEventTableName_Alias	subMxPluginPort_CLang_SetEventTableName_Alias = NULL;
+
+TMxPluginPort_Project_MultiLang_GetEnabled	subMxPluginPort_Project_MultiLang_GetEnabled = NULL;
+TMxPluginPort_Project_MultiLang_SetEnabled	subMxPluginPort_Project_MultiLang_SetEnabled = NULL;
+TMxPluginPort_Project_MultiLang_GetCount	subMxPluginPort_Project_MultiLang_GetCount = NULL;
+TMxPluginPort_Project_MultiLang_GetName		subMxPluginPort_Project_MultiLang_GetName = NULL;
+TMxPluginPort_Project_MultiLang_SetName		subMxPluginPort_Project_MultiLang_SetName = NULL;
+TMxPluginPort_Project_MultiLang_Add			subMxPluginPort_Project_MultiLang_Add = NULL;
+TMxPluginPort_Project_MultiLang_Remove		subMxPluginPort_Project_MultiLang_Remove = NULL;
 
 TMxPluginPort_Cast_FindBlank				subMxPluginPort_Cast_FindBlank = NULL;
 TMxPluginPort_Cast_FindBlankSince			subMxPluginPort_Cast_FindBlankSince = NULL;
@@ -400,6 +563,9 @@ TMxPluginPort_Track_GetLabelName			subMxPluginPort_Track_GetLabelName = NULL;
 TMxPluginPort_Track_SetLabelName			subMxPluginPort_Track_SetLabelName = NULL;
 TMxPluginPort_Track_FindTrackLabel			subMxPluginPort_Track_FindTrackLabel = NULL;
 
+TMxPluginPort_TrackProperty_SetData			subMxPluginPort_TrackProperty_SetData = NULL;
+TMxPluginPort_TrackProperty_GetData			subMxPluginPort_TrackProperty_GetData = NULL;
+
 TMxPluginPort_LoopTrack_GetLength			subMxPluginPort_LoopTrack_GetLength = NULL;
 TMxPluginPort_LoopTrack_GetValue			subMxPluginPort_LoopTrack_GetValue = NULL;
 TMxPluginPort_LoopTrack_SetValue			subMxPluginPort_LoopTrack_SetValue = NULL;
@@ -413,6 +579,16 @@ TMxPluginPort_CastPropety_SetDataFloat		subMxPluginPort_CastPropety_SetDataFloat
 
 TMxPluginPort_CastPropety_GetData			subMxPluginPort_CastPropety_GetData = NULL;
 TMxPluginPort_Primitive_QuadPolygon			subMxPluginPort_Primitive_QuadPolygon = NULL;
+
+TMxPluginPort_Project_SetPropertyInt		subMxPluginPort_Project_SetPropertyInt = NULL;
+TMxPluginPort_Project_GetPropertyInt		subMxPluginPort_Project_GetPropertyInt = NULL;
+
+TMxPluginPort_Cast_Text_GetLineCount		subMxPluginPort_Cast_Text_GetLineCount = NULL;
+TMxPluginPort_Cast_Text_GetLineString		subMxPluginPort_Cast_Text_GetLineString = NULL;
+
+TMxPluginPort_Cast_TextML_GetLangAssigned	subMxPluginPort_Cast_TextML_GetLangAssigned = NULL;
+TMxPluginPort_Cast_TextML_CreateLanguage	subMxPluginPort_Cast_TextML_CreateLanguage = NULL;
+TMxPluginPort_Cast_TextML_RemoveLanguage	subMxPluginPort_Cast_TextML_RemoveLanguage = NULL;
 
 BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 {
@@ -440,6 +616,10 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_Event_Score_GetScoreTrack: { subMxPluginPort_Event_Score_GetScoreTrack = (TMxPluginPort_Event_Score_GetScoreTrack)FuncAddr; break; }
 	case	IDMxPluginPort_Event_Score_GetSelectedCount: { subMxPluginPort_Event_Score_GetSelectedCount = (TMxPluginPort_Event_Score_GetSelectedCount)FuncAddr; break; }
 	case	IDMxPluginPort_Event_Score_GetSelectedTrack: { subMxPluginPort_Event_Score_GetSelectedTrack = (TMxPluginPort_Event_Score_GetSelectedTrack)FuncAddr; break; }
+
+	case	IDMxPluginPort_Event_ScoreRename_GetNumber: { subMxPluginPort_Event_ScoreRename_GetNumber = (TMxPluginPort_Event_ScoreRename_GetNumber)FuncAddr; break; }
+	case	IDMxPluginPort_Event_ScoreRename_GetOldName: { subMxPluginPort_Event_ScoreRename_GetOldName = (TMxPluginPort_Event_ScoreRename_GetOldName)FuncAddr; break; }
+	case	IDMxPluginPort_Event_ScoreRename_GetNewName: { subMxPluginPort_Event_ScoreRename_GetNewName = (TMxPluginPort_Event_ScoreRename_GetNewName)FuncAddr; break; }
 
 	case	IDMxPluginPort_Event_Cast_GetCastType: { subMxPluginPort_Event_Cast_GetCastType = (TMxPluginPort_Event_Cast_GetCastType)FuncAddr; break; }
 	case	IDMxPluginPort_Event_Cast_GetCastNumber: { subMxPluginPort_Event_Cast_GetCastNumber = (TMxPluginPort_Event_Cast_GetCastNumber)FuncAddr; break; }
@@ -470,6 +650,49 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_CLang_GetFileNameConst: { subMxPluginPort_CLang_GetFileNameConst = (TMxPluginPort_CLang_GetFileNameConst)FuncAddr; break; }
 	case	IDMxPluginPort_CLang_GetFileNameEventSource: { subMxPluginPort_CLang_GetFileNameEventSource = (TMxPluginPort_CLang_GetFileNameEventSource)FuncAddr; break; }
 	case	IDMxPluginPort_CLang_GetFileNameEventHeader: { subMxPluginPort_CLang_GetFileNameEventHeader = (TMxPluginPort_CLang_GetFileNameEventHeader)FuncAddr; break; }
+
+	case	IDMxPluginPort_CLang_GetInitEvent_Enabled: { subMxPluginPort_CLang_GetInitEvent_Enabled = (TMxPluginPort_CLang_GetInitEvent_Enabled)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetInitEvent_Type: { subMxPluginPort_CLang_GetInitEvent_Type = (TMxPluginPort_CLang_GetInitEvent_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetInitEvent_Name: { subMxPluginPort_CLang_GetInitEvent_Name = (TMxPluginPort_CLang_GetInitEvent_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetFinallyEvent_Enabled: { subMxPluginPort_CLang_GetFinallyEvent_Enabled = (TMxPluginPort_CLang_GetFinallyEvent_Enabled)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetFinallyEvent_Type: { subMxPluginPort_CLang_GetFinallyEvent_Type = (TMxPluginPort_CLang_GetFinallyEvent_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetFinallyEvent_Name: { subMxPluginPort_CLang_GetFinallyEvent_Name = (TMxPluginPort_CLang_GetFinallyEvent_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetInitEventFuncName: { subMxPluginPort_CLang_GetInitEventFuncName = (TMxPluginPort_CLang_GetInitEventFuncName)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetFinallyEventFuncName: { subMxPluginPort_CLang_GetFinallyEventFuncName = (TMxPluginPort_CLang_GetFinallyEventFuncName)FuncAddr; break; }
+
+	case	IDMxPluginPort_CLang_SetEnabled: { subMxPluginPort_CLang_SetEnabled = (TMxPluginPort_CLang_SetEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetPathSRCNative: { subMxPluginPort_CLang_SetPathSRCNative = (TMxPluginPort_CLang_SetPathSRCNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetPathEventNative: { subMxPluginPort_CLang_SetPathEventNative = (TMxPluginPort_CLang_SetPathEventNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetPathLibNative: { subMxPluginPort_CLang_SetPathLibNative = (TMxPluginPort_CLang_SetPathLibNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetPathOBJNative: { subMxPluginPort_CLang_SetPathOBJNative = (TMxPluginPort_CLang_SetPathOBJNative)FuncAddr; break; }
+
+	case	IDMxPluginPort_CLang_GetPathSRCNative: { subMxPluginPort_CLang_GetPathSRCNative = (TMxPluginPort_CLang_GetPathSRCNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetPathEventNative: { subMxPluginPort_CLang_GetPathEventNative = (TMxPluginPort_CLang_GetPathEventNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetPathLibNative: { subMxPluginPort_CLang_GetPathLibNative = (TMxPluginPort_CLang_GetPathLibNative)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_GetPathOBJNative: { subMxPluginPort_CLang_GetPathOBJNative = (TMxPluginPort_CLang_GetPathOBJNative)FuncAddr; break; }
+
+	case	IDMxPluginPort_CLang_SetInitEvent_Enabled: { subMxPluginPort_CLang_SetInitEvent_Enabled = (TMxPluginPort_CLang_SetInitEvent_Enabled)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetInitEvent_Type: { subMxPluginPort_CLang_SetInitEvent_Type = (TMxPluginPort_CLang_SetInitEvent_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetInitEvent_Name: { subMxPluginPort_CLang_SetInitEvent_Name = (TMxPluginPort_CLang_SetInitEvent_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetFinallyEvent_Enabled: { subMxPluginPort_CLang_SetFinallyEvent_Enabled = (TMxPluginPort_CLang_SetFinallyEvent_Enabled)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetFinallyEvent_Type: { subMxPluginPort_CLang_SetFinallyEvent_Type = (TMxPluginPort_CLang_SetFinallyEvent_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetFinallyEvent_Name: { subMxPluginPort_CLang_SetFinallyEvent_Name = (TMxPluginPort_CLang_SetFinallyEvent_Name)FuncAddr; break; }
+
+	case	IDMxPluginPort_CLang_SetEventListName_Type: { subMxPluginPort_CLang_SetEventListName_Type = (TMxPluginPort_CLang_SetEventListName_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventListName_Name: { subMxPluginPort_CLang_SetEventListName_Name = (TMxPluginPort_CLang_SetEventListName_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventSymbolName_Type: { subMxPluginPort_CLang_SetEventSymbolName_Type = (TMxPluginPort_CLang_SetEventSymbolName_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventSymbolName_Name: { subMxPluginPort_CLang_SetEventSymbolName_Name = (TMxPluginPort_CLang_SetEventSymbolName_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventTableName_Type: { subMxPluginPort_CLang_SetEventTableName_Type = (TMxPluginPort_CLang_SetEventTableName_Type)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventTableName_Name: { subMxPluginPort_CLang_SetEventTableName_Name = (TMxPluginPort_CLang_SetEventTableName_Name)FuncAddr; break; }
+	case	IDMxPluginPort_CLang_SetEventTableName_Alias: { subMxPluginPort_CLang_SetEventTableName_Alias = (TMxPluginPort_CLang_SetEventTableName_Alias)FuncAddr; break; }
+
+	case	IDMxPluginPort_Project_MultiLang_GetEnabled: { subMxPluginPort_Project_MultiLang_GetEnabled = (TMxPluginPort_Project_MultiLang_GetEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_SetEnabled: { subMxPluginPort_Project_MultiLang_SetEnabled = (TMxPluginPort_Project_MultiLang_SetEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_GetCount: { subMxPluginPort_Project_MultiLang_GetCount = (TMxPluginPort_Project_MultiLang_GetCount)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_GetName: { subMxPluginPort_Project_MultiLang_GetName = (TMxPluginPort_Project_MultiLang_GetName)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_SetName: { subMxPluginPort_Project_MultiLang_SetName = (TMxPluginPort_Project_MultiLang_SetName)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_Add: { subMxPluginPort_Project_MultiLang_Add = (TMxPluginPort_Project_MultiLang_Add)FuncAddr; break; }
+	case	IDMxPluginPort_Project_MultiLang_Remove: { subMxPluginPort_Project_MultiLang_Remove = (TMxPluginPort_Project_MultiLang_Remove)FuncAddr; break; }
 
 	case	IDMxPluginPort_Cast_FindBlank: { subMxPluginPort_Cast_FindBlank = (TMxPluginPort_Cast_FindBlank)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_FindBlankSince: { subMxPluginPort_Cast_FindBlankSince = (TMxPluginPort_Cast_FindBlankSince)FuncAddr; break; }
@@ -542,6 +765,9 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_Track_SetLabelName: { subMxPluginPort_Track_SetLabelName = (TMxPluginPort_Track_SetLabelName)FuncAddr; break; }
 	case	IDMxPluginPort_Track_FindTrackLabel: { subMxPluginPort_Track_FindTrackLabel = (TMxPluginPort_Track_FindTrackLabel)FuncAddr; break; }
 
+	case	IDMxPluginPort_TrackProperty_SetData: { subMxPluginPort_TrackProperty_SetData = (TMxPluginPort_TrackProperty_SetData)FuncAddr; break; }
+	case	IDMxPluginPort_TrackProperty_GetData: { subMxPluginPort_TrackProperty_GetData = (TMxPluginPort_TrackProperty_GetData)FuncAddr; break; }
+
 	case	IDMxPluginPort_LoopTrack_GetLength: { subMxPluginPort_LoopTrack_GetLength = (TMxPluginPort_LoopTrack_GetLength)FuncAddr; break; }
 	case	IDMxPluginPort_LoopTrack_GetValue: { subMxPluginPort_LoopTrack_GetValue = (TMxPluginPort_LoopTrack_GetValue)FuncAddr; break; }
 	case	IDMxPluginPort_LoopTrack_SetValue: { subMxPluginPort_LoopTrack_SetValue = (TMxPluginPort_LoopTrack_SetValue)FuncAddr; break; }
@@ -555,6 +781,16 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_CastPropety_GetData: { subMxPluginPort_CastPropety_GetData = (TMxPluginPort_CastPropety_GetData)FuncAddr; break; }
 
 	case	IDMxPluginPort_Primitive_QuadPolygon: { subMxPluginPort_Primitive_QuadPolygon = (TMxPluginPort_Primitive_QuadPolygon)FuncAddr; break; }
+	case	IDMxPluginPort_Project_SetPropertyInt: { subMxPluginPort_Project_SetPropertyInt = (TMxPluginPort_Project_SetPropertyInt)FuncAddr; break; }
+	case	IDMxPluginPort_Project_GetPropertyInt: { subMxPluginPort_Project_GetPropertyInt = (TMxPluginPort_Project_GetPropertyInt)FuncAddr; break; }
+
+	case	IDMxPluginPort_Cast_Text_GetLineCount: { subMxPluginPort_Cast_Text_GetLineCount = (TMxPluginPort_Cast_Text_GetLineCount)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetLineString: { subMxPluginPort_Cast_Text_GetLineString = (TMxPluginPort_Cast_Text_GetLineString)FuncAddr; break; }
+
+	case	IDMxPluginPort_Cast_TextML_GetLangAssigned: { subMxPluginPort_Cast_TextML_GetLangAssigned = (TMxPluginPort_Cast_TextML_GetLangAssigned)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_TextML_CreateLanguage: { subMxPluginPort_Cast_TextML_CreateLanguage = (TMxPluginPort_Cast_TextML_CreateLanguage)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_TextML_RemoveLanguage: { subMxPluginPort_Cast_TextML_RemoveLanguage = (TMxPluginPort_Cast_TextML_RemoveLanguage)FuncAddr; break; }
+
 	case	IDMxPluginPort_End: {																										   break; }
 	default: { return FALSE; };
 	}
@@ -696,6 +932,28 @@ BOOL MxPluginPort_Event_Score_GetSelectedTrack(HINSTANCE hinstDLL, int Index, in
 {
 	if (subMxPluginPort_Event_Score_GetSelectedTrack) return subMxPluginPort_Event_Score_GetSelectedTrack(hinstDLL, Index, TrackNum);
 	if (TrackNum != NULL) *TrackNum = -1;
+	return false;
+}
+
+
+BOOL MxPluginPort_Event_ScoreRename_GetNumber(HINSTANCE hinstDLL, int* ScoreNum)
+{
+	if (subMxPluginPort_Event_ScoreRename_GetNumber) return subMxPluginPort_Event_ScoreRename_GetNumber(hinstDLL, ScoreNum);
+	if (ScoreNum != NULL) *ScoreNum = -1;
+	return false;
+}
+
+BOOL MxPluginPort_Event_ScoreRename_GetOldName(HINSTANCE hinstDLL, char** OldName)
+{
+	if (subMxPluginPort_Event_ScoreRename_GetOldName) return subMxPluginPort_Event_ScoreRename_GetOldName(hinstDLL, OldName);
+	if (OldName != NULL) *OldName = NULL;
+	return false;
+}
+
+BOOL MxPluginPort_Event_ScoreRename_GetNewName(HINSTANCE hinstDLL, char** NewName)
+{
+	if (subMxPluginPort_Event_ScoreRename_GetNewName) return subMxPluginPort_Event_ScoreRename_GetNewName(hinstDLL, NewName);
+	if (NewName != NULL) *NewName = NULL;
 	return false;
 }
 
@@ -869,6 +1127,253 @@ BOOL MxPluginPort_CLang_GetFileNameEventHeader(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetFileNameEventHeader) return subMxPluginPort_CLang_GetFileNameEventHeader(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetInitEvent_Enabled(BOOL* Enabled)
+{
+	if (Enabled) *Enabled = false;
+	if (subMxPluginPort_CLang_GetInitEvent_Enabled) return subMxPluginPort_CLang_GetInitEvent_Enabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetInitEvent_Type(TCLang_EventNameType* Type)
+{
+	if (Type) *Type = evt_DefaultName;
+	if (subMxPluginPort_CLang_GetInitEvent_Type) {
+		int iType;
+		BOOL res = subMxPluginPort_CLang_GetInitEvent_Type(&iType);
+		if (res) {
+			*Type = (TCLang_EventNameType)iType;
+		}
+		return res;
+	}
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetInitEvent_Name(char** Name)
+{
+	if (Name) *Name = NULL;
+	if (subMxPluginPort_CLang_GetInitEvent_Name) return subMxPluginPort_CLang_GetInitEvent_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetFinallyEvent_Enabled(BOOL* Enabled)
+{
+	if (Enabled) *Enabled = false;
+	if (subMxPluginPort_CLang_GetFinallyEvent_Enabled) return subMxPluginPort_CLang_GetFinallyEvent_Enabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetFinallyEvent_Type(TCLang_EventNameType* Type)
+{
+	if (Type) *Type = evt_DefaultName;
+	if (subMxPluginPort_CLang_GetFinallyEvent_Type) {
+		int iType;
+		BOOL res = subMxPluginPort_CLang_GetFinallyEvent_Type(&iType);
+		if (res) {
+			*Type = (TCLang_EventNameType)iType;
+		}
+		return res;
+	}
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetFinallyEvent_Name(char** Name)
+{
+	if (Name) *Name = NULL;
+	if (subMxPluginPort_CLang_GetFinallyEvent_Name) return subMxPluginPort_CLang_GetFinallyEvent_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetInitEventFuncName(char** Name)
+{
+	if (Name) *Name = NULL;
+	if (subMxPluginPort_CLang_GetInitEventFuncName) return subMxPluginPort_CLang_GetInitEventFuncName(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetFinallyEventFuncName(char** Name)
+{
+	if (Name) *Name = NULL;
+	if (subMxPluginPort_CLang_GetFinallyEventFuncName) return subMxPluginPort_CLang_GetFinallyEventFuncName(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEnabled(BOOL Enabled)
+{
+	if (subMxPluginPort_CLang_SetEnabled) return subMxPluginPort_CLang_SetEnabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetPathSRCNative(char* FileName)
+{
+	if (subMxPluginPort_CLang_SetPathSRCNative) return subMxPluginPort_CLang_SetPathSRCNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetPathEventNative(char* FileName)
+{
+	if (subMxPluginPort_CLang_SetPathEventNative) return subMxPluginPort_CLang_SetPathEventNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetPathLibNative(char* FileName)
+{
+	if (subMxPluginPort_CLang_SetPathLibNative) return subMxPluginPort_CLang_SetPathLibNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetPathOBJNative(char* FileName)
+{
+	if (subMxPluginPort_CLang_SetPathOBJNative) return subMxPluginPort_CLang_SetPathOBJNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetPathSRCNative(char** FileName)
+{
+	if (subMxPluginPort_CLang_GetPathSRCNative) return subMxPluginPort_CLang_GetPathSRCNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetPathEventNative(char** FileName)
+{
+	if (subMxPluginPort_CLang_GetPathEventNative) return subMxPluginPort_CLang_GetPathEventNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetPathLibNative(char** FileName)
+{
+	if (subMxPluginPort_CLang_GetPathLibNative) return subMxPluginPort_CLang_GetPathLibNative(FileName);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_GetPathOBJNative(char** FileName)
+{
+	if (subMxPluginPort_CLang_GetPathOBJNative) return subMxPluginPort_CLang_GetPathOBJNative(FileName);
+	return false;
+}
+
+
+BOOL MxPluginPort_CLang_SetInitEvent_Enabled(BOOL Enabled)
+{
+	if (subMxPluginPort_CLang_SetInitEvent_Enabled) return subMxPluginPort_CLang_SetInitEvent_Enabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetInitEvent_Type(TCLang_EventNameType Value)
+{
+	if (subMxPluginPort_CLang_SetInitEvent_Type) return subMxPluginPort_CLang_SetInitEvent_Type((int)Value);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetInitEvent_Name(char* Name)
+{
+	if (subMxPluginPort_CLang_SetInitEvent_Name) return subMxPluginPort_CLang_SetInitEvent_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetFinallyEvent_Enabled(BOOL Enabled)
+{
+	if (subMxPluginPort_CLang_SetFinallyEvent_Enabled) return subMxPluginPort_CLang_SetFinallyEvent_Enabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetFinallyEvent_Type(TCLang_EventNameType Value)
+{
+	if (subMxPluginPort_CLang_SetFinallyEvent_Type) return subMxPluginPort_CLang_SetFinallyEvent_Type((int)Value);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetFinallyEvent_Name(char* Name)
+{
+	if (subMxPluginPort_CLang_SetFinallyEvent_Name) return subMxPluginPort_CLang_SetFinallyEvent_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventListName_Type(TCLang_EventNameType Value)
+{
+	if (subMxPluginPort_CLang_SetEventListName_Type) return subMxPluginPort_CLang_SetEventListName_Type((int)Value);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventListName_Name(char* Name)
+{
+	if (subMxPluginPort_CLang_SetEventListName_Name) return subMxPluginPort_CLang_SetEventListName_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventSymbolName_Type(TCLang_EventNameType Value)
+{
+	if (subMxPluginPort_CLang_SetEventSymbolName_Type) return subMxPluginPort_CLang_SetEventSymbolName_Type((int)Value);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventSymbolName_Name(char* Name)
+{
+	if (subMxPluginPort_CLang_SetEventSymbolName_Name) return subMxPluginPort_CLang_SetEventSymbolName_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventTableName_Type(TCLang_EventNameType Value)
+{
+	if (subMxPluginPort_CLang_SetEventTableName_Type) return subMxPluginPort_CLang_SetEventTableName_Type((int)Value);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventTableName_Name(char* Name)
+{
+	if (subMxPluginPort_CLang_SetEventTableName_Name) return subMxPluginPort_CLang_SetEventTableName_Name(Name);
+	return false;
+}
+
+BOOL MxPluginPort_CLang_SetEventTableName_Alias(BOOL Enabled)
+{
+	if (subMxPluginPort_CLang_SetEventTableName_Alias) return subMxPluginPort_CLang_SetEventTableName_Alias(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_GetEnabled(BOOL* Enabled)
+{
+	if (Enabled) *Enabled = false;
+	if (subMxPluginPort_Project_MultiLang_GetEnabled) return subMxPluginPort_Project_MultiLang_GetEnabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_SetEnabled(BOOL	Enabled)
+{
+	if (subMxPluginPort_Project_MultiLang_SetEnabled) return subMxPluginPort_Project_MultiLang_SetEnabled(Enabled);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_GetCount(int* Count)
+{
+	if (subMxPluginPort_Project_MultiLang_GetCount) return subMxPluginPort_Project_MultiLang_GetCount(Count);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_GetName(int	Index, char** Name)
+{
+	if (Name) *Name = NULL;
+	if (subMxPluginPort_Project_MultiLang_GetName) return subMxPluginPort_Project_MultiLang_GetName(Index, Name);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_SetName(int Index, const char* Name)
+{
+	if (subMxPluginPort_Project_MultiLang_SetName) return subMxPluginPort_Project_MultiLang_SetName(Index, Name);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_Add(const char* Name)
+{
+	if (subMxPluginPort_Project_MultiLang_Add) return subMxPluginPort_Project_MultiLang_Add(Name);
+	return false;
+}
+
+BOOL MxPluginPort_Project_MultiLang_Remove(int Index)
+{
+	if (subMxPluginPort_Project_MultiLang_Remove) return subMxPluginPort_Project_MultiLang_Remove(Index);
 	return false;
 }
 
@@ -1281,6 +1786,17 @@ int  MxPluginPort_Track_FindTrackLabel(int ScoreNumber, char* LabelName)
 	return -1;
 }
 
+BOOL MxPluginPort_TrackProperty_SetData(int ScoreNumber, int TrackNumber, int IDNum, int Value)
+{
+	if (subMxPluginPort_TrackProperty_SetData) return subMxPluginPort_TrackProperty_SetData(ScoreNumber, TrackNumber, IDNum, Value);
+	return false;
+}
+
+BOOL MxPluginPort_TrackProperty_GetData(int ScoreNumber, int TrackNumber, int IDNum, void* Value)
+{
+	if (subMxPluginPort_TrackProperty_GetData) return subMxPluginPort_TrackProperty_GetData(ScoreNumber, TrackNumber, IDNum, Value);
+	return false;
+}
 
 int  MxPluginPort_LoopTrack_GetLength(int ScoreNumbe)
 {
@@ -1382,4 +1898,50 @@ BOOL MxPluginPort_Script_GetExternal(int CastNumber, TScriptExternalFile* Value)
 		}
 	}
 	return res;
+}
+
+BOOL MxPluginPort_Project_SetPropertyInt(TProjectProperty ID, int Value)
+{
+	if (subMxPluginPort_Project_SetPropertyInt) return subMxPluginPort_Project_SetPropertyInt(ID, Value);
+	return false;
+}
+
+
+BOOL MxPluginPort_Project_GetPropertyInt(TProjectProperty ID, int* Value)
+{
+	if (subMxPluginPort_Project_GetPropertyInt) return subMxPluginPort_Project_GetPropertyInt(ID, Value);
+	return false;
+}
+
+BOOL MxPluginPort_Cast_Text_GetLineCount(int CastNumber, int LangNum, int* Count)
+{
+	if (Count != NULL) *Count = 0;
+	if (subMxPluginPort_Cast_Text_GetLineCount) return subMxPluginPort_Cast_Text_GetLineCount(CastNumber, LangNum, Count);
+	return false;
+}
+
+BOOL MxPluginPort_Cast_Text_GetLineString(int CastNumber, int LineNumber, int LangNum, void** Str)
+{
+	if (Str != NULL) *Str = NULL;
+	if (subMxPluginPort_Cast_Text_GetLineString) return subMxPluginPort_Cast_Text_GetLineString(CastNumber, LineNumber, LangNum, Str);
+	return false;
+}
+
+BOOL MxPluginPort_Cast_TextML_GetLanguageAssigned(int CastNumber, int LangNum, BOOL* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_TextML_GetLangAssigned) return subMxPluginPort_Cast_TextML_GetLangAssigned(CastNumber, LangNum, Flag);
+	return false;
+}
+
+BOOL MxPluginPort_Cast_TextML_CreateLanguage(int CastNumber, int LangNum)
+{
+	if (subMxPluginPort_Cast_TextML_CreateLanguage) return subMxPluginPort_Cast_TextML_CreateLanguage(CastNumber, LangNum);
+	return false;
+}
+
+BOOL MxPluginPort_Cast_TextML_RemoveLanguage(int CastNumber, int LangNum)
+{
+	if (subMxPluginPort_Cast_TextML_RemoveLanguage) return subMxPluginPort_Cast_TextML_RemoveLanguage(CastNumber, LangNum);
+	return false;
 }

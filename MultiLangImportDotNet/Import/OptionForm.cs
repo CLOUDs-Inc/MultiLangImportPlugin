@@ -170,5 +170,19 @@ namespace MultiLangImportDotNet.Import
 
             e.DrawFocusRectangle();
         }
+
+        /// <summary>
+        /// サブキャスト接続文字入力欄へのキーボード入力イベントハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxConjunction_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // 入力文字がキャスト名禁止記号の場合、入力をスキップする
+            if (Utils.UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

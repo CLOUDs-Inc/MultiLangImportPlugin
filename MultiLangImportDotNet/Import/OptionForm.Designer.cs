@@ -119,6 +119,7 @@ namespace MultiLangImportDotNet.Import
             this.textBoxConjunction.Size = new System.Drawing.Size(231, 19);
             this.textBoxConjunction.TabIndex = 4;
             this.textBoxConjunction.Text = "_";
+            this.textBoxConjunction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxConjunction_KeyPress);
             // 
             // label1
             // 

@@ -180,3 +180,13 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 //
 //	return result;
 //}
+
+/// <summary>
+/// プロジェクトの多言語使用状態をOnにする
+/// </summary>
+/// <returns>On化成否</returns>
+bool DataAccessor::MLSetEnable() {
+
+
+	return ;
+}

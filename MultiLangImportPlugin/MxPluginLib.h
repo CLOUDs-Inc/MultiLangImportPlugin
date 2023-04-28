@@ -40,6 +40,7 @@ typedef enum TSDKVersionList_t {
 #define		am_Event_NewProject		(0x103)
 #define		am_Event_CastRename		(0x200)
 #define		am_Event_CastDelete		(0x201)
+#define		am_Event_ScoreRename	(0x300)
 #define		am_When_Running			(0x20000000)
 #define		am_When_Anytime			(0x40000000)
 #define		am_PreEvent				(0x80000000)
@@ -116,6 +117,12 @@ typedef enum TLoopTrackData_t {
 //========================================
 #define		ta_TrackVisible 0			//ƒgƒ‰ƒbƒN‚Ì‰Â‹E•s‰Â‹
 #define		ta_TrackCanEdit	1			//•ÒW‰Â”\E•s‰Â”\
+
+//========================================
+//MxPluginPort_TrackProperty_SetData,
+//MxPluginPort_TrackProperty_GetData‚Åg—p‚·‚é’è‹`
+//========================================
+#define		tp_2DHoldAspect 0			//ƒAƒXƒyƒNƒg”ä•Û
 
 //========================================
 //ƒLƒƒƒXƒg‚ÌŒ^‚Ì’è‹`
@@ -218,7 +225,8 @@ typedef enum TTextPropertyType_t {
 	cp_Text_Alignment = 0x22,	//ƒeƒLƒXƒg‚Ì”z’u(TTextAlignment‚ğw’è‚Å‚«‚é)
 	cp_Text_AlignmentWidth = 0x23,	//ƒeƒLƒXƒg‚ğ¶Šñ‚¹E’†‰›Šñ‚¹E‰EŠñ‚¹‚É‚µ‚½Û‚ÌƒeƒLƒXƒg•
 	cp_Text_ClickEnabled = 0x24,	//ƒNƒŠƒbƒN”»’è		0=OFF 1=ON
-	cp_Text_Antialias = 0x25	//ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX	0=OFF 1=ON
+	cp_Text_Antialias = 0x25,	//ƒAƒ“ƒ`ƒGƒCƒŠƒAƒX	0=OFF 1=ON
+	cp_Text_LineCount = 0x26	//ƒeƒLƒXƒgƒLƒƒƒXƒg‚Ìs”(æ“¾‚Ì‚İ)
 } TTextPropertyType;
 
 typedef enum TTextStringEncodeType_t {
@@ -324,6 +332,7 @@ typedef enum TScriptExternalFile_t {
 /*================================================*/
 #define	cse_Encode_ANSI				0x01
 #define	cse_Encode_UTF8				0x02
+#define	cse_Overwrite				0x80
 
 /*===============================================*/
 /* MxPluginPort_Project_CreateRuntimeFile ‚Ì’è‹` */
@@ -352,6 +361,25 @@ typedef enum TAnnotationEncode_t {
 	sae_UTF16 = 0x01,
 	sae_UNSET = 0xFFFFFFFF
 } TAnnotationEncode;
+
+//==========================================
+//‰Šú‰»ŠÖ”EI—¹ŠÖ”‚Ìİ’è‚Åg—p
+//==========================================
+typedef enum TCLang_EventNameType_t {
+	evt_DefaultName = 0x00,
+	evt_CustomName = 0x01,
+	evt_MXPFileName = 0x02
+} TCLang_EventNameType;
+
+
+//======================================================================================//
+//MxPluginPort_Project_SetPropertyIntAMxPluginPort_Project_GetPropertyInt‚Åg—p‚·‚é’è‹`//
+//======================================================================================//
+typedef enum TProjectProperty_t {
+	psp_BackColor = 0x00,
+	psp_MultiLangUse = 0x01,
+	psp_MultiLangCount = 0x02
+} TProjectProperty;
 
 //========================================
 //ƒT[ƒrƒXŠÖ”‚Ì’è‹`
@@ -384,6 +412,10 @@ BOOL MxPluginPort_Event_Score_GetScoreTrack(HINSTANCE hinstDLL, int* ScoreNum, i
 BOOL MxPluginPort_Event_Score_GetSelectedCount(HINSTANCE hinstDLL, int* SelectedCount);											//ƒXƒRƒA(ƒgƒ‰ƒbƒN)‚ÅƒCƒxƒ“ƒg‚ª”­¶‚µ‚½ê‡‚ÌA‘I‘ğ‚µ‚Ä‚¢‚éƒgƒ‰ƒbƒN”‚ğæ“¾‚·‚é
 BOOL MxPluginPort_Event_Score_GetSelectedTrack(HINSTANCE hinstDLL, int Index, int* TrackNum);										//ƒXƒRƒA(ƒgƒ‰ƒbƒN)‚ÅƒCƒxƒ“ƒg‚ª”­¶‚µ‚½ê‡‚ÌA‘I‘ğ‚µ‚Ä‚¢‚éƒgƒ‰ƒbƒN”‚ğæ“¾‚·‚é
 
+BOOL MxPluginPort_Event_ScoreRename_GetNumber(HINSTANCE hinstDLL, int* ScoreNum);												//ƒXƒRƒA–¼•ÏXƒCƒxƒ“ƒg‚ª”­¶‚µ‚½Û‚ÌAƒXƒRƒA”Ô†
+BOOL MxPluginPort_Event_ScoreRename_GetOldName(HINSTANCE hinstDLL, char** OldName);												//ƒXƒRƒA–¼•ÏXƒCƒxƒ“ƒg‚ª”­¶‚µ‚½Û‚ÌAŒÃ‚¢ƒXƒRƒA–¼
+BOOL MxPluginPort_Event_ScoreRename_GetNewName(HINSTANCE hinstDLL, char** NewName);												//ƒXƒRƒA–¼•ÏXƒCƒxƒ“ƒg‚ª”­¶‚µ‚½Û‚ÌAV‚µ‚¢ƒXƒRƒA–¼
+
 BOOL MxPluginPort_Event_Cast_GetCastType(HINSTANCE hinstDLL, int* CastType);												//ƒLƒƒƒXƒgŒnƒCƒxƒ“ƒg‚Å‚ÌƒLƒƒƒXƒgƒ^ƒCƒv
 BOOL MxPluginPort_Event_Cast_GetCastNumber(HINSTANCE hinstDLL, int* CastNumber);											//ƒLƒƒƒXƒgŒnƒCƒxƒ“ƒg‚Å‚ÌƒLƒƒƒXƒg”Ô†
 BOOL MxPluginPort_Event_Cast_GetOldName(HINSTANCE hinstDLL, char** OldName);												//ƒLƒƒƒXƒg‚ÌƒŠƒl[ƒ€ƒCƒxƒ“ƒg‚Å‚ÌŒÃ‚¢ƒLƒƒƒXƒg–¼
@@ -413,6 +445,48 @@ BOOL MxPluginPort_CLang_GetPathOBJ(char** FileName);																	// CŒ¾Œêƒ‰ƒ
 BOOL MxPluginPort_CLang_GetFileNameConst(char** FileName);																	// CŒ¾Œêƒ‰ƒCƒuƒ‰ƒŠƒRƒ“ƒeƒ“ƒc‚Ì’è”ƒtƒ@ƒCƒ‹–¼(ƒLƒƒƒXƒg”Ô†AƒXƒRƒA”Ô†“™)‚ğæ“¾‚·‚é
 BOOL MxPluginPort_CLang_GetFileNameEventSource(char** FileName);																	// CŒ¾Œêƒ‰ƒCƒuƒ‰ƒŠƒRƒ“ƒeƒ“ƒc‚ÌƒCƒxƒ“ƒgƒ\[ƒXƒtƒ@ƒCƒ‹–¼‚ğæ“¾‚·‚é
 BOOL MxPluginPort_CLang_GetFileNameEventHeader(char** FileName);																	// CŒ¾Œêƒ‰ƒCƒuƒ‰ƒŠƒRƒ“ƒeƒ“ƒc‚ÌƒCƒxƒ“ƒgƒwƒbƒ_ƒtƒ@ƒCƒ‹–¼‚ğæ“¾‚·‚é
+
+BOOL MxPluginPort_CLang_GetInitEvent_Enabled(BOOL* Enabled);
+BOOL MxPluginPort_CLang_GetInitEvent_Type(TCLang_EventNameType* Value);
+BOOL MxPluginPort_CLang_GetInitEvent_Name(char** Name);
+BOOL MxPluginPort_CLang_GetFinallyEvent_Enabled(BOOL* Enabled);
+BOOL MxPluginPort_CLang_GetFinallyEvent_Type(TCLang_EventNameType* Value);
+BOOL MxPluginPort_CLang_GetFinallyEvent_Name(char** Name);
+BOOL MxPluginPort_CLang_GetInitEventFuncName(char** Name);
+BOOL MxPluginPort_CLang_GetFinallyEventFuncName(char** Name);
+
+BOOL MxPluginPort_CLang_SetEnabled(BOOL Enabled);
+BOOL MxPluginPort_CLang_SetPathSRCNative(char* FileName);
+BOOL MxPluginPort_CLang_SetPathEventNative(char* FileName);
+BOOL MxPluginPort_CLang_SetPathLibNative(char* FileName);
+BOOL MxPluginPort_CLang_SetPathOBJNative(char* FileName);
+BOOL MxPluginPort_CLang_GetPathSRCNative(char** FileName);
+BOOL MxPluginPort_CLang_GetPathEventNative(char** FileName);
+BOOL MxPluginPort_CLang_GetPathLibNative(char** FileName);
+BOOL MxPluginPort_CLang_GetPathOBJNative(char** FileName);
+
+BOOL MxPluginPort_CLang_SetInitEvent_Enabled(BOOL Enabled);
+BOOL MxPluginPort_CLang_SetInitEvent_Type(TCLang_EventNameType Value);
+BOOL MxPluginPort_CLang_SetInitEvent_Name(char* Name);
+BOOL MxPluginPort_CLang_SetFinallyEvent_Enabled(BOOL Enabled);
+BOOL MxPluginPort_CLang_SetFinallyEvent_Type(TCLang_EventNameType Value);
+BOOL MxPluginPort_CLang_SetFinallyEvent_Name(char* Name);
+
+BOOL MxPluginPort_CLang_SetEventListName_Type(TCLang_EventNameType Value);
+BOOL MxPluginPort_CLang_SetEventListName_Name(char* Name);
+BOOL MxPluginPort_CLang_SetEventSymbolName_Type(TCLang_EventNameType Value);
+BOOL MxPluginPort_CLang_SetEventSymbolName_Name(char* Name);
+BOOL MxPluginPort_CLang_SetEventTableName_Type(TCLang_EventNameType Value);
+BOOL MxPluginPort_CLang_SetEventTableName_Name(char* Name);
+BOOL MxPluginPort_CLang_SetEventTableName_Alias(BOOL Enabled);
+
+BOOL MxPluginPort_Project_MultiLang_GetEnabled(BOOL* Enabled);
+BOOL MxPluginPort_Project_MultiLang_SetEnabled(BOOL	Enabled);
+BOOL MxPluginPort_Project_MultiLang_GetCount(int* Count);
+BOOL MxPluginPort_Project_MultiLang_GetName(int	Index, char** Name);
+BOOL MxPluginPort_Project_MultiLang_SetName(int	Index, const char* Name);
+BOOL MxPluginPort_Project_MultiLang_Add(const char* Name);
+BOOL MxPluginPort_Project_MultiLang_Remove(int	Index);
 
 int  MxPluginPort_Cast_FindBlank(int CastType);																		//‹ó”’ƒLƒƒƒXƒg‚ğŒŸõ‚·‚é
 int  MxPluginPort_Cast_FindBlankSince(int CastType, int CastNumber);														//”CˆÓ”Ô†ˆÈ~‚Ì‹ó”’ƒLƒƒƒXƒg‚ğŒŸõ‚·‚é
@@ -486,6 +560,9 @@ int  MxPluginPort_Track_GetLabelName(int ScoreNumber, int TrackNumber, char* Lab
 BOOL MxPluginPort_Track_SetLabelName(int ScoreNumber, int TrackNumber, char* LabelName, int Reserved);					//ƒgƒ‰ƒbƒNƒ‰ƒxƒ‹–¼‚ğİ’è‚·‚é
 int  MxPluginPort_Track_FindTrackLabel(int ScoreNumber, char* LabelName);													//ƒgƒ‰ƒbƒNƒ‰ƒxƒ‹‚ğŒŸõ‚·‚é
 
+BOOL MxPluginPort_TrackProperty_SetData(int ScoreNumber, int TrackNumber, int IDNum, int Value);
+BOOL MxPluginPort_TrackProperty_GetData(int ScoreNumber, int TrackNumber, int IDNum, void* Value);
+
 int  MxPluginPort_LoopTrack_GetLength(int ScoreNumbe);																	//ƒ‹[ƒvƒgƒ‰ƒbƒN‚Ì’·‚³‚ğæ“¾‚·‚é
 BOOL MxPluginPort_LoopTrack_GetValue(int ScoreNumber, int FrameNumber, TLoopTrackData* Value);							//ƒ‹[ƒvƒgƒ‰ƒbƒN‚ÌƒtƒŒ[ƒ€‚Ì’l‚ğæ“¾‚·‚é
 BOOL MxPluginPort_LoopTrack_SetValue(int ScoreNumber, int FrameNumber, TLoopTrackData Value);								//ƒ‹[ƒvƒgƒ‰ƒbƒN‚ÌƒtƒŒ[ƒ€‚Ì’l‚ğİ’è‚·‚é
@@ -504,6 +581,16 @@ BOOL MxPluginPort_CastPropety_GetData(int CastType, int CastNumber, int Property
 #define MXVEV3 MXPLUGIN_VECTOR3D
 BOOL MxPluginPort_Primitive_QuadPolygon(int CastNumber, char* CastName, MXVEV3 V1, MXVEV3 V2, MXVEV3 V3, MXVEV3 V4);			//l’¸“_ƒ|ƒŠƒSƒ“‚ğì¬
 #undef MXVEV3
+
+BOOL MxPluginPort_Project_SetPropertyInt(TProjectProperty ID, int Value);
+BOOL MxPluginPort_Project_GetPropertyInt(TProjectProperty ID, int* Value);
+
+BOOL MxPluginPort_Cast_Text_GetLineCount(int CastNumber, int LangNum, int* Count);
+BOOL MxPluginPort_Cast_Text_GetLineString(int CastNumber, int LineNumber, int LangNum, void** Str);
+
+BOOL MxPluginPort_Cast_TextML_GetLanguageAssigned(int CastNumber, int LangNum, int* Flag);
+BOOL MxPluginPort_Cast_TextML_CreateLanguage(int CastNumber, int LangNum);
+BOOL MxPluginPort_Cast_TextML_RemoveLanguage(int CastNumber, int LangNum);
 
 extern "C"
 {
