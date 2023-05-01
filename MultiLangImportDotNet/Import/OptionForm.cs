@@ -72,6 +72,18 @@ namespace MultiLangImportDotNet.Import
         private void buttonOK_Click(object sender, EventArgs e)
         {
             SetOptionFormSettingToAppData(this.appData.OptionData);
+            
+            // サブキャスト名の使用On＆サブキャスト列選択済みの場合に限り
+            if(this.checkBoxUseSubcastName.Checked && this.listBoxSubcastName.SelectedIndex != -1)
+            {
+                // サブキャスト名を接続した名前リストを生成保持しておく
+                bool combineResult = this.appData.SetCombinedNameForTextCast();
+                if (!combineResult)
+                {
+                    MessageBox.Show("Failed to make combined Textcast names with subcasts.");
+                    return;
+                }
+            }
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

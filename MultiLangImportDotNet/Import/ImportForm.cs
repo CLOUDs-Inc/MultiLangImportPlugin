@@ -282,6 +282,11 @@ namespace MultiLangImportDotNet.Import
             this.Close();
         }
 
+        /// <summary>
+        /// Excelファイル読み取り開始ボタンクリックイベントハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonImportFile_Click(object sender, EventArgs e)
         {
             // ファイルパス取得
@@ -362,6 +367,11 @@ namespace MultiLangImportDotNet.Import
             SetDefaultLanguage(this.appData);
         }
 
+        /// <summary>
+        /// SDKインポート開始ボタンクリックイベントハンドラ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonImport_Click(object sender, EventArgs e)
         {
             // 言語ページ、キャスト名はANSI指定
@@ -392,6 +402,7 @@ namespace MultiLangImportDotNet.Import
 
             // フォームのチェックボックス設定をアプリ管理データにセットする
             SetImportFormSettingToAppData(this.appData);
+
 
             // フォーム呼び出し元に通知OK
             this.DialogResult = DialogResult.OK;

@@ -156,6 +156,7 @@
     <ClInclude Include="DataAccessor.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="MultiLangTextController.h" />
     <ClInclude Include="MxPluginLib.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SdkData.h" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="DataAccessor.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MultiLangTextController.cpp" />
     <ClCompile Include="MxPluginLib.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -40,6 +40,11 @@ namespace MultiLangImportDotNet
         public List<string> TextCastNameList { get; set; }
 
         /// <summary>
+        /// サブキャスト名＆接続文字付きテキストキャスト名リスト
+        /// </summary>
+        public List<string> CombinedTextCastNameList { get; set; }
+
+        /// <summary>
         /// テキストデータテーブル（二次元配列）
         /// </summary>
         public Import.TextData[,] TextDataTable { get; set; }
@@ -191,6 +196,33 @@ namespace MultiLangImportDotNet
             this.SubcastNameIndex = -1;
             this.DefaultLanguageIndex = -1;
             this.OptionData = new OptionData();
+        }
+
+        /// <summary>
+        /// サブキャスト名を接続したテキストキャスト名リストを生成・保持する
+        /// </summary>
+        /// <returns>生成の成否</returns>
+        public bool SetCombinedNameForTextCast()
+        {
+            if (this.LanguageNameList == null) return false;
+            if (this.SubcastNameIndex == -1) return false;
+            if (this.TextCastNameList == null) return false;
+            if (this.TextDataTable == null) return false;
+            if (this.TextCastNameList.Count != TextDataTable.GetLength(0)) return false;
+
+            List<string> combinedTextCastNameList = new List<string>();
+
+            string conjunctionString = this.OptionData.ConjunctionString;
+            for(int index = 0; index < TextCastNameList.Count; index++)
+            {
+                string combinedName = 
+                    TextCastNameList[index] + conjunctionString + TextDataTable[index, this.SubcastNameIndex].Text;
+                combinedTextCastNameList.Add(combinedName);
+            }
+
+            this.CombinedTextCastNameList = combinedTextCastNameList;
+
+            return true;
         }
     }
 }

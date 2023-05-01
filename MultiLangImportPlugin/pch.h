@@ -17,6 +17,7 @@
 #include <Shlwapi.h>
 #include <fileapi.h>
 
+#include <algorithm>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -33,5 +34,6 @@
 #include "WrapperIf.h"
 #include "DataAccessor.h"
 #include "SingleLogger.h"
+#include "MultiLangTextController.h"
 
 #endif //PCH_H

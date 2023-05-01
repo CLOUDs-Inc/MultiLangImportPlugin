@@ -89,9 +89,31 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 
 
 
-	// 言語ページ追加処理
-	// ログ：追加言語
+	MultiLangTextController mlTextController;
 
+	// 言語ページ追加処理の有無確認
+	if (writeData.flagAddIfLanguagePageNotFound)
+	{
+		// 追加言語のリストを作成（サブキャスト用としているExcel列データを外すため）
+		vector<string> appendPageNameList;
+		for (size_t index = 0; index < writeData.languageNameList.size(); index++)
+		{
+			// サブキャスト名使用Onなら、サブキャストに使用した列のページ名は追加しない
+			if (writeData.flagUseSubcastName && writeData.subcastNameIndex == (int)index)
+			{
+				continue;
+			}
+
+			appendPageNameList.push_back(writeData.languageNameList[index]);
+		}
+
+		// 言語ページ追加処理
+		mlTextController.SetPageNames(appendPageNameList);
+		
+		// ログ：追加言語
+
+
+	}
 
 
 
@@ -181,12 +203,3 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 //	return result;
 //}
 
-/// <summary>
-/// プロジェクトの多言語使用状態をOnにする
-/// </summary>
-/// <returns>On化成否</returns>
-bool DataAccessor::MLSetEnable() {
-
-
-	return ;
-}
