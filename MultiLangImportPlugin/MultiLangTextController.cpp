@@ -1,7 +1,13 @@
 #include "pch.h"
 
-MultiLangTextController::MultiLangTextController()
+/// <summary>
+/// コンストラクタ
+/// </summary>
+/// <param name="on">ログ機能OnOff</param>
+MultiLangTextController::MultiLangTextController(bool logOn)
 {
+	this->pLogger = new UnicodeLogger(logOn);
+
 	// クラス生成時に多言語使用状態にし、他の処理の前に多言語使用可能状況を準備する
 	// 他の処理の際、enable:trueを確認すること
 	this->isEnable = SetProjectMLEnable();
@@ -16,6 +22,14 @@ MultiLangTextController::MultiLangTextController()
 			return;
 		}
 	}
+}
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+MultiLangTextController::~MultiLangTextController()
+{
+	delete this->pLogger;
 }
 
 /// <summary>
@@ -108,6 +122,9 @@ bool MultiLangTextController::SetPageNames(std::vector<std::string>& list)
 		if (!mxResult) {
 			return false;
 		}
+
+		std::string msg = "LANGUAGE [" + list[pageIndex] + "]: Added";
+		this->pLogger->log(msg);
 	}
 
 	return true;

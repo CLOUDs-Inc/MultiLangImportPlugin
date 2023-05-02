@@ -8,7 +8,7 @@ private:
 	bool isEnable;
 
 	std::vector<std::string> pageNames;
-
+	UnicodeLogger* pLogger = nullptr;
 
 	bool GetPageNames(std::vector<std::string>& list);
 
@@ -16,8 +16,12 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	MultiLangTextController();
+	MultiLangTextController(bool logFlag);
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~MultiLangTextController();
 
 	bool IsEnabled();
 	bool SetProjectMLEnable();

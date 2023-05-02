@@ -16,6 +16,7 @@
 #include <crtdbg.h>
 #include <Shlwapi.h>
 #include <fileapi.h>
+#include <Windows.h>
 
 #include <algorithm>
 #include <vector>
@@ -23,7 +24,7 @@
 #include <fstream>
 #include <string>
 #include <codecvt>
-#include <filesystem>
+
 
 #include "Const.h"
 #include "TextData.h"
@@ -34,6 +35,7 @@
 #include "WrapperIf.h"
 #include "DataAccessor.h"
 #include "SingleLogger.h"
+#include "UnicodeLogger.h"
 #include "MultiLangTextController.h"
 
 #endif //PCH_H
