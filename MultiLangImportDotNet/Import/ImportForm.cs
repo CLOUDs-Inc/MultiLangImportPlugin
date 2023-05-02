@@ -60,7 +60,6 @@ namespace MultiLangImportDotNet.Import
             appData.TextCastNameList = reader.TextCastNameList;
             appData.TextDataTable = reader.TextDataTable;
             // サブキャスト列指定をリセット
-            appData.SubcastNameIndex = -1;
             appData.OptionData.SubcastIndex = -1;
         }
 
@@ -121,6 +120,12 @@ namespace MultiLangImportDotNet.Import
 
         private void SetTextDataDisplayTextBox(TextData textData)
         {
+            if(textData == null)
+            {
+                this.textBoxTextModification.Clear();
+                return;
+            }
+
             var fontSizeTextBox = this.textBoxTextModification.Font.Size;
 
             FontStyle fontStyle = FontStyle.Regular;
@@ -142,32 +147,38 @@ namespace MultiLangImportDotNet.Import
         /// <param name="textData">テキストデータ</param>
         private void SetTextDataDisplayLabel(TextData textData)
         {
-            if (textData == null) return;
-
-            StringBuilder sb = new StringBuilder();
-
-            // フォント名文字列の作成
-            string fontNameStr = "Font: " + (string.IsNullOrWhiteSpace(textData.FontName) ? "--" : textData.FontName);
-            sb.Append(fontNameStr);
-
-            // フォントサイズ文字列の作成
-            float fontSize = textData.FontSize;
-            if (0.0 < fontSize)
+            if (textData != null)
             {
-                string sizeFormat = ((fontSize % 1f) != 0f)
-                        ? ", Size: {0:F1} pt"
-                        : ", Size: {0:F0} pt";
+                StringBuilder sb = new StringBuilder();
 
-                string fontSizeStr = string.Format(sizeFormat, fontSize);
-                sb.Append(fontSizeStr);
+                // フォント名文字列の作成
+                string fontNameStr = "Font: " + (string.IsNullOrWhiteSpace(textData.FontName) ? "--" : textData.FontName);
+                sb.Append(fontNameStr);
+
+                // フォントサイズ文字列の作成
+                float fontSize = textData.FontSize;
+                if (0.0 < fontSize)
+                {
+                    string sizeFormat = ((fontSize % 1f) != 0f)
+                            ? ", Size: {0:F1} pt"
+                            : ", Size: {0:F0} pt";
+
+                    string fontSizeStr = string.Format(sizeFormat, fontSize);
+                    sb.Append(fontSizeStr);
+                }
+
+                // フォント色文字列の作成
+                string colorStr = ", Color: #" + textData.FontColor.ToHexRGBString();
+                sb.Append(colorStr);
+
+                // フォント情報表示ラベルにセット
+                this.labelTextModification.Text = sb.ToString();
             }
-
-            // フォント色文字列の作成
-            string colorStr = ", Color: #" + textData.FontColor.ToHexRGBString();
-            sb.Append(colorStr);
-
-            // フォント情報表示ラベルにセット
-            this.labelTextModification.Text = sb.ToString();
+            else
+            {
+                // フォント情報表示ラベルにセット
+                this.labelTextModification.Text = "Font: --";
+            }
 
             // ラベル幅に応じて、ラベルのx座標を調節
             var oldLocation = this.labelTextModification.Location;

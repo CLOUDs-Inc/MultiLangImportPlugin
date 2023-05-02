@@ -10,16 +10,9 @@ namespace MultiLangImportDotNet
     public class Utils
     {
         /// <summary>
-        /// ページ名に使用できない文字
-        /// </summary>
-        public static string UNUSABLE_CHARS_STR_FOR_NAME = "!\"#$%&'()*+,-./:;<=>?@[\\]^{|}~";
-
-        /// <summary>
         /// キャスト名に使用できない文字
         /// </summary>
         public static string UNUSABLE_CHARS_STR_FOR_CASTNAME = " !\"#$%&'()*+,-./:;<=>?@[\\]^{|}~";
-
-        public static char[] UNUSABLE_CHARS_BY_CASTNAME = UNUSABLE_CHARS_STR_FOR_NAME.ToCharArray();
 
         public static Encoding EncodeSJIS = Encoding.GetEncoding("shift_jis");
 
@@ -43,25 +36,28 @@ namespace MultiLangImportDotNet
         }
 
 
-        public static bool CheckNameHitUnusableChars(string testedString)
+        public static bool CheckNameHitUnusableSymbols(string testedString)
         {
             if(testedString == null)
             {
                 return false;
             }
 
+            bool result = testedString.Any(c => UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(c));
+#if false
             foreach(var c in testedString)
             {
-                if (UNUSABLE_CHARS_STR_FOR_NAME.Contains(c))
+                if (UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(c))
                 {
                     return true;
                 }
             }
+#endif
 
-            return false;
+            return result;
         }
 
-        public static string ChangeUnusableCharToUnderscore(string testedString)
+        public static string ChangeUnusableSymbolToUnderscore(string testedString)
         {
             if(testedString == null)
             {
@@ -72,7 +68,7 @@ namespace MultiLangImportDotNet
             foreach(var c in testedString)
             {
                 sb.Append(
-                    UNUSABLE_CHARS_STR_FOR_NAME.Contains(c) ? '_' : c
+                    UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(c) ? '_' : c
                 );
             }
 
@@ -135,7 +131,7 @@ namespace MultiLangImportDotNet
         }
 
 
-        public static bool CorrectCastName(out string correctedName, string castName)
+        public static bool CorrectNameForCastName(out string correctedName, string castName)
         {
             bool result;
 
@@ -145,10 +141,7 @@ namespace MultiLangImportDotNet
 
                 // 変換できず"?"となった箇所は"_"に変換する
                 // 使用できない記号についても"_"に変換する
-                foreach (char c in UNUSABLE_CHARS_STR_FOR_CASTNAME)
-                {
-                    sjisName = sjisName.Replace(c, '_');
-                }
+                sjisName = ChangeUnusableSymbolToUnderscore(sjisName);
 
                 // 先頭に数字がある場合"TXT_"を頭に付与する
                 if (!string.IsNullOrEmpty(sjisName) && char.IsDigit(sjisName[0]))

@@ -33,7 +33,7 @@ namespace MultiLangImportDotNet.Import
             // 使用不可言語を選択している場合は、選択を解除(index:-1)とする
             optionData.SubcastIndex = appData.LangHasTextWithUnusableCharList[this.listBoxSubcastName.SelectedIndex]
                 ? -1
-                : optionData.SubcastIndex = this.listBoxSubcastName.SelectedIndex;
+                : this.listBoxSubcastName.SelectedIndex;
         }
 
         private void checkBoxUseSubcastName_CheckedChanged(object sender, EventArgs e)
@@ -72,9 +72,10 @@ namespace MultiLangImportDotNet.Import
         private void buttonOK_Click(object sender, EventArgs e)
         {
             SetOptionFormSettingToAppData(this.appData.OptionData);
-            
+
             // サブキャスト名の使用On＆サブキャスト列選択済みの場合に限り
-            if(this.checkBoxUseSubcastName.Checked && this.listBoxSubcastName.SelectedIndex != -1)
+            if (this.appData.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME]
+                && this.appData.OptionData.SubcastIndex != -1)
             {
                 // サブキャスト名を接続した名前リストを生成保持しておく
                 bool combineResult = this.appData.SetCombinedNameForTextCast();

@@ -267,7 +267,7 @@ namespace MultiLangImportDotNet.TextExcel
                                                     if(text != null)
                                                     {
                                                         // テキストにキャスト名使用不可文字含有チェック
-                                                        bool hasUnusableChar = Utils.CheckNameHitUnusableChars(text);
+                                                        bool hasUnusableChar = Utils.CheckNameHitUnusableSymbols(text);
                                                         // テキスト：ANSI変換可否チェック
                                                         bool canConvToANSI = Utils.ANSIConvertTest(text);
 

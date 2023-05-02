@@ -30,11 +30,6 @@ namespace MultiLangImportDotNet
         public List<bool> LangHasTextWithUnusableCharList { get; set; }
 
         /// <summary>
-        /// サブキャスト名指定インデクス
-        /// </summary>
-        public int SubcastNameIndex { get; set; }
-
-        /// <summary>
         /// テキストキャスト名リスト
         /// </summary>
         public List<string> TextCastNameList { get; set; }
@@ -67,7 +62,7 @@ namespace MultiLangImportDotNet
                 for (int index = 0; index < LanguageNameList.Count; index++)
                 {
                     // 列をサブキャスト用に指定している場合はチェック不要
-                    if (index == SubcastNameIndex) continue;
+                    if (index == OptionData.SubcastIndex) continue;
 
                     // ページ名に１つでもANSI変換できない名前があった場合
                     if (!Utils.ANSIConvertTest(LanguageNameList[index]))
@@ -88,13 +83,14 @@ namespace MultiLangImportDotNet
                 }
 
                 // サブキャスト名としての指定があり
-                if(0 <= SubcastNameIndex)
+                if(0 <= OptionData.SubcastIndex)
                 {
                     // サブキャスト名の列のデータに
                     for(int index = 0; index < TextCastNameList.Count; index++)
                     {
                         // １つでもANSI変換できない名前があった場合
-                        if(!TextDataTable[index, SubcastNameIndex].CanConvertToANSI)
+                        if (null != TextDataTable[index, OptionData.SubcastIndex]
+                            && !TextDataTable[index, OptionData.SubcastIndex].CanConvertToANSI)
                         {
                             // 変換不可フラグON
                             return true;
@@ -119,7 +115,8 @@ namespace MultiLangImportDotNet
                 {
                     for(int c = 0; c < colNum; c++)
                     {
-                        if(!TextDataTable[r, c].CanConvertToANSI)
+                        if (null != TextDataTable[r, c]
+                            && !TextDataTable[r, c].CanConvertToANSI)
                         {
                             return true;
                         }
@@ -193,7 +190,6 @@ namespace MultiLangImportDotNet
         public ApplicationData()
         {
             this.Flags = new Dictionary<string, bool>();
-            this.SubcastNameIndex = -1;
             this.DefaultLanguageIndex = -1;
             this.OptionData = new OptionData();
         }
@@ -205,7 +201,7 @@ namespace MultiLangImportDotNet
         public bool SetCombinedNameForTextCast()
         {
             if (this.LanguageNameList == null) return false;
-            if (this.SubcastNameIndex == -1) return false;
+            if (this.OptionData.SubcastIndex == -1) return false;
             if (this.TextCastNameList == null) return false;
             if (this.TextDataTable == null) return false;
             if (this.TextCastNameList.Count != TextDataTable.GetLength(0)) return false;
@@ -213,10 +209,14 @@ namespace MultiLangImportDotNet
             List<string> combinedTextCastNameList = new List<string>();
 
             string conjunctionString = this.OptionData.ConjunctionString;
-            for(int index = 0; index < TextCastNameList.Count; index++)
+            for (int index = 0; index < TextCastNameList.Count; index++)
             {
-                string combinedName = 
-                    TextCastNameList[index] + conjunctionString + TextDataTable[index, this.SubcastNameIndex].Text;
+                string combinedName = TextCastNameList[index];
+                var textData = TextDataTable[index, this.OptionData.SubcastIndex];
+                if (textData != null)
+                {
+                    combinedName = combinedName + conjunctionString + TextDataTable[index, this.OptionData.SubcastIndex].Text;
+                }
                 combinedTextCastNameList.Add(combinedName);
             }
 
