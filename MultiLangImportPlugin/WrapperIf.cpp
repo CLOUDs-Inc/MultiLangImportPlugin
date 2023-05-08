@@ -25,6 +25,10 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 	char* pExcelFullPathStr = DownloadString("DownloadImportExcelFilePath");
 	writeData.importExcelFileFullPath = std::string(pExcelFullPathStr);
 	delete[] pExcelFullPathStr;
+	// インポートExcelファイルフルパス文字列（ワイド）
+	wchar_t* pExcelFullPathWStr = DownloadWString("DownloadImportExcelFilePath");
+	writeData.importExcelFileFullPathWide = std::wstring(pExcelFullPathWStr);
+	delete[] pExcelFullPathWStr;
 
 	// Apply languages and casts設定 =============
 	writeData.flagAddIfLanguagePageNotFound = DownloadFlag("AddIfLangPageNotFound");
@@ -161,6 +165,7 @@ bool WrapperIf::init()
 	PROC_ATTACH(DownloadTextDataTable, PProcDownloadTextDataTable, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadStringArray, PProcDownloadStringArray, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadString, PProcDownloadString, hModule, result, INIT_ERROR);
+	PROC_ATTACH(DownloadWString, PProcDownloadWString, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadInteger, PProcDownloadInteger, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadFloat, PProcDownloadFloat, hModule, result, INIT_ERROR);
 	PROC_ATTACH(DownloadFlag, PProcDownloadFlag, hModule, result, INIT_ERROR);

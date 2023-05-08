@@ -88,8 +88,7 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 	// ログ：インポートExcelファイルパス情報
 
 
-	bool logOn = writeData.flagLogOutput;
-	MultiLangTextController mlTextController(logOn);
+	MultiLangTextController mlTextController(writeData);
 
 	// 言語ページ追加処理の有無確認
 	if (writeData.flagAddIfLanguagePageNotFound)

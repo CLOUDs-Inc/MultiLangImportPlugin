@@ -7,6 +7,8 @@ class MultiLangTextController
 private:
 	bool isEnable;
 
+	WriteData writeData;
+
 	std::vector<std::string> pageNames;
 	UnicodeLogger* pLogger = nullptr;
 
@@ -16,7 +18,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	MultiLangTextController(bool logFlag);
+	MultiLangTextController(WriteData& writeData);
 
 	/// <summary>
 	/// デストラクタ
@@ -26,4 +28,7 @@ public:
 	bool IsEnabled();
 	bool SetProjectMLEnable();
 	bool SetPageNames(std::vector<std::string>& list);
+
+	bool SetTextProperty(int castNumber, TextData& textData);
+
 };

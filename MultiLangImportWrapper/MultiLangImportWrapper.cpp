@@ -232,6 +232,25 @@ namespace MultiLangImportWrapper
 		}
 
 		/// <summary>
+		/// .NET側よりワイド文字列データの取得（共通処理、戻り値受け取り側でdelete[]が必要
+		/// </summary>
+		/// <param name="methodName">文字列取得メソッド名</param>
+		/// <returns>文字列データ</returns>
+		wchar_t* DownloadWString(const std::string& methodName) override {
+			System::String^ methodNameManaged = msclr::interop::marshal_as<System::String^>(methodName);
+			MethodInfo^ methodInfo = managedType->GetMethod(methodNameManaged);
+			Object^ obj = methodInfo->Invoke(managedObject, nullptr);
+			String^ stringManaged = safe_cast<String^>(obj);
+
+			std::wstring wstringUnmanaged = marshal_as<std::wstring>(stringManaged);
+			size_t bufLen = wstringUnmanaged.length() + 1;
+			wchar_t* pwStr = new wchar_t[bufLen];
+			wcscpy_s(pwStr, bufLen, wstringUnmanaged.c_str());
+
+			return pwStr;
+		}
+
+		/// <summary>
 		/// .Net側からintegerデータを取得する
 		/// </summary>
 		/// <param name="variableName">取得先変数名</param>
@@ -387,6 +406,19 @@ char* DownloadString(const std::string& methodName)
 {
 	if (wrapper != nullptr) {
 		return wrapper->DownloadString(methodName);
+	}
+	return nullptr;
+}
+
+/// <summary>
+/// .NET側からのワイド文字列の取得
+/// </summary>
+/// <param name="methodName">.NET側文字列出力メソッド名</param>
+/// <returns>文字列</returns>
+wchar_t* DownloadWString(const std::string& methodName)
+{
+	if (wrapper != nullptr) {
+		return wrapper->DownloadWString(methodName);
 	}
 	return nullptr;
 }

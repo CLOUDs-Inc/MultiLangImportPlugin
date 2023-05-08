@@ -29,6 +29,7 @@ typedef void(*PProcUploadTextCastNames)(int names_len, char** names);
 typedef TextData** (*PProcDownloadTextDataTable)();
 typedef char** (*PProcDownloadStringArray)(const std::string& arrayName);
 typedef char* (*PProcDownloadString)(const std::string& methodName);
+typedef wchar_t* (*PProcDownloadWString)(const std::string& methodName);
 typedef int(*PProcDownloadInteger)(const std::string& variableName);
 typedef float(*PProcDownloadFloat)(const std::string& variableName);
 typedef bool(*PProcDownloadFlag)(const std::string& flagName);
@@ -50,6 +51,7 @@ class WrapperIf {
 	PProcDownloadTextDataTable DownloadTextDataTable = nullptr;
 	PProcDownloadStringArray DownloadStringArray = nullptr;
 	PProcDownloadString DownloadString = nullptr;
+	PProcDownloadWString DownloadWString = nullptr;
 	PProcDownloadInteger DownloadInteger = nullptr;
 	PProcDownloadFloat DownloadFloat = nullptr;
 	PProcDownloadFlag DownloadFlag = nullptr;

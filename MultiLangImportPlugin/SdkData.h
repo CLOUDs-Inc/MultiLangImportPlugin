@@ -5,6 +5,7 @@ using namespace std;
 class SdkData {
 public:
 	string projectPath;
+	wstring projectPathW;
 	string projectName;
 
 	vector<string> textCastNames;

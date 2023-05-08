@@ -4,9 +4,13 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="on">ログ機能OnOff</param>
-MultiLangTextController::MultiLangTextController(bool logOn)
+MultiLangTextController::MultiLangTextController(WriteData& writeData)
 {
-	this->pLogger = new UnicodeLogger(logOn);
+	this->writeData = writeData;
+	this->pLogger = new UnicodeLogger(writeData.flagLogOutput);
+
+	std::wstring msg = L"# Import File: " + writeData.importExcelFileFullPathWide;
+	this->pLogger->log(msg);
 
 	// クラス生成時に多言語使用状態にし、他の処理の前に多言語使用可能状況を準備する
 	// 他の処理の際、enable:trueを確認すること
@@ -125,6 +129,51 @@ bool MultiLangTextController::SetPageNames(std::vector<std::string>& list)
 
 		std::string msg = "LANGUAGE [" + list[pageIndex] + "]: Added";
 		this->pLogger->log(msg);
+	}
+
+	return true;
+}
+
+
+
+bool MultiLangTextController::SetTextProperty(int castNumber, TextData& textData) {
+	bool mxResult = false;
+
+	if (this->writeData.flagApplyFontNameToTextCast){
+		mxResult = MxPluginPort_CastPropety_SetDataPtr(ct_Text, castNumber, cp_Text_FontName, (void*)textData.fontName.c_str());
+		if (!mxResult) {
+			return false;
+		}
+	}
+
+	if (this->writeData.flagApplyFontSizeToTextCast) {
+		mxResult = MxPluginPort_CastPropety_SetDataInt(ct_Text, castNumber, cp_Text_FontSize, (int)textData.fontSize);
+		if (!mxResult) {
+			return false;
+		}
+	}
+
+	if (this->writeData.flagApplyTextColorToTextCast) {
+		int colorValue = (textData.colorR & 0x000000ff)
+			+ ((textData.colorG << 8) & 0x0000ff00)
+			+ ((textData.colorB << 16) & 0x00ff0000);
+		mxResult = MxPluginPort_CastPropety_SetDataInt(ct_Text, castNumber, cp_Text_FontColor, colorValue);
+		if (!mxResult) {
+			return false;
+		}
+	}
+
+	if (this->writeData.flagApplyStringToTextCast) {
+		bool isUnicodeTextCast = true;
+		if (isUnicodeTextCast) {
+			mxResult = MxPluginPort_CastPropety_SetDataPtr(ct_Text, castNumber, cp_Text_TextData, (void*)textData.wtext.c_str());
+		}
+		else {
+			mxResult = MxPluginPort_CastPropety_SetDataPtr(ct_Text, castNumber, cp_Text_TextData, (void*)textData.text.c_str());
+		}
+		if (!mxResult) {
+			return false;
+		}
 	}
 
 	return true;

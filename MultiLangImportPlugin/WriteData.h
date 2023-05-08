@@ -21,6 +21,7 @@ public:
 	vector<string> textCastNameList;
 
 	string importExcelFileFullPath;
+	wstring importExcelFileFullPathWide;
 
 	vector<vector<TextData>> textDataTable;
 
