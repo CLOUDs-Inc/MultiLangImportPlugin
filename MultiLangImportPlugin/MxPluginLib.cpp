@@ -191,10 +191,48 @@
 
 #define	IDMxPluginPort_Cast_Text_GetLineCount			0x1000
 #define	IDMxPluginPort_Cast_Text_GetLineString			0x1001
-
-#define	IDMxPluginPort_Cast_TextML_GetLangAssigned		0x1800
-#define	IDMxPluginPort_Cast_TextML_CreateLanguage		0x1801
-#define	IDMxPluginPort_Cast_TextML_RemoveLanguage		0x1802
+#define	IDMxPluginPort_Cast_Text_GetLangAssigned		0x1002
+#define	IDMxPluginPort_Cast_Text_CreateLanguage			0x1003
+#define	IDMxPluginPort_Cast_Text_RemoveLanguage			0x1004
+#define	IDMxPluginPort_Cast_Text_SetTextData			0x1005
+#define	IDMxPluginPort_Cast_Text_SetFontColor			0x1007
+#define	IDMxPluginPort_Cast_Text_GetFontColor			0x1008
+#define	IDMxPluginPort_Cast_Text_SetBackColor			0x1009
+#define	IDMxPluginPort_Cast_Text_GetBackColor			0x100A
+#define	IDMxPluginPort_Cast_Text_SetFontHeight			0x100B
+#define	IDMxPluginPort_Cast_Text_GetFontHeight			0x100C
+#define	IDMxPluginPort_Cast_Text_SetFontSize			0x100D
+#define	IDMxPluginPort_Cast_Text_GetFontSize			0x100E
+#define	IDMxPluginPort_Cast_Text_SetFontName			0x100F
+#define	IDMxPluginPort_Cast_Text_GetFontName			0x1010
+#define	IDMxPluginPort_Cast_Text_SetFontCharSet			0x1011
+#define	IDMxPluginPort_Cast_Text_GetFontCharSet			0x1012
+#define	IDMxPluginPort_Cast_Text_SetTransparent			0x1013
+#define	IDMxPluginPort_Cast_Text_GetTransparent			0x1014
+#define	IDMxPluginPort_Cast_Text_SetItemDistance		0x1015
+#define	IDMxPluginPort_Cast_Text_GetItemDistance		0x1016
+#define	IDMxPluginPort_Cast_Text_SetBackward			0x1017
+#define	IDMxPluginPort_Cast_Text_GetBackward			0x1018
+#define	IDMxPluginPort_Cast_Text_SetAlphaEnabled		0x1019
+#define	IDMxPluginPort_Cast_Text_GetAlphaEnabled		0x101A
+#define	IDMxPluginPort_Cast_Text_SetCenterX				0x101B
+#define	IDMxPluginPort_Cast_Text_GetCenterX				0x101C
+#define	IDMxPluginPort_Cast_Text_SetCenterY				0x101D
+#define	IDMxPluginPort_Cast_Text_GetCenterY				0x101E
+#define	IDMxPluginPort_Cast_Text_SetFixSize				0x101F
+#define	IDMxPluginPort_Cast_Text_GetFixSize				0x1020
+#define	IDMxPluginPort_Cast_Text_GetWidth				0x1021
+#define	IDMxPluginPort_Cast_Text_GetHeight				0x1022
+#define	IDMxPluginPort_Cast_Text_SetEncode				0x1023
+#define	IDMxPluginPort_Cast_Text_GetEncode				0x1024
+#define	IDMxPluginPort_Cast_Text_SetAlignment			0x1025
+#define	IDMxPluginPort_Cast_Text_GetAlignment			0x1026
+#define	IDMxPluginPort_Cast_Text_SetAlignmentWidth		0x1027
+#define	IDMxPluginPort_Cast_Text_GetAlignmentWidth		0x1028
+#define	IDMxPluginPort_Cast_Text_SetClickEnabled		0x1029
+#define	IDMxPluginPort_Cast_Text_GetClickEnabled		0x102A
+#define	IDMxPluginPort_Cast_Text_SetAntialias			0x102B
+#define	IDMxPluginPort_Cast_Text_GetAntialias			0x102C
 
 #define	IDMxPluginPort_End								0xFF
 
@@ -390,9 +428,47 @@ typedef BOOL(_cdecl* TMxPluginPort_Project_GetPropertyInt)(int ID, int* Value);
 
 typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineCount)(int CastNumber, int LangNum, int* Count);
 typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineString)(int CastNumber, int LineNumber, int LangNum, void** St);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_GetLangAssigned)(int CastNumber, int LangNum, BOOL* Result);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_CreateLanguage)(int CastNumber, int LangNum);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_TextML_RemoveLanguage)(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLangAssigned)(int CastNumber, int LangNum, BOOL* Result);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_CreateLanguage)(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_RemoveLanguage)(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTextData)(int CastNumber, int LangNum, int Encode, const void* Data);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontColor)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontColor)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackColor)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackColor)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontHeight)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontHeight)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontSize)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontSize)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontName)(int CastNumber, int LangNum, const char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontName)(int CastNumber, int LangNum, const char** Name);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontCharSet)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontCharSet)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTransparent)(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetTransparent)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetItemDistance)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetItemDistance)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackward)(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackward)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlphaEnabled)(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlphaEnabled)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterX)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterX)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterY)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterY)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFixSize)(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFixSize)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetWidth)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetHeight)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetEncode)(int CastNumber, TTextStringEncodeType* Encode);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlignment)(int CastNumber, int LangNum, TTextAlignment		Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlignment)(int CastNumber, int LangNum, TTextAlignment* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlignmentWidth)(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlignmentWidth)(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetClickEnabled)(int CastNumber, int LangNum, BOOL  Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetClickEnabled)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAntialias)(int CastNumber, int LangNum, BOOL  Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAntialias)(int CastNumber, int LangNum, BOOL* Value);
 
 //DLLÇÃä÷êîÇíËã`
 TMxPluginPort_System_AddMemu				subMxPluginPort_System_AddMemu = NULL;
@@ -452,13 +528,13 @@ TMxPluginPort_CLang_GetFileNameConst		subMxPluginPort_CLang_GetFileNameConst = N
 TMxPluginPort_CLang_GetFileNameEventSource	subMxPluginPort_CLang_GetFileNameEventSource = NULL;
 TMxPluginPort_CLang_GetFileNameEventHeader	subMxPluginPort_CLang_GetFileNameEventHeader = NULL;
 
-TMxPluginPort_CLang_GetInitEvent_Enabled    subMxPluginPort_CLang_GetInitEvent_Enabled = NULL;
-TMxPluginPort_CLang_GetInitEvent_Type       subMxPluginPort_CLang_GetInitEvent_Type = NULL;
-TMxPluginPort_CLang_GetInitEvent_Name       subMxPluginPort_CLang_GetInitEvent_Name = NULL;
+TMxPluginPort_CLang_GetInitEvent_Enabled	subMxPluginPort_CLang_GetInitEvent_Enabled = NULL;
+TMxPluginPort_CLang_GetInitEvent_Type		subMxPluginPort_CLang_GetInitEvent_Type = NULL;
+TMxPluginPort_CLang_GetInitEvent_Name		subMxPluginPort_CLang_GetInitEvent_Name = NULL;
 TMxPluginPort_CLang_GetFinallyEvent_Enabled subMxPluginPort_CLang_GetFinallyEvent_Enabled = NULL;
-TMxPluginPort_CLang_GetFinallyEvent_Type    subMxPluginPort_CLang_GetFinallyEvent_Type = NULL;
-TMxPluginPort_CLang_GetFinallyEvent_Name    subMxPluginPort_CLang_GetFinallyEvent_Name = NULL;
-TMxPluginPort_CLang_GetInitEventFuncName    subMxPluginPort_CLang_GetInitEventFuncName = NULL;
+TMxPluginPort_CLang_GetFinallyEvent_Type	subMxPluginPort_CLang_GetFinallyEvent_Type = NULL;
+TMxPluginPort_CLang_GetFinallyEvent_Name	subMxPluginPort_CLang_GetFinallyEvent_Name = NULL;
+TMxPluginPort_CLang_GetInitEventFuncName	subMxPluginPort_CLang_GetInitEventFuncName = NULL;
 TMxPluginPort_CLang_GetFinallyEventFuncName	subMxPluginPort_CLang_GetFinallyEventFuncName = NULL;
 
 TMxPluginPort_CLang_SetEnabled				subMxPluginPort_CLang_SetEnabled = NULL;
@@ -471,12 +547,12 @@ TMxPluginPort_CLang_GetPathEventNative		subMxPluginPort_CLang_GetPathEventNative
 TMxPluginPort_CLang_GetPathLibNative		subMxPluginPort_CLang_GetPathLibNative = NULL;
 TMxPluginPort_CLang_GetPathOBJNative		subMxPluginPort_CLang_GetPathOBJNative = NULL;
 
-TMxPluginPort_CLang_SetInitEvent_Enabled    subMxPluginPort_CLang_SetInitEvent_Enabled = NULL;
-TMxPluginPort_CLang_SetInitEvent_Type       subMxPluginPort_CLang_SetInitEvent_Type = NULL;
-TMxPluginPort_CLang_SetInitEvent_Name       subMxPluginPort_CLang_SetInitEvent_Name = NULL;
+TMxPluginPort_CLang_SetInitEvent_Enabled	subMxPluginPort_CLang_SetInitEvent_Enabled = NULL;
+TMxPluginPort_CLang_SetInitEvent_Type		subMxPluginPort_CLang_SetInitEvent_Type = NULL;
+TMxPluginPort_CLang_SetInitEvent_Name		subMxPluginPort_CLang_SetInitEvent_Name = NULL;
 TMxPluginPort_CLang_SetFinallyEvent_Enabled subMxPluginPort_CLang_SetFinallyEvent_Enabled = NULL;
-TMxPluginPort_CLang_SetFinallyEvent_Type    subMxPluginPort_CLang_SetFinallyEvent_Type = NULL;
-TMxPluginPort_CLang_SetFinallyEvent_Name    subMxPluginPort_CLang_SetFinallyEvent_Name = NULL;
+TMxPluginPort_CLang_SetFinallyEvent_Type	subMxPluginPort_CLang_SetFinallyEvent_Type = NULL;
+TMxPluginPort_CLang_SetFinallyEvent_Name	subMxPluginPort_CLang_SetFinallyEvent_Name = NULL;
 
 TMxPluginPort_CLang_SetEventListName_Type	subMxPluginPort_CLang_SetEventListName_Type = NULL;
 TMxPluginPort_CLang_SetEventListName_Name	subMxPluginPort_CLang_SetEventListName_Name = NULL;
@@ -585,10 +661,47 @@ TMxPluginPort_Project_GetPropertyInt		subMxPluginPort_Project_GetPropertyInt = N
 
 TMxPluginPort_Cast_Text_GetLineCount		subMxPluginPort_Cast_Text_GetLineCount = NULL;
 TMxPluginPort_Cast_Text_GetLineString		subMxPluginPort_Cast_Text_GetLineString = NULL;
-
-TMxPluginPort_Cast_TextML_GetLangAssigned	subMxPluginPort_Cast_TextML_GetLangAssigned = NULL;
-TMxPluginPort_Cast_TextML_CreateLanguage	subMxPluginPort_Cast_TextML_CreateLanguage = NULL;
-TMxPluginPort_Cast_TextML_RemoveLanguage	subMxPluginPort_Cast_TextML_RemoveLanguage = NULL;
+TMxPluginPort_Cast_Text_GetLangAssigned		subMxPluginPort_Cast_Text_GetLangAssigned = NULL;
+TMxPluginPort_Cast_Text_CreateLanguage		subMxPluginPort_Cast_Text_CreateLanguage = NULL;
+TMxPluginPort_Cast_Text_RemoveLanguage		subMxPluginPort_Cast_Text_RemoveLanguage = NULL;
+TMxPluginPort_Cast_Text_SetTextData			subMxPluginPort_Cast_Text_SetTextData = NULL;
+TMxPluginPort_Cast_Text_SetFontColor		subMxPluginPort_Cast_Text_SetFontColor = NULL;
+TMxPluginPort_Cast_Text_GetFontColor		subMxPluginPort_Cast_Text_GetFontColor = NULL;
+TMxPluginPort_Cast_Text_SetBackColor		subMxPluginPort_Cast_Text_SetBackColor = NULL;
+TMxPluginPort_Cast_Text_GetBackColor		subMxPluginPort_Cast_Text_GetBackColor = NULL;
+TMxPluginPort_Cast_Text_SetFontHeight		subMxPluginPort_Cast_Text_SetFontHeight = NULL;
+TMxPluginPort_Cast_Text_GetFontHeight		subMxPluginPort_Cast_Text_GetFontHeight = NULL;
+TMxPluginPort_Cast_Text_SetFontSize			subMxPluginPort_Cast_Text_SetFontSize = NULL;
+TMxPluginPort_Cast_Text_GetFontSize			subMxPluginPort_Cast_Text_GetFontSize = NULL;
+TMxPluginPort_Cast_Text_SetFontName			subMxPluginPort_Cast_Text_SetFontName = NULL;
+TMxPluginPort_Cast_Text_GetFontName			subMxPluginPort_Cast_Text_GetFontName = NULL;
+TMxPluginPort_Cast_Text_SetFontCharSet		subMxPluginPort_Cast_Text_SetFontCharSet = NULL;
+TMxPluginPort_Cast_Text_GetFontCharSet		subMxPluginPort_Cast_Text_GetFontCharSet = NULL;
+TMxPluginPort_Cast_Text_SetTransparent		subMxPluginPort_Cast_Text_SetTransparent = NULL;
+TMxPluginPort_Cast_Text_GetTransparent		subMxPluginPort_Cast_Text_GetTransparent = NULL;
+TMxPluginPort_Cast_Text_SetItemDistance		subMxPluginPort_Cast_Text_SetItemDistance = NULL;
+TMxPluginPort_Cast_Text_GetItemDistance		subMxPluginPort_Cast_Text_GetItemDistance = NULL;
+TMxPluginPort_Cast_Text_SetBackward			subMxPluginPort_Cast_Text_SetBackward = NULL;
+TMxPluginPort_Cast_Text_GetBackward			subMxPluginPort_Cast_Text_GetBackward = NULL;
+TMxPluginPort_Cast_Text_SetAlphaEnabled		subMxPluginPort_Cast_Text_SetAlphaEnabled = NULL;
+TMxPluginPort_Cast_Text_GetAlphaEnabled		subMxPluginPort_Cast_Text_GetAlphaEnabled = NULL;
+TMxPluginPort_Cast_Text_SetCenterX			subMxPluginPort_Cast_Text_SetCenterX = NULL;
+TMxPluginPort_Cast_Text_GetCenterX			subMxPluginPort_Cast_Text_GetCenterX = NULL;
+TMxPluginPort_Cast_Text_SetCenterY			subMxPluginPort_Cast_Text_SetCenterY = NULL;
+TMxPluginPort_Cast_Text_GetCenterY			subMxPluginPort_Cast_Text_GetCenterY = NULL;
+TMxPluginPort_Cast_Text_SetFixSize			subMxPluginPort_Cast_Text_SetFixSize = NULL;
+TMxPluginPort_Cast_Text_GetFixSize			subMxPluginPort_Cast_Text_GetFixSize = NULL;
+TMxPluginPort_Cast_Text_GetWidth			subMxPluginPort_Cast_Text_GetWidth = NULL;
+TMxPluginPort_Cast_Text_GetHeight			subMxPluginPort_Cast_Text_GetHeight = NULL;
+TMxPluginPort_Cast_Text_GetEncode			subMxPluginPort_Cast_Text_GetEncode = NULL;
+TMxPluginPort_Cast_Text_SetAlignment		subMxPluginPort_Cast_Text_SetAlignment = NULL;
+TMxPluginPort_Cast_Text_GetAlignment		subMxPluginPort_Cast_Text_GetAlignment = NULL;
+TMxPluginPort_Cast_Text_SetAlignmentWidth	subMxPluginPort_Cast_Text_SetAlignmentWidth = NULL;
+TMxPluginPort_Cast_Text_GetAlignmentWidth	subMxPluginPort_Cast_Text_GetAlignmentWidth = NULL;
+TMxPluginPort_Cast_Text_SetClickEnabled		subMxPluginPort_Cast_Text_SetClickEnabled = NULL;
+TMxPluginPort_Cast_Text_GetClickEnabled		subMxPluginPort_Cast_Text_GetClickEnabled = NULL;
+TMxPluginPort_Cast_Text_SetAntialias		subMxPluginPort_Cast_Text_SetAntialias = NULL;
+TMxPluginPort_Cast_Text_GetAntialias		subMxPluginPort_Cast_Text_GetAntialias = NULL;
 
 BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 {
@@ -787,10 +900,47 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_Cast_Text_GetLineCount: { subMxPluginPort_Cast_Text_GetLineCount = (TMxPluginPort_Cast_Text_GetLineCount)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_GetLineString: { subMxPluginPort_Cast_Text_GetLineString = (TMxPluginPort_Cast_Text_GetLineString)FuncAddr; break; }
 
-	case	IDMxPluginPort_Cast_TextML_GetLangAssigned: { subMxPluginPort_Cast_TextML_GetLangAssigned = (TMxPluginPort_Cast_TextML_GetLangAssigned)FuncAddr; break; }
-	case	IDMxPluginPort_Cast_TextML_CreateLanguage: { subMxPluginPort_Cast_TextML_CreateLanguage = (TMxPluginPort_Cast_TextML_CreateLanguage)FuncAddr; break; }
-	case	IDMxPluginPort_Cast_TextML_RemoveLanguage: { subMxPluginPort_Cast_TextML_RemoveLanguage = (TMxPluginPort_Cast_TextML_RemoveLanguage)FuncAddr; break; }
-
+	case	IDMxPluginPort_Cast_Text_GetLangAssigned: { subMxPluginPort_Cast_Text_GetLangAssigned = (TMxPluginPort_Cast_Text_GetLangAssigned)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_CreateLanguage: { subMxPluginPort_Cast_Text_CreateLanguage = (TMxPluginPort_Cast_Text_CreateLanguage)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_RemoveLanguage: { subMxPluginPort_Cast_Text_RemoveLanguage = (TMxPluginPort_Cast_Text_RemoveLanguage)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetTextData: { subMxPluginPort_Cast_Text_SetTextData = (TMxPluginPort_Cast_Text_SetTextData)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontColor: { subMxPluginPort_Cast_Text_SetFontColor = (TMxPluginPort_Cast_Text_SetFontColor)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontColor: { subMxPluginPort_Cast_Text_GetFontColor = (TMxPluginPort_Cast_Text_GetFontColor)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetBackColor: { subMxPluginPort_Cast_Text_SetBackColor = (TMxPluginPort_Cast_Text_SetBackColor)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetBackColor: { subMxPluginPort_Cast_Text_GetBackColor = (TMxPluginPort_Cast_Text_GetBackColor)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontHeight: { subMxPluginPort_Cast_Text_SetFontHeight = (TMxPluginPort_Cast_Text_SetFontHeight)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontHeight: { subMxPluginPort_Cast_Text_GetFontHeight = (TMxPluginPort_Cast_Text_GetFontHeight)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontSize: { subMxPluginPort_Cast_Text_SetFontSize = (TMxPluginPort_Cast_Text_SetFontSize)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontSize: { subMxPluginPort_Cast_Text_GetFontSize = (TMxPluginPort_Cast_Text_GetFontSize)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontName: { subMxPluginPort_Cast_Text_SetFontName = (TMxPluginPort_Cast_Text_SetFontName)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontName: { subMxPluginPort_Cast_Text_GetFontName = (TMxPluginPort_Cast_Text_GetFontName)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontCharSet: { subMxPluginPort_Cast_Text_SetFontCharSet = (TMxPluginPort_Cast_Text_SetFontCharSet)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontCharSet: { subMxPluginPort_Cast_Text_GetFontCharSet = (TMxPluginPort_Cast_Text_GetFontCharSet)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetTransparent: { subMxPluginPort_Cast_Text_SetTransparent = (TMxPluginPort_Cast_Text_SetTransparent)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetTransparent: { subMxPluginPort_Cast_Text_GetTransparent = (TMxPluginPort_Cast_Text_GetTransparent)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetItemDistance: { subMxPluginPort_Cast_Text_SetItemDistance = (TMxPluginPort_Cast_Text_SetItemDistance)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetItemDistance: { subMxPluginPort_Cast_Text_GetItemDistance = (TMxPluginPort_Cast_Text_GetItemDistance)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetBackward: { subMxPluginPort_Cast_Text_SetBackward = (TMxPluginPort_Cast_Text_SetBackward)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetBackward: { subMxPluginPort_Cast_Text_GetBackward = (TMxPluginPort_Cast_Text_GetBackward)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetAlphaEnabled: { subMxPluginPort_Cast_Text_SetAlphaEnabled = (TMxPluginPort_Cast_Text_SetAlphaEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetAlphaEnabled: { subMxPluginPort_Cast_Text_GetAlphaEnabled = (TMxPluginPort_Cast_Text_GetAlphaEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetCenterX: { subMxPluginPort_Cast_Text_SetCenterX = (TMxPluginPort_Cast_Text_SetCenterX)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetCenterX: { subMxPluginPort_Cast_Text_GetCenterX = (TMxPluginPort_Cast_Text_GetCenterX)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetCenterY: { subMxPluginPort_Cast_Text_SetCenterY = (TMxPluginPort_Cast_Text_SetCenterY)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetCenterY: { subMxPluginPort_Cast_Text_GetCenterY = (TMxPluginPort_Cast_Text_GetCenterY)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFixSize: { subMxPluginPort_Cast_Text_SetFixSize = (TMxPluginPort_Cast_Text_SetFixSize)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFixSize: { subMxPluginPort_Cast_Text_GetFixSize = (TMxPluginPort_Cast_Text_GetFixSize)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetWidth: { subMxPluginPort_Cast_Text_GetWidth = (TMxPluginPort_Cast_Text_GetWidth)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetHeight: { subMxPluginPort_Cast_Text_GetHeight = (TMxPluginPort_Cast_Text_GetHeight)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetEncode: { subMxPluginPort_Cast_Text_GetEncode = (TMxPluginPort_Cast_Text_GetEncode)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetAlignment: { subMxPluginPort_Cast_Text_SetAlignment = (TMxPluginPort_Cast_Text_SetAlignment)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetAlignment: { subMxPluginPort_Cast_Text_GetAlignment = (TMxPluginPort_Cast_Text_GetAlignment)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetAlignmentWidth: { subMxPluginPort_Cast_Text_SetAlignmentWidth = (TMxPluginPort_Cast_Text_SetAlignmentWidth)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetAlignmentWidth: { subMxPluginPort_Cast_Text_GetAlignmentWidth = (TMxPluginPort_Cast_Text_GetAlignmentWidth)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetClickEnabled: { subMxPluginPort_Cast_Text_SetClickEnabled = (TMxPluginPort_Cast_Text_SetClickEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetClickEnabled: { subMxPluginPort_Cast_Text_GetClickEnabled = (TMxPluginPort_Cast_Text_GetClickEnabled)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetAntialias: { subMxPluginPort_Cast_Text_SetAntialias = (TMxPluginPort_Cast_Text_SetAntialias)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetAntialias: { subMxPluginPort_Cast_Text_GetAntialias = (TMxPluginPort_Cast_Text_GetAntialias)FuncAddr; break; }
 	case	IDMxPluginPort_End: {																										   break; }
 	default: { return FALSE; };
 	}
@@ -802,7 +952,7 @@ BOOL MxPluginPort_System_GetSDKEXEVersion(unsigned long long int* Version)
 	if (Version) *Version = 0;
 	if (subMxPluginPort_System_GetSDKVersion)
 		return subMxPluginPort_System_GetSDKVersion(gsv_EXEVersion, Version);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_GetSDKFuncVersion(TSDKVersionList* Version)
@@ -810,43 +960,43 @@ BOOL MxPluginPort_System_GetSDKFuncVersion(TSDKVersionList* Version)
 	if (Version) *Version = svl_Unassigned;
 	if (subMxPluginPort_System_GetSDKVersion)
 		return subMxPluginPort_System_GetSDKVersion(gsv_FuncVersion, Version);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_AddMemu(HINSTANCE hinstDLL, char* Name, int Option, void* Reserved, void* UserParam)
 {
 	if (subMxPluginPort_System_AddMemu) return subMxPluginPort_System_AddMemu(hinstDLL, Name, Option, Reserved, UserParam);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_MenuEnabled(int hinstMenu, BOOL Enabled)
 {
 	if (subMxPluginPort_System_MenuEnabled) return subMxPluginPort_System_MenuEnabled(hinstMenu, Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_MenuVisible(int hinstMenu, BOOL Visible)
 {
 	if (subMxPluginPort_System_MenuVisible) return subMxPluginPort_System_MenuVisible(hinstMenu, Visible);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_MenuCaption(int hinstMenu, char* Caption)
 {
 	if (subMxPluginPort_System_MenuCaption) return subMxPluginPort_System_MenuCaption(hinstMenu, Caption);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_Paint(void* Reserved)
 {
 	if (subMxPluginPort_System_Paint) return subMxPluginPort_System_Paint(Reserved);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_AttachEvent(HINSTANCE hinstDLL, UINT msg, TMxWMCOPYDATAPROC lpWMCopyDataProc)
 {
 	if (subMxPluginPort_System_AttachEvent) return subMxPluginPort_System_AttachEvent(hinstDLL, msg, lpWMCopyDataProc);
-	return false;
+	return FALSE;
 }
 
 HWND MxPluginPort_System_GetHWnd(void)
@@ -858,19 +1008,19 @@ HWND MxPluginPort_System_GetHWnd(void)
 BOOL MxPluginPort_System_Progress(TSetProgressCommand Command, int Param)
 {
 	if (subMxPluginPort_System_Progress) return subMxPluginPort_System_Progress((int)Command, Param);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_ProgressMsg(char* Msg)
 {
 	if (subMxPluginPort_System_ProgressMsg) return subMxPluginPort_System_ProgressMsg((int)spg_SetMessage, Msg);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_System_TrimLabelName(char* Des, char* Sou)
 {
 	if (subMxPluginPort_System_TrimLabelName) return subMxPluginPort_System_TrimLabelName(Des, Sou);
-	return false;
+	return FALSE;
 }
 
 int MxPluginPort_System_GetSDKLanguage(void)
@@ -882,7 +1032,7 @@ int MxPluginPort_System_GetSDKLanguage(void)
 BOOL MxPluginPort_System_ProcessMessages(void)
 {
 	if (subMxPluginPort_System_ProcessMessages) return subMxPluginPort_System_ProcessMessages();
-	return false;
+	return FALSE;
 }
 
 int MxPluginPort_Event_GetUIHandle(HINSTANCE hinstDLL, int* Handle)
@@ -896,21 +1046,21 @@ BOOL MxPluginPort_Event_GetEventType(HINSTANCE hinstDLL, int* Type)
 {
 	if (subMxPluginPort_Event_GetEventType) return subMxPluginPort_Event_GetEventType(hinstDLL, Type);
 	if (Type != NULL) *Type = -1;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_GetPreEvent(HINSTANCE hinstDLL, BOOL* Flag)
 {
 	if (subMxPluginPort_Event_GetPreEvent) return subMxPluginPort_Event_GetPreEvent(hinstDLL, Flag);
-	if (Flag != NULL) *Flag = false;
-	return false;
+	if (Flag != NULL) *Flag = FALSE;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_GetMXPFileName(HINSTANCE hinstDLL, char** FileName)
 {
 	if (subMxPluginPort_Event_GetMXPFileName) return subMxPluginPort_Event_GetMXPFileName(hinstDLL, FileName);
 	if (FileName != NULL) *FileName = NULL;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Score_GetScoreTrack(HINSTANCE hinstDLL, int* ScoreNumber, int* TrackNumber)
@@ -918,21 +1068,21 @@ BOOL MxPluginPort_Event_Score_GetScoreTrack(HINSTANCE hinstDLL, int* ScoreNumber
 	if (subMxPluginPort_Event_Score_GetScoreTrack) return subMxPluginPort_Event_Score_GetScoreTrack(hinstDLL, ScoreNumber, TrackNumber);
 	if (ScoreNumber != NULL) *ScoreNumber = -1;
 	if (TrackNumber != NULL) *TrackNumber = -1;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Score_GetSelectedCount(HINSTANCE hinstDLL, int* SelectedCount)
 {
 	if (subMxPluginPort_Event_Score_GetSelectedCount) return subMxPluginPort_Event_Score_GetSelectedCount(hinstDLL, SelectedCount);
 	if (SelectedCount != NULL) *SelectedCount = 0;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Score_GetSelectedTrack(HINSTANCE hinstDLL, int Index, int* TrackNum)
 {
 	if (subMxPluginPort_Event_Score_GetSelectedTrack) return subMxPluginPort_Event_Score_GetSelectedTrack(hinstDLL, Index, TrackNum);
 	if (TrackNum != NULL) *TrackNum = -1;
-	return false;
+	return FALSE;
 }
 
 
@@ -940,73 +1090,73 @@ BOOL MxPluginPort_Event_ScoreRename_GetNumber(HINSTANCE hinstDLL, int* ScoreNum)
 {
 	if (subMxPluginPort_Event_ScoreRename_GetNumber) return subMxPluginPort_Event_ScoreRename_GetNumber(hinstDLL, ScoreNum);
 	if (ScoreNum != NULL) *ScoreNum = -1;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_ScoreRename_GetOldName(HINSTANCE hinstDLL, char** OldName)
 {
 	if (subMxPluginPort_Event_ScoreRename_GetOldName) return subMxPluginPort_Event_ScoreRename_GetOldName(hinstDLL, OldName);
 	if (OldName != NULL) *OldName = NULL;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_ScoreRename_GetNewName(HINSTANCE hinstDLL, char** NewName)
 {
 	if (subMxPluginPort_Event_ScoreRename_GetNewName) return subMxPluginPort_Event_ScoreRename_GetNewName(hinstDLL, NewName);
 	if (NewName != NULL) *NewName = NULL;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Cast_GetCastType(HINSTANCE hinstDLL, int* CastType)
 {
 	if (subMxPluginPort_Event_Cast_GetCastType) return subMxPluginPort_Event_Cast_GetCastType(hinstDLL, CastType);
 	if (CastType != NULL) *CastType = -1;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Cast_GetCastNumber(HINSTANCE hinstDLL, int* CastNumber)
 {
 	if (subMxPluginPort_Event_Cast_GetCastNumber) return subMxPluginPort_Event_Cast_GetCastNumber(hinstDLL, CastNumber);
 	if (CastNumber != NULL) *CastNumber = -1;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Cast_GetOldName(HINSTANCE hinstDLL, char** OldName)
 {
 	if (subMxPluginPort_Event_Cast_GetOldName) return subMxPluginPort_Event_Cast_GetOldName(hinstDLL, OldName);
 	if (OldName != NULL) *OldName = NULL;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Event_Cast_GetNewName(HINSTANCE hinstDLL, char** NewName)
 {
 	if (subMxPluginPort_Event_Cast_GetNewName) return subMxPluginPort_Event_Cast_GetNewName(hinstDLL, NewName);
 	if (NewName != NULL) *NewName = NULL;
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_Init(int InitMode)
 {
 	if (subMxPluginPort_Project_Init) return subMxPluginPort_Project_Init(InitMode);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_LoadCabinet(char* FileName, int Mode)
 {
 	if (subMxPluginPort_Project_LoadCabinet) return subMxPluginPort_Project_LoadCabinet(FileName, Mode);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_LoadCabinetEx(char* FileName, int Mode, int* ScoreNumber, int* TrackNumber)
 {
 	if (subMxPluginPort_Project_LoadCabinetEx) return subMxPluginPort_Project_LoadCabinetEx(FileName, Mode, ScoreNumber, TrackNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_SetScreenSize(int width, int height)
 {
 	if (subMxPluginPort_Project_SetScreenSize) return subMxPluginPort_Project_SetScreenSize(width, height);
-	return false;
+	return FALSE;
 }
 
 char* MxPluginPort_Project_GetContentsPath(void)
@@ -1024,117 +1174,117 @@ char* MxPluginPort_Project_GetContentsName(void)
 BOOL MxPluginPort_Project_GetContentsSaved(void)
 {
 	if (subMxPluginPort_Project_GetContentsSaved) return subMxPluginPort_Project_GetContentsSaved();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_GetContentsChanged(void)
 {
 	if (subMxPluginPort_Project_GetContentsChanged) return subMxPluginPort_Project_GetContentsChanged();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_SetContentsChanged(void)
 {
 	if (subMxPluginPort_Project_SetContentsChanged) return subMxPluginPort_Project_SetContentsChanged();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_ClearContentsChanged(void)
 {
 	if (subMxPluginPort_Project_ClearContentsChanged) return subMxPluginPort_Project_ClearContentsChanged();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_SaveContents(char* FileName)
 {
 	if (subMxPluginPort_Project_SaveContents) return subMxPluginPort_Project_SaveContents(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_LoadContents(char* FileName)
 {
 	if (subMxPluginPort_Project_LoadContents) return subMxPluginPort_Project_LoadContents(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_CreateRuntimeFile(char* FileName, int Format, void* Options)
 {
 	if (subMxPluginPort_Project_CreateRuntimeFile) return subMxPluginPort_Project_CreateRuntimeFile(FileName, Format, Options);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_GetContentsRunning(void)
 {
 	if (subMxPluginPort_Project_GetContentsRunning) return subMxPluginPort_Project_GetContentsRunning();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_LoadFile(char* FileName, int Format, void* Options)
 {
 	if (subMxPluginPort_Project_LoadFile) return subMxPluginPort_Project_LoadFile(FileName, Format, Options);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetEnabled(void)
 {
 	if (subMxPluginPort_CLang_GetEnabled) return subMxPluginPort_CLang_GetEnabled();
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathSRC(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetPathSRC) return subMxPluginPort_CLang_GetPathSRC(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathEvent(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetPathEvent) return subMxPluginPort_CLang_GetPathEvent(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathLib(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetPathLib) return subMxPluginPort_CLang_GetPathLib(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathOBJ(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetPathOBJ) return subMxPluginPort_CLang_GetPathOBJ(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFileNameConst(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetFileNameConst) return subMxPluginPort_CLang_GetFileNameConst(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFileNameEventSource(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetFileNameEventSource) return subMxPluginPort_CLang_GetFileNameEventSource(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFileNameEventHeader(char** FileName)
 {
 	if (FileName) *FileName = NULL;
 	if (subMxPluginPort_CLang_GetFileNameEventHeader) return subMxPluginPort_CLang_GetFileNameEventHeader(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetInitEvent_Enabled(BOOL* Enabled)
 {
-	if (Enabled) *Enabled = false;
+	if (Enabled) *Enabled = FALSE;
 	if (subMxPluginPort_CLang_GetInitEvent_Enabled) return subMxPluginPort_CLang_GetInitEvent_Enabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetInitEvent_Type(TCLang_EventNameType* Type)
@@ -1148,21 +1298,21 @@ BOOL MxPluginPort_CLang_GetInitEvent_Type(TCLang_EventNameType* Type)
 		}
 		return res;
 	}
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetInitEvent_Name(char** Name)
 {
 	if (Name) *Name = NULL;
 	if (subMxPluginPort_CLang_GetInitEvent_Name) return subMxPluginPort_CLang_GetInitEvent_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFinallyEvent_Enabled(BOOL* Enabled)
 {
-	if (Enabled) *Enabled = false;
+	if (Enabled) *Enabled = FALSE;
 	if (subMxPluginPort_CLang_GetFinallyEvent_Enabled) return subMxPluginPort_CLang_GetFinallyEvent_Enabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFinallyEvent_Type(TCLang_EventNameType* Type)
@@ -1176,205 +1326,205 @@ BOOL MxPluginPort_CLang_GetFinallyEvent_Type(TCLang_EventNameType* Type)
 		}
 		return res;
 	}
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFinallyEvent_Name(char** Name)
 {
 	if (Name) *Name = NULL;
 	if (subMxPluginPort_CLang_GetFinallyEvent_Name) return subMxPluginPort_CLang_GetFinallyEvent_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetInitEventFuncName(char** Name)
 {
 	if (Name) *Name = NULL;
 	if (subMxPluginPort_CLang_GetInitEventFuncName) return subMxPluginPort_CLang_GetInitEventFuncName(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetFinallyEventFuncName(char** Name)
 {
 	if (Name) *Name = NULL;
 	if (subMxPluginPort_CLang_GetFinallyEventFuncName) return subMxPluginPort_CLang_GetFinallyEventFuncName(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEnabled(BOOL Enabled)
 {
 	if (subMxPluginPort_CLang_SetEnabled) return subMxPluginPort_CLang_SetEnabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetPathSRCNative(char* FileName)
 {
 	if (subMxPluginPort_CLang_SetPathSRCNative) return subMxPluginPort_CLang_SetPathSRCNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetPathEventNative(char* FileName)
 {
 	if (subMxPluginPort_CLang_SetPathEventNative) return subMxPluginPort_CLang_SetPathEventNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetPathLibNative(char* FileName)
 {
 	if (subMxPluginPort_CLang_SetPathLibNative) return subMxPluginPort_CLang_SetPathLibNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetPathOBJNative(char* FileName)
 {
 	if (subMxPluginPort_CLang_SetPathOBJNative) return subMxPluginPort_CLang_SetPathOBJNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathSRCNative(char** FileName)
 {
 	if (subMxPluginPort_CLang_GetPathSRCNative) return subMxPluginPort_CLang_GetPathSRCNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathEventNative(char** FileName)
 {
 	if (subMxPluginPort_CLang_GetPathEventNative) return subMxPluginPort_CLang_GetPathEventNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathLibNative(char** FileName)
 {
 	if (subMxPluginPort_CLang_GetPathLibNative) return subMxPluginPort_CLang_GetPathLibNative(FileName);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_GetPathOBJNative(char** FileName)
 {
 	if (subMxPluginPort_CLang_GetPathOBJNative) return subMxPluginPort_CLang_GetPathOBJNative(FileName);
-	return false;
+	return FALSE;
 }
 
 
 BOOL MxPluginPort_CLang_SetInitEvent_Enabled(BOOL Enabled)
 {
 	if (subMxPluginPort_CLang_SetInitEvent_Enabled) return subMxPluginPort_CLang_SetInitEvent_Enabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetInitEvent_Type(TCLang_EventNameType Value)
 {
 	if (subMxPluginPort_CLang_SetInitEvent_Type) return subMxPluginPort_CLang_SetInitEvent_Type((int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetInitEvent_Name(char* Name)
 {
 	if (subMxPluginPort_CLang_SetInitEvent_Name) return subMxPluginPort_CLang_SetInitEvent_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetFinallyEvent_Enabled(BOOL Enabled)
 {
 	if (subMxPluginPort_CLang_SetFinallyEvent_Enabled) return subMxPluginPort_CLang_SetFinallyEvent_Enabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetFinallyEvent_Type(TCLang_EventNameType Value)
 {
 	if (subMxPluginPort_CLang_SetFinallyEvent_Type) return subMxPluginPort_CLang_SetFinallyEvent_Type((int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetFinallyEvent_Name(char* Name)
 {
 	if (subMxPluginPort_CLang_SetFinallyEvent_Name) return subMxPluginPort_CLang_SetFinallyEvent_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventListName_Type(TCLang_EventNameType Value)
 {
 	if (subMxPluginPort_CLang_SetEventListName_Type) return subMxPluginPort_CLang_SetEventListName_Type((int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventListName_Name(char* Name)
 {
 	if (subMxPluginPort_CLang_SetEventListName_Name) return subMxPluginPort_CLang_SetEventListName_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventSymbolName_Type(TCLang_EventNameType Value)
 {
 	if (subMxPluginPort_CLang_SetEventSymbolName_Type) return subMxPluginPort_CLang_SetEventSymbolName_Type((int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventSymbolName_Name(char* Name)
 {
 	if (subMxPluginPort_CLang_SetEventSymbolName_Name) return subMxPluginPort_CLang_SetEventSymbolName_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventTableName_Type(TCLang_EventNameType Value)
 {
 	if (subMxPluginPort_CLang_SetEventTableName_Type) return subMxPluginPort_CLang_SetEventTableName_Type((int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventTableName_Name(char* Name)
 {
 	if (subMxPluginPort_CLang_SetEventTableName_Name) return subMxPluginPort_CLang_SetEventTableName_Name(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CLang_SetEventTableName_Alias(BOOL Enabled)
 {
 	if (subMxPluginPort_CLang_SetEventTableName_Alias) return subMxPluginPort_CLang_SetEventTableName_Alias(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_GetEnabled(BOOL* Enabled)
 {
-	if (Enabled) *Enabled = false;
+	if (Enabled) *Enabled = FALSE;
 	if (subMxPluginPort_Project_MultiLang_GetEnabled) return subMxPluginPort_Project_MultiLang_GetEnabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_SetEnabled(BOOL	Enabled)
 {
 	if (subMxPluginPort_Project_MultiLang_SetEnabled) return subMxPluginPort_Project_MultiLang_SetEnabled(Enabled);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_GetCount(int* Count)
 {
 	if (subMxPluginPort_Project_MultiLang_GetCount) return subMxPluginPort_Project_MultiLang_GetCount(Count);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_GetName(int	Index, char** Name)
 {
 	if (Name) *Name = NULL;
 	if (subMxPluginPort_Project_MultiLang_GetName) return subMxPluginPort_Project_MultiLang_GetName(Index, Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_SetName(int Index, const char* Name)
 {
 	if (subMxPluginPort_Project_MultiLang_SetName) return subMxPluginPort_Project_MultiLang_SetName(Index, Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_Add(const char* Name)
 {
 	if (subMxPluginPort_Project_MultiLang_Add) return subMxPluginPort_Project_MultiLang_Add(Name);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Project_MultiLang_Remove(int Index)
 {
 	if (subMxPluginPort_Project_MultiLang_Remove) return subMxPluginPort_Project_MultiLang_Remove(Index);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Cast_FindBlank(int CastType)
@@ -1410,13 +1560,13 @@ int  MxPluginPort_Cast_CreateLight(int CastNumber, char* CastName, int LightType
 BOOL MxPluginPort_Cast_Delete(int CastType, int CastNumber, int Reserved)
 {
 	if (subMxPluginPort_Cast_Delete) return subMxPluginPort_Cast_Delete(CastType, CastNumber, Reserved);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Cast_UseCheck(int CastType, int CastNumber)
 {
 	if (subMxPluginPort_Cast_UseCheck) return subMxPluginPort_Cast_UseCheck(CastType, CastNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Cast_GetCastName(int CastType, int CastNumber, char* CastName, int NameLength)
@@ -1434,7 +1584,7 @@ int  MxPluginPort_Cast_SetCastName(int CastType, int CastNumber, char* NewName, 
 BOOL MxPluginPort_Cast_SaveToFile(int CastType, int CastNumbe, char* FileName, void* Reserved)
 {
 	if (subMxPluginPort_Cast_SaveToFile) return subMxPluginPort_Cast_SaveToFile(CastType, CastNumbe, FileName, Reserved);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Cast_FindCast(int CastType, char* CastName)
@@ -1454,6 +1604,16 @@ int  MxPluginPort_Cast_CreateText(int CastNumber, char* CastName)
 	if (subMxPluginPort_Cast_CreateText) return subMxPluginPort_Cast_CreateText(CastNumber, CastName);
 	return -1;
 }
+
+int  MxPluginPort_Cast_CreateTextEx(int CastNumber, char* CastName, TTextStringEncodeType Encode)
+{
+	int iResultCode = MxPluginPort_Cast_CreateText(CastNumber, CastName);
+	if (Encode == set_UTF) {
+		MxPluginPort_CastPropety_SetDataInt(ct_Text, iResultCode, cp_Text_StringEncode, set_UTF);
+	}
+	return iResultCode;
+}
+
 
 int  MxPluginPort_Cast_CreateScript(int CastNumber, char* CastName)
 {
@@ -1488,7 +1648,7 @@ int  MxPluginPort_Cast_CreateBitmap(int CastNumber, char* CastName, char* FileNa
 BOOL MxPluginPort_Cast_Assigned(int CastType, int CastNumber)
 {
 	if (subMxPluginPort_Cast_Assigned) return subMxPluginPort_Cast_Assigned(CastType, CastNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Cast_TrimCastName(int CastType, char* SourCastName, char* DestCastName, int NameLength)
@@ -1500,18 +1660,18 @@ int  MxPluginPort_Cast_TrimCastName(int CastType, char* SourCastName, char* Dest
 BOOL MxPluginPort_Cast_TrimFileName(int CastType, int CastNumber)
 {
 	if (subMxPluginPort_Cast_TrimFileName) return subMxPluginPort_Cast_TrimFileName(CastType, CastNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Cast_Exchange(int CastType, int CastNumber1, int CastNumber2)
 {
 	if (subMxPluginPort_Cast_Exchange) return subMxPluginPort_Cast_Exchange(CastType, CastNumber1, CastNumber2);
-	return false;
+	return FALSE;
 }
 
 BOOL MxTest_PluginPort_Cast_TrimCastName(void)
 {
-	return (subMxPluginPort_Cast_TrimCastName) ? true : false;
+	return (subMxPluginPort_Cast_TrimCastName) ? true : FALSE;
 }
 
 
@@ -1548,13 +1708,13 @@ int  MxPluginPort_Score_CreateTrack(int ScoreNumber, int CastType, int CastNumbe
 BOOL MxPluginPort_Score_DeleteTrack(int ScoreNumber, int TrackNumber, int Reserved)
 {
 	if (subMxPluginPort_Score_DeleteTrack) return subMxPluginPort_Score_DeleteTrack(ScoreNumber, TrackNumber, Reserved);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_Trim(int ScoreNumber)
 {
 	if (subMxPluginPort_Score_Trim) return subMxPluginPort_Score_Trim(ScoreNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Score_GetLength(int ScoreNumber)
@@ -1572,19 +1732,19 @@ int  MxPluginPort_Score_Find(char* ScoreName)
 BOOL MxPluginPort_Score_UpdateLength(int ScoreNumber)
 {
 	if (subMxPluginPort_Score_UpdateLength) return subMxPluginPort_Score_UpdateLength(ScoreNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_Exchange(int ScoreNumber, int Track1, int Track2)
 {
 	if (subMxPluginPort_Score_Exchange) return subMxPluginPort_Score_Exchange(ScoreNumber, Track1, Track2);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_DeleteScore(int ScoreNumber)
 {
 	if (subMxPluginPort_Score_DeleteScore) return subMxPluginPort_Score_DeleteScore(ScoreNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Score_GetLabelName(int ScoreNumber, int FrameNumber, char* LabelName, int NameLength)
@@ -1596,7 +1756,7 @@ int  MxPluginPort_Score_GetLabelName(int ScoreNumber, int FrameNumber, char* Lab
 BOOL MxPluginPort_Score_SetLabelName(int ScoreNumber, int FrameNumber, char* LabelName, int Reserved)
 {
 	if (subMxPluginPort_Score_SetLabelName) return subMxPluginPort_Score_SetLabelName(ScoreNumber, FrameNumber, LabelName, Reserved);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Score_GetLabelPosMax(int ScoreNumber)
@@ -1614,30 +1774,30 @@ int  MxPluginPort_Score_FindFrameLabel(int ScoreNumber, char* LabelName)
 BOOL MxPluginPort_Score_Clear(int ScoreNumber, int Options)
 {
 	if (subMxPluginPort_Score_Clear) return subMxPluginPort_Score_Clear(ScoreNumber, Options);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_MoveTrack(int ScoreNumber, int MoveTo, int MoveFrom)
 {
 	if (subMxPluginPort_Score_MoveTrack) return subMxPluginPort_Score_MoveTrack(ScoreNumber, MoveTo, MoveFrom);
-	return false;
+	return FALSE;
 }
 
 BOOL MxTest_MxPluginPort_Score_Clear(void)
 {
-	return (subMxPluginPort_Score_Clear) ? true : false;
+	return (subMxPluginPort_Score_Clear) ? true : FALSE;
 }
 
 BOOL MxPluginPort_Score_SetAnnotationEncode(int ScoreNumber, TAnnotationEncode Encode)
 {
 	if (subMxPluginPort_Score_SetAnnotationEncode) return subMxPluginPort_Score_SetAnnotationEncode(ScoreNumber, (int)Encode);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_SetAnnotationData(int ScoreNumber, int Page, void* Annotation)
 {
 	if (subMxPluginPort_Score_SetAnnotationData) return subMxPluginPort_Score_SetAnnotationData(ScoreNumber, Page, Annotation);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_GetAnnotationEncode(int ScoreNumber, TAnnotationEncode* Encode)
@@ -1649,7 +1809,7 @@ BOOL MxPluginPort_Score_GetAnnotationEncode(int ScoreNumber, TAnnotationEncode* 
 		if (Encode) *Encode = (TAnnotationEncode)encode_int;
 		return res;
 	}
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_GetAnnotationData(int ScoreNumber, int Page, void** Annotation)
@@ -1657,19 +1817,19 @@ BOOL MxPluginPort_Score_GetAnnotationData(int ScoreNumber, int Page, void** Anno
 	if (Annotation)
 		*Annotation = NULL;
 	if (subMxPluginPort_Score_GetAnnotationData) return subMxPluginPort_Score_GetAnnotationData(ScoreNumber, Page, Annotation);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_GetAnnotationCount(int ScoreNumber, int* Count)
 {
 	if (subMxPluginPort_Score_GetAnnotationCount) return subMxPluginPort_Score_GetAnnotationCount(ScoreNumber, Count);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Score_ClearAnnotation(int ScoreNumber, int Page)
 {
 	if (subMxPluginPort_Score_ClearAnnotation) return subMxPluginPort_Score_ClearAnnotation(ScoreNumber, Page);
-	return false;
+	return FALSE;
 }
 
 int MxPluginPort_Score_InsertAnnotationData(int ScoreNumber, int Page, void* Annotation)
@@ -1681,25 +1841,25 @@ int MxPluginPort_Score_InsertAnnotationData(int ScoreNumber, int Page, void* Ann
 BOOL MxPluginPort_Score_RemoveAnnotationData(int ScoreNumber, int Page)
 {
 	if (subMxPluginPort_Score_RemoveAnnotationData) return subMxPluginPort_Score_RemoveAnnotationData(ScoreNumber, Page);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_GetCastType(int ScoreNumber, int TrackNumber, int* CastType)
 {
 	if (subMxPluginPort_Track_GetCastType) return subMxPluginPort_Track_GetCastType(ScoreNumber, TrackNumber, CastType);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_GetCastNumber(int ScoreNumber, int TrackNumber, int* CastNumber)
 {
 	if (subMxPluginPort_Track_GetCastNumber) return subMxPluginPort_Track_GetCastNumber(ScoreNumber, TrackNumber, CastNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_SetCastNumber(int ScoreNumber, int TrackNumber, int CastNumber)
 {
 	if (subMxPluginPort_Track_SetCastNumber) return subMxPluginPort_Track_SetCastNumber(ScoreNumber, TrackNumber, CastNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Track_GetLength(int ScoreNumber, int TrackNumber)
@@ -1711,43 +1871,43 @@ int  MxPluginPort_Track_GetLength(int ScoreNumber, int TrackNumber)
 BOOL MxPluginPort_Track_GetParent(int ScoreNumber, int TrackNumber, int* ParentTrackNumber)
 {
 	if (subMxPluginPort_Track_GetParent) return subMxPluginPort_Track_GetParent(ScoreNumber, TrackNumber, ParentTrackNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_TestSetParent(int ScoreNumber, int ParentTrack, int ChildTrack)
 {
 	if (subMxPluginPort_Track_TestSetParent) return subMxPluginPort_Track_TestSetParent(ScoreNumber, ParentTrack, ChildTrack);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_SetParent(int ScoreNumber, int ParentTrack, int ChildTrack)
 {
 	if (subMxPluginPort_Track_SetParent) return subMxPluginPort_Track_SetParent(ScoreNumber, ParentTrack, ChildTrack);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_GetFrameData(int ScoreNumber, int TrackNumber, int FrameNumber, int TrackType, void* Data)
 {
 	if (subMxPluginPort_Track_GetFrameData) return subMxPluginPort_Track_GetFrameData(ScoreNumber, TrackNumber, FrameNumber, TrackType, Data);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_SetFrameData(int ScoreNumber, int TrackNumber, int FrameNumber, int TrackType, void* Data)
 {
 	if (subMxPluginPort_Track_SetFrameData) return subMxPluginPort_Track_SetFrameData(ScoreNumber, TrackNumber, FrameNumber, TrackType, Data);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_Trim(int ScoreNumber, int TrackNumber, int FrameNumber, int TrackType)
 {
 	if (subMxPluginPort_Track_Trim) return subMxPluginPort_Track_Trim(ScoreNumber, TrackNumber, FrameNumber, TrackType);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_Assigned(int ScoreNumber, int TrackNumber)
 {
 	if (subMxPluginPort_Track_Assigned) return subMxPluginPort_Track_Assigned(ScoreNumber, TrackNumber);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Track_FindBlank(int ScoreNumber)
@@ -1759,13 +1919,13 @@ int  MxPluginPort_Track_FindBlank(int ScoreNumber)
 BOOL MxPluginPort_Track_SetAttribute(int ScoreNumber, int TrackNumber, int AttrType, BOOL Value)
 {
 	if (subMxPluginPort_Track_SetAttribute) return subMxPluginPort_Track_SetAttribute(ScoreNumber, TrackNumber, AttrType, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Track_GetAttribute(int ScoreNumber, int TrackNumber, int AttrType, BOOL* Value)
 {
 	if (subMxPluginPort_Track_GetAttribute) return subMxPluginPort_Track_GetAttribute(ScoreNumber, TrackNumber, AttrType, Value);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Track_GetLabelName(int ScoreNumber, int TrackNumber, char* LabelName, int NameLength)
@@ -1777,7 +1937,7 @@ int  MxPluginPort_Track_GetLabelName(int ScoreNumber, int TrackNumber, char* Lab
 BOOL MxPluginPort_Track_SetLabelName(int ScoreNumber, int TrackNumber, char* LabelName, int Reserved)
 {
 	if (subMxPluginPort_Track_SetLabelName) return subMxPluginPort_Track_SetLabelName(ScoreNumber, TrackNumber, LabelName, Reserved);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_Track_FindTrackLabel(int ScoreNumber, char* LabelName)
@@ -1789,13 +1949,13 @@ int  MxPluginPort_Track_FindTrackLabel(int ScoreNumber, char* LabelName)
 BOOL MxPluginPort_TrackProperty_SetData(int ScoreNumber, int TrackNumber, int IDNum, int Value)
 {
 	if (subMxPluginPort_TrackProperty_SetData) return subMxPluginPort_TrackProperty_SetData(ScoreNumber, TrackNumber, IDNum, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_TrackProperty_GetData(int ScoreNumber, int TrackNumber, int IDNum, void* Value)
 {
 	if (subMxPluginPort_TrackProperty_GetData) return subMxPluginPort_TrackProperty_GetData(ScoreNumber, TrackNumber, IDNum, Value);
-	return false;
+	return FALSE;
 }
 
 int  MxPluginPort_LoopTrack_GetLength(int ScoreNumbe)
@@ -1809,61 +1969,61 @@ BOOL MxPluginPort_LoopTrack_GetValue(int ScoreNumber, int FrameNumber, TLoopTrac
 	int iVal = 0;
 	if (subMxPluginPort_LoopTrack_GetValue) return subMxPluginPort_LoopTrack_GetValue(ScoreNumber, FrameNumber, &iVal);
 	*Value = (TLoopTrackData)(iVal & 0xff);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_LoopTrack_SetValue(int ScoreNumber, int FrameNumber, TLoopTrackData Value)
 {
 	if (subMxPluginPort_LoopTrack_SetValue) return subMxPluginPort_LoopTrack_SetValue(ScoreNumber, FrameNumber, (int)Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_LoopTrack_Trim(int ScoreNumber)
 {
 	if (subMxPluginPort_LoopTrack_Trim) return subMxPluginPort_LoopTrack_Trim(ScoreNumber);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_SetDataInt(int CastType, int CastNumber, int PropertyType, int	 Value)
 {
 	if (subMxPluginPort_CastPropety_SetDataInt1) return subMxPluginPort_CastPropety_SetDataInt1(CastType, CastNumber, PropertyType, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_SetDataInt(int CastType, int CastNumber, int PropertyType, int	 Value1, int Value2)
 {
 	if (subMxPluginPort_CastPropety_SetDataInt2) return subMxPluginPort_CastPropety_SetDataInt2(CastType, CastNumber, PropertyType, Value1, Value2);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_SetDataInt(int CastType, int CastNumber, int PropertyType, int	 Value1, int Value2, int Value3)
 {
 	if (subMxPluginPort_CastPropety_SetDataInt3) return subMxPluginPort_CastPropety_SetDataInt3(CastType, CastNumber, PropertyType, Value1, Value2, Value3);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_SetDataPtr(int CastType, int CastNumber, int PropertyType, void* Value)
 {
 	if (subMxPluginPort_CastPropety_SetDataPtr) return subMxPluginPort_CastPropety_SetDataPtr(CastType, CastNumber, PropertyType, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_SetDataFloat(int CastType, int CastNumber, int PropertyType, float Value)
 {
 	if (subMxPluginPort_CastPropety_SetDataFloat) return subMxPluginPort_CastPropety_SetDataFloat(CastType, CastNumber, PropertyType, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_CastPropety_GetData(int CastType, int CastNumber, int PropertyType, void* Value)
 {
 	if (subMxPluginPort_CastPropety_GetData) return subMxPluginPort_CastPropety_GetData(CastType, CastNumber, PropertyType, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Primitive_QuadPolygon(int CastNumber, char* CastName, MXPLUGIN_VECTOR3D V1, MXPLUGIN_VECTOR3D V2, MXPLUGIN_VECTOR3D V3, MXPLUGIN_VECTOR3D V4)
 {
 	if (subMxPluginPort_Primitive_QuadPolygon) return subMxPluginPort_Primitive_QuadPolygon(CastNumber, CastName, V1, V2, V3, V4);
-	return false;
+	return FALSE;
 }
 
 BOOL MxCast_Bitmap_SetDataInt(int CastNumber, TBitmapPropertyType PropertyType, int Value) { return MxPluginPort_CastPropety_SetDataInt(ct_Bitmap, CastNumber, (int)PropertyType, Value); }
@@ -1880,7 +2040,7 @@ BOOL MxPluginPort_Script_GetEncode(int CastNumber, TScriptEncodeType* Value)
 		case 0:			*Value = script_encode_ANSI;		break;
 		case 1:			*Value = script_encode_UTF8;		break;
 		case 2:			*Value = script_encode_UTF8_BOM;	break;
-		default:		res = false;						break;
+		default:		res = FALSE;						break;
 		}
 	}
 	return res;
@@ -1894,7 +2054,7 @@ BOOL MxPluginPort_Script_GetExternal(int CastNumber, TScriptExternalFile* Value)
 		switch (intval) {
 		case 0:			*Value = script_file_Internal;	break;
 		case 1:			*Value = script_file_External;	break;
-		default:		res = false;				break;
+		default:		res = FALSE;				break;
 		}
 	}
 	return res;
@@ -1903,45 +2063,334 @@ BOOL MxPluginPort_Script_GetExternal(int CastNumber, TScriptExternalFile* Value)
 BOOL MxPluginPort_Project_SetPropertyInt(TProjectProperty ID, int Value)
 {
 	if (subMxPluginPort_Project_SetPropertyInt) return subMxPluginPort_Project_SetPropertyInt(ID, Value);
-	return false;
+	return FALSE;
 }
 
 
 BOOL MxPluginPort_Project_GetPropertyInt(TProjectProperty ID, int* Value)
 {
 	if (subMxPluginPort_Project_GetPropertyInt) return subMxPluginPort_Project_GetPropertyInt(ID, Value);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Cast_Text_GetLineCount(int CastNumber, int LangNum, int* Count)
 {
 	if (Count != NULL) *Count = 0;
 	if (subMxPluginPort_Cast_Text_GetLineCount) return subMxPluginPort_Cast_Text_GetLineCount(CastNumber, LangNum, Count);
-	return false;
+	return FALSE;
 }
 
 BOOL MxPluginPort_Cast_Text_GetLineString(int CastNumber, int LineNumber, int LangNum, void** Str)
 {
 	if (Str != NULL) *Str = NULL;
 	if (subMxPluginPort_Cast_Text_GetLineString) return subMxPluginPort_Cast_Text_GetLineString(CastNumber, LineNumber, LangNum, Str);
-	return false;
+	return FALSE;
 }
 
-BOOL MxPluginPort_Cast_TextML_GetLanguageAssigned(int CastNumber, int LangNum, BOOL* Flag)
+BOOL MxPluginPort_Cast_Text_GetLanguageAssigned(int CastNumber, int LangNum, bool* Flag)
 {
 	if (Flag != NULL) *Flag = false;
-	if (subMxPluginPort_Cast_TextML_GetLangAssigned) return subMxPluginPort_Cast_TextML_GetLangAssigned(CastNumber, LangNum, Flag);
-	return false;
+	if (subMxPluginPort_Cast_Text_GetLangAssigned) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetLangAssigned(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
 }
 
-BOOL MxPluginPort_Cast_TextML_CreateLanguage(int CastNumber, int LangNum)
+BOOL MxPluginPort_Cast_Text_CreateLanguage(int CastNumber, int LangNum)
 {
-	if (subMxPluginPort_Cast_TextML_CreateLanguage) return subMxPluginPort_Cast_TextML_CreateLanguage(CastNumber, LangNum);
-	return false;
+	if (subMxPluginPort_Cast_Text_CreateLanguage) return subMxPluginPort_Cast_Text_CreateLanguage(CastNumber, LangNum);
+	return FALSE;
 }
 
-BOOL MxPluginPort_Cast_TextML_RemoveLanguage(int CastNumber, int LangNum)
+BOOL MxPluginPort_Cast_Text_RemoveLanguage(int CastNumber, int LangNum)
 {
-	if (subMxPluginPort_Cast_TextML_RemoveLanguage) return subMxPluginPort_Cast_TextML_RemoveLanguage(CastNumber, LangNum);
-	return false;
+	if (subMxPluginPort_Cast_Text_RemoveLanguage) return subMxPluginPort_Cast_Text_RemoveLanguage(CastNumber, LangNum);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetTextDataANSI(int CastNumber, int LangNum, const char* string)
+{
+	if (subMxPluginPort_Cast_Text_SetTextData) return subMxPluginPort_Cast_Text_SetTextData(CastNumber, LangNum, set_ANSI, (const void*)string);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetTextDataWIDE(int CastNumber, int LangNum, const wchar_t* string)
+{
+	if (subMxPluginPort_Cast_Text_SetTextData) return subMxPluginPort_Cast_Text_SetTextData(CastNumber, LangNum, set_WIDE, (const void*)string);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFontColor(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetFontColor) return subMxPluginPort_Cast_Text_SetFontColor(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontColor(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetFontColor) return subMxPluginPort_Cast_Text_GetFontColor(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetBackColor(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetBackColor) return subMxPluginPort_Cast_Text_SetBackColor(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetBackColor(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetBackColor) return subMxPluginPort_Cast_Text_GetBackColor(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFontHeight(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetFontHeight) return subMxPluginPort_Cast_Text_SetFontHeight(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontHeight(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetFontHeight) return subMxPluginPort_Cast_Text_GetFontHeight(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFontSize(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetFontSize) return subMxPluginPort_Cast_Text_SetFontSize(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontSize(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetFontSize) return subMxPluginPort_Cast_Text_GetFontSize(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFontName(int CastNumber, int LangNum, const char* Name)
+{
+	if (subMxPluginPort_Cast_Text_SetFontName) return subMxPluginPort_Cast_Text_SetFontName(CastNumber, LangNum, Name);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontName(int CastNumber, int LangNum, const char** Name)
+{
+	if (Name != NULL) *Name = NULL;
+	if (subMxPluginPort_Cast_Text_GetFontName) return subMxPluginPort_Cast_Text_GetFontName(CastNumber, LangNum, Name);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFontCharSet(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetFontCharSet) return subMxPluginPort_Cast_Text_SetFontCharSet(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontCharSet(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetFontCharSet) return subMxPluginPort_Cast_Text_GetFontCharSet(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetTransparent(int CastNumber, int LangNum, bool Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetTransparent) return subMxPluginPort_Cast_Text_SetTransparent(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetTransparent(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_Text_GetTransparent) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetTransparent(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetItemDistance(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetItemDistance) return subMxPluginPort_Cast_Text_SetItemDistance(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetItemDistance(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetItemDistance) return subMxPluginPort_Cast_Text_GetItemDistance(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetBackward(int CastNumber, int LangNum, bool Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetBackward) return subMxPluginPort_Cast_Text_SetBackward(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetBackward(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = 0;
+	if (subMxPluginPort_Cast_Text_GetBackward) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetBackward(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetAlphaEnabled(int CastNumber, int LangNum, bool	Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetAlphaEnabled) return subMxPluginPort_Cast_Text_SetAlphaEnabled(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetAlphaEnabled(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_Text_GetAlphaEnabled) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetAlphaEnabled(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetCenterX(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetCenterX) return subMxPluginPort_Cast_Text_SetCenterX(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetCenterX(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetCenterX) return subMxPluginPort_Cast_Text_GetCenterX(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetCenterY(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetCenterY) return subMxPluginPort_Cast_Text_SetCenterY(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetCenterY(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetCenterY) return subMxPluginPort_Cast_Text_GetCenterY(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetFixSize(int CastNumber, int LangNum, bool	Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetFixSize) return subMxPluginPort_Cast_Text_SetFixSize(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFixSize(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_Text_GetFixSize) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetFixSize(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetWidth(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetWidth) return subMxPluginPort_Cast_Text_GetWidth(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetHeight(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetHeight) return subMxPluginPort_Cast_Text_GetHeight(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetEncode(int CastNumber, TTextStringEncodeType* Encode)
+{
+	if (Encode != NULL) *Encode = set_ANSI;
+	if (subMxPluginPort_Cast_Text_GetEncode) return subMxPluginPort_Cast_Text_GetEncode(CastNumber, Encode);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetAlignment(int CastNumber, int LangNum, TTextAlignment	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetAlignment) return subMxPluginPort_Cast_Text_SetAlignment(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetAlignment(int CastNumber, int LangNum, TTextAlignment* Value)
+{
+	if (Value != NULL) *Value = talign_None;
+	if (subMxPluginPort_Cast_Text_GetAlignment) return subMxPluginPort_Cast_Text_GetAlignment(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetAlignmentWidth(int CastNumber, int LangNum, int	Value)
+{
+	if (subMxPluginPort_Cast_Text_SetAlignmentWidth) return subMxPluginPort_Cast_Text_SetAlignmentWidth(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetAlignmentWidth(int CastNumber, int LangNum, int* Value)
+{
+	if (Value != NULL) *Value = 0;
+	if (subMxPluginPort_Cast_Text_GetAlignmentWidth) return subMxPluginPort_Cast_Text_GetAlignmentWidth(CastNumber, LangNum, Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetClickEnabled(int CastNumber, int LangNum, bool Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetClickEnabled) return subMxPluginPort_Cast_Text_SetClickEnabled(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetClickEnabled(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_Text_GetClickEnabled) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetClickEnabled(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_SetAntialias(int CastNumber, int LangNum, bool Flag)
+{
+	if (subMxPluginPort_Cast_Text_SetAntialias) return subMxPluginPort_Cast_Text_SetAntialias(CastNumber, LangNum, Flag);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetAntialias(int CastNumber, int LangNum, bool* Flag)
+{
+	if (Flag != NULL) *Flag = false;
+	if (subMxPluginPort_Cast_Text_GetAntialias) {
+		BOOL tmpFlag;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetAntialias(CastNumber, LangNum, &tmpFlag);
+		*Flag = tmpFlag != 0;
+		return lbResult;
+	}
+	return FALSE;
 }

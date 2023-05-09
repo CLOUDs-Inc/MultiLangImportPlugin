@@ -233,6 +233,7 @@ typedef enum TTextStringEncodeType_t {
 	set_ANSI = 0x00,
 	set_UTF = 0x01
 } TTextStringEncodeType;
+#define	set_WIDE	(set_UTF)
 
 typedef enum TTextFontStyleType_t {
 	fs_Regular = 0x00,	//通常文字
@@ -246,10 +247,8 @@ typedef enum TTextAlignment_t {
 	talign_Center = 0x01,		//中央
 	talign_Right = 0x02,		//右寄せ
 	talign_Left = 0x03,		//左寄せ
-	talign_Center_Default = 0x11,		//中央・デフォルト指定
-	talign_Right_Default = 0x12,		//右寄せ・デフォルト指定
-	talign_Left_Default = 0x13,		//左寄せ・デフォルト指定
-	talign_Negate = 0x80		//アライメント継承打ち消し
+	talign_Center_Right = 0x04,		//中央右寄せ
+	talign_Center_Left = 0x05		//中央右寄せ
 } TTextAlignment;
 
 BOOL MxCast_Text_SetDataInt(int CastNumber, TTextPropertyType PropertyType, int  Value);	//キャストのプロパティを設定する
@@ -501,6 +500,7 @@ BOOL MxPluginPort_Cast_SaveToFile(int CastType, int CastNumbe, char* FileName, v
 int  MxPluginPort_Cast_FindCast(int CastType, char* CastName);														//キャストを文字列で検索する
 int  MxPluginPort_Cast_CreateWave(int CastNumber, char* CastName, char* FileName, BOOL ExternalFile);					//Waveキャストを作成する
 int  MxPluginPort_Cast_CreateText(int CastNumber, char* CastName);													//Textキャストを作成する
+int  MxPluginPort_Cast_CreateTextEx(int CastNumber, char* CastName, TTextStringEncodeType Encode);
 int  MxPluginPort_Cast_CreateScript(int CastNumber, char* CastName);													//スクリプトキャストを作成する
 int  MxPluginPort_Cast_CreateScriptEx(int CastNumber, char* CastName, char* FileName, int Options, int Reserved);			//スクリプトキャストを作成する
 int  MxPluginPort_Cast_CreateTexture(int CastNumber, char* CastName, char* FileName);										//Textureキャストを作成する
@@ -588,9 +588,48 @@ BOOL MxPluginPort_Project_GetPropertyInt(TProjectProperty ID, int* Value);
 BOOL MxPluginPort_Cast_Text_GetLineCount(int CastNumber, int LangNum, int* Count);
 BOOL MxPluginPort_Cast_Text_GetLineString(int CastNumber, int LineNumber, int LangNum, void** Str);
 
-BOOL MxPluginPort_Cast_TextML_GetLanguageAssigned(int CastNumber, int LangNum, int* Flag);
-BOOL MxPluginPort_Cast_TextML_CreateLanguage(int CastNumber, int LangNum);
-BOOL MxPluginPort_Cast_TextML_RemoveLanguage(int CastNumber, int LangNum);
+BOOL MxPluginPort_Cast_Text_GetEncode(int CastNumber, TTextStringEncodeType* Encode);
+BOOL MxPluginPort_Cast_Text_GetLanguageAssigned(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_CreateLanguage(int CastNumber, int LangNum);
+BOOL MxPluginPort_Cast_Text_RemoveLanguage(int CastNumber, int LangNum);
+BOOL MxPluginPort_Cast_Text_SetTextDataANSI(int CastNumber, int LangNum, const char* string);
+BOOL MxPluginPort_Cast_Text_SetTextDataWIDE(int CastNumber, int LangNum, const wchar_t* string);
+BOOL MxPluginPort_Cast_Text_SetFontColor(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetFontColor(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetBackColor(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetBackColor(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetFontHeight(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetFontHeight(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetFontSize(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetFontSize(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetFontName(int CastNumber, int LangNum, const char* Name);
+BOOL MxPluginPort_Cast_Text_GetFontName(int CastNumber, int LangNum, const char** Name);
+BOOL MxPluginPort_Cast_Text_SetFontCharSet(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetFontCharSet(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetTransparent(int CastNumber, int LangNum, bool	Flag);
+BOOL MxPluginPort_Cast_Text_GetTransparent(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_SetItemDistance(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetItemDistance(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetBackward(int CastNumber, int LangNum, bool	Value);
+BOOL MxPluginPort_Cast_Text_GetBackward(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_SetAlphaEnabled(int CastNumber, int LangNum, bool	Flag);
+BOOL MxPluginPort_Cast_Text_GetAlphaEnabled(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_SetCenterX(int CastNumber, int LangNum, int	Flag);
+BOOL MxPluginPort_Cast_Text_GetCenterX(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetCenterY(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetCenterY(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetFixSize(int CastNumber, int LangNum, bool	Flag);
+BOOL MxPluginPort_Cast_Text_GetFixSize(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_GetWidth(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_GetHeight(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetAlignment(int CastNumber, int LangNum, TTextAlignment	Value);
+BOOL MxPluginPort_Cast_Text_GetAlignment(int CastNumber, int LangNum, TTextAlignment* Value);
+BOOL MxPluginPort_Cast_Text_SetAlignmentWidth(int CastNumber, int LangNum, int	Value);
+BOOL MxPluginPort_Cast_Text_GetAlignmentWidth(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetClickEnabled(int CastNumber, int LangNum, bool	Flag);
+BOOL MxPluginPort_Cast_Text_GetClickEnabled(int CastNumber, int LangNum, bool* Flag);
+BOOL MxPluginPort_Cast_Text_SetAntialias(int CastNumber, int LangNum, bool	Flag);
+BOOL MxPluginPort_Cast_Text_GetAntialias(int CastNumber, int LangNum, bool* Flag);
 
 extern "C"
 {
