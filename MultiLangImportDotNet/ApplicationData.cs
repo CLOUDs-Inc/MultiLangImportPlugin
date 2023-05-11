@@ -21,7 +21,26 @@ namespace MultiLangImportDotNet
         /// <summary>
         /// 言語名リスト
         /// </summary>
-        public List<string> LanguageNameList { get; set; }
+        public List<string> LanguageNameListInside { get; set; }
+
+        /// <summary>
+        /// 言語名リスト（ANSI変換済み＆サブキャスト列除去済み）
+        /// </summary>
+        public List<string> LanguageNameListModified
+        {
+            get
+            {
+                List<string> modList = new List<string>();
+                for(int index = 0; index < LanguageNameListInside.Count; index++)
+                {
+                    if (index == this.OptionData.SubcastIndex) continue;
+
+                    string name = Utils.ForcelyConvertToANSI(LanguageNameListInside[index]);
+                    modList.Add(name);
+                }
+                return modList;
+            }
+        }
 
         /// <summary>
         /// 言語毎名称使用不可文字含有フラグリスト
@@ -32,12 +51,46 @@ namespace MultiLangImportDotNet
         /// <summary>
         /// テキストキャスト名リスト
         /// </summary>
-        public List<string> TextCastNameList { get; set; }
+        public List<string> TextCastNameListInside { get; set; }
 
         /// <summary>
-        /// サブキャスト名＆接続文字付きテキストキャスト名リスト
+        /// テキストキャスト名リスト（サブキャスト時加工済み＆ANSI変換済み）
         /// </summary>
-        public List<string> CombinedTextCastNameList { get; set; }
+        public List<string> TextCastNameListModified
+        {
+            get
+            {
+                bool subcastOn = 
+                    this.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME]
+                    && this.OptionData.SubcastIndex != -1;
+                string conjunctionString = this.OptionData.ConjunctionString;
+
+                List<string> modList = new List<string>();
+                for (int index = 0; index < TextCastNameListInside.Count; index++)
+                {
+                    string castname;
+
+                    // サブキャスト名の使用On＆サブキャスト列選択済みの場合に限り
+                    if (subcastOn)
+                    {
+                        string combinedName = TextCastNameListInside[index];
+                        var textData = TextDataTable[index, this.OptionData.SubcastIndex];
+                        if (textData != null)
+                        {
+                            combinedName = combinedName + conjunctionString + TextDataTable[index, this.OptionData.SubcastIndex].Text;
+                        }
+                        castname = combinedName;
+                    }
+                    else
+                    {
+                        castname = TextCastNameListInside[index];
+                    }
+                    castname = Utils.ForcelyConvertToANSI(castname);
+                    modList.Add(castname);
+                }
+                return modList;
+            }
+        }
 
         /// <summary>
         /// テキストデータテーブル（二次元配列）
@@ -59,23 +112,23 @@ namespace MultiLangImportDotNet
             get
             {
                 // ページ名に１つでもANSI変換できない名前があった場合
-                for (int index = 0; index < LanguageNameList.Count; index++)
+                for (int index = 0; index < LanguageNameListInside.Count; index++)
                 {
                     // 列をサブキャスト用に指定している場合はチェック不要
                     if (index == OptionData.SubcastIndex) continue;
 
                     // ページ名に１つでもANSI変換できない名前があった場合
-                    if (!Utils.ANSIConvertTest(LanguageNameList[index]))
+                    if (!Utils.ANSIConvertTest(LanguageNameListInside[index]))
                     {
                         // 変換不可フラグON
                         return true;
                     }
                 }
 
-                if(TextCastNameList != null)
+                if(TextCastNameListInside != null)
                 {
                     // キャスト名に１つでもANSI変換できない名前があった場合
-                    if (TextCastNameList.Any(name => !Utils.ANSIConvertTest(name)))
+                    if (TextCastNameListInside.Any(name => !Utils.ANSIConvertTest(name)))
                     {
                         // 変換不可フラグON
                         return true;
@@ -86,7 +139,7 @@ namespace MultiLangImportDotNet
                 if(0 <= OptionData.SubcastIndex)
                 {
                     // サブキャスト名の列のデータに
-                    for(int index = 0; index < TextCastNameList.Count; index++)
+                    for(int index = 0; index < TextCastNameListInside.Count; index++)
                     {
                         // １つでもANSI変換できない名前があった場合
                         if (null != TextDataTable[index, OptionData.SubcastIndex]
@@ -192,37 +245,6 @@ namespace MultiLangImportDotNet
             this.Flags = new Dictionary<string, bool>();
             this.DefaultLanguageIndex = -1;
             this.OptionData = new OptionData();
-        }
-
-        /// <summary>
-        /// サブキャスト名を接続したテキストキャスト名リストを生成・保持する
-        /// </summary>
-        /// <returns>生成の成否</returns>
-        public bool SetCombinedNameForTextCast()
-        {
-            if (this.LanguageNameList == null) return false;
-            if (this.OptionData.SubcastIndex == -1) return false;
-            if (this.TextCastNameList == null) return false;
-            if (this.TextDataTable == null) return false;
-            if (this.TextCastNameList.Count != TextDataTable.GetLength(0)) return false;
-
-            List<string> combinedTextCastNameList = new List<string>();
-
-            string conjunctionString = this.OptionData.ConjunctionString;
-            for (int index = 0; index < TextCastNameList.Count; index++)
-            {
-                string combinedName = TextCastNameList[index];
-                var textData = TextDataTable[index, this.OptionData.SubcastIndex];
-                if (textData != null)
-                {
-                    combinedName = combinedName + conjunctionString + TextDataTable[index, this.OptionData.SubcastIndex].Text;
-                }
-                combinedTextCastNameList.Add(combinedName);
-            }
-
-            this.CombinedTextCastNameList = combinedTextCastNameList;
-
-            return true;
         }
     }
 }

@@ -6,9 +6,9 @@ class WriteData
 {
 public:
 	/// <summary>
-	/// デフォルト言語インデックス
+	/// デフォルト言語名
 	/// </summary>
-	int selectedLanguageIndex;
+	string defaultLanguageName;
 
 	/// <summary>
 	/// 言語名リスト
@@ -54,4 +54,7 @@ public:
 	/// </summary>
 	int subcastNameIndex;
 
+
+	// 関数 ======================================
+	int getColumnIndexOfPageName(string pageName);
 };

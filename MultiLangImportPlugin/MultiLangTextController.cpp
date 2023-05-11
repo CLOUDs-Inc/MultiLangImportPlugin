@@ -1,9 +1,9 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 
 /// <summary>
-/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 /// </summary>
-/// <param name="on">ƒƒO‹@”\OnOff</param>
+/// <param name="on">ãƒ­ã‚°æ©Ÿèƒ½OnOff</param>
 MultiLangTextController::MultiLangTextController(WriteData& writeData)
 {
 	this->writeData = writeData;
@@ -12,32 +12,46 @@ MultiLangTextController::MultiLangTextController(WriteData& writeData)
 	std::wstring msg = L"# Import File: " + writeData.importExcelFileFullPathWide;
 	this->pLogger->log(msg);
 
-	// ƒNƒ‰ƒX¶¬‚É‘½Œ¾Œêg—pó‘Ô‚É‚µA‘¼‚Ìˆ—‚Ì‘O‚É‘½Œ¾Œêg—p‰Â”\ó‹µ‚ğ€”õ‚·‚é
-	// ‘¼‚Ìˆ—‚ÌÛAenable:true‚ğŠm”F‚·‚é‚±‚Æ
+	// ã‚¯ãƒ©ã‚¹ç”Ÿæˆæ™‚ã«å¤šè¨€èªä½¿ç”¨çŠ¶æ…‹ã«ã—ã€ä»–ã®å‡¦ç†ã®å‰ã«å¤šè¨€èªä½¿ç”¨å¯èƒ½çŠ¶æ³ã‚’æº–å‚™ã™ã‚‹
+	// ä»–ã®å‡¦ç†ã®éš›ã€enable:trueã‚’ç¢ºèªã™ã‚‹ã“ã¨
 	this->isEnable = SetProjectMLEnable();
 
-	if (this->isEnable)
-	{
-		bool result;
-
-		result = this->GetPageNames(this->pageNames);
-		if (!result) {
-			this->isEnable = false;
-			return;
-		}
+	if (!this->isEnable) {
+		return;
 	}
+
+	bool result;
+	result = this->GetPageNames(this->pageNames);
+	if (!result) {
+		this->isEnable = false;
+		return;
+	}
+
 }
 
 /// <summary>
-/// ƒfƒXƒgƒ‰ƒNƒ^
+/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 /// </summary>
 MultiLangTextController::~MultiLangTextController()
 {
 	delete this->pLogger;
 }
 
+bool MultiLangTextController::ImportTextData()
+{
+	bool result = true;
+
+	// ç¬¬ä¸€è¨€èªåã‚’å–å¾—ã™ã‚‹
+	this->firstPageName = this->GetFirstPageName();
+
+	// ç¬¬ä¸€è¨€èªåãŒUIå´ã®ä½•åˆ—ç›®ã‹ã‚’å–å¾—ã™ã‚‹
+	this->columnIndexOfFirstPageName = writeData.getColumnIndexOfPageName(this->firstPageName);
+
+	return result;
+}
+
 /// <summary>
-/// ƒvƒƒWƒFƒNƒg‚Ì‘½Œ¾Œêg—p‰Â”Ûó‘Ô‚Ìæ“¾
+/// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®å¤šè¨€èªä½¿ç”¨å¯å¦çŠ¶æ…‹ã®å–å¾—
 /// </summary>
 /// <returns></returns>
 bool MultiLangTextController::IsEnabled()
@@ -45,20 +59,28 @@ bool MultiLangTextController::IsEnabled()
 	return this->isEnable;
 }
 
+/// <summary>
+/// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã®è¨€èªãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
+/// </summary>
+/// <param name="list">ç©ºãƒªã‚¹ãƒˆï¼ˆè¨€èªãƒªã‚¹ãƒˆç™»éŒ²ç”¨ï¼‰</param>
+/// <returns>æˆå¦</returns>
 bool MultiLangTextController::GetPageNames(std::vector<std::string>& list)
 {
 	BOOL mxResult;
-
 	int pageCount;
+
+	// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã®è¨€èªæ•°ã‚’å–å¾—
 	mxResult = MxPluginPort_Project_MultiLang_GetCount(&pageCount);
 	if (!mxResult) {
 		return false;
 	}
 
+	// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…è¨€èªã®ãã‚Œãã‚Œã«å¯¾ã—ã¦ã€‚
 	for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
 	{
 		char* pname = nullptr;
 		
+		// è¨€èªåæ–‡å­—åˆ—(ANSI)ã‚’å–å¾—
 		mxResult = MxPluginPort_Project_MultiLang_GetName(pageIndex, &pname);
 		if (!mxResult) {
 			return false;
@@ -72,24 +94,48 @@ bool MultiLangTextController::GetPageNames(std::vector<std::string>& list)
 }
 
 /// <summary>
-/// ƒvƒƒWƒFƒNƒg‚Ì‘½Œ¾Œêg—pó‘Ô‚ğOn‚É‚·‚é
+/// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¨€èªè¨­å®š
 /// </summary>
-/// <returns>On‰»¬”Û</returns>
+/// <param name="writeData">æ›¸ãè¾¼ã¿ç®¡ç†ãƒ‡ãƒ¼ã‚¿</param>
+/// <returns>å‡¦ç†æˆå¦</returns>
+bool MultiLangTextController::SetDefaultLanguage(WriteData& writeData)
+{
+	bool result = true;
+	int mxResult;
+
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¨€èªå
+	writeData.defaultLanguageName;
+
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¨€èªè¨­å®š
+
+
+	return result;
+}
+
+
+
+
+
+
+/// <summary>
+/// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®å¤šè¨€èªä½¿ç”¨çŠ¶æ…‹ã‚’Onã«ã™ã‚‹
+/// </summary>
+/// <returns>OnåŒ–æˆå¦</returns>
 bool MultiLangTextController::SetProjectMLEnable()
 {
 	BOOL mxResult;
 
 	BOOL isEnabled = false;
-	// Œ»ƒvƒƒWƒFƒNƒg‚ª‘½Œ¾Œêg—p‰Â”\‚©Šm”F‚·‚é
+	// ç¾ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãŒå¤šè¨€èªä½¿ç”¨å¯èƒ½ã‹ç¢ºèªã™ã‚‹
 	mxResult = MxPluginPort_Project_MultiLang_GetEnabled(&isEnabled);
 
 	if (!mxResult) {
 		return false;
 	}
 
-	// Œ»İ‘½Œ¾Œê–¢g—p‚È‚çg—p‚µ‚½‚¢‚Ì‚ÅA
+	// ç¾åœ¨å¤šè¨€èªæœªä½¿ç”¨ãªã‚‰ä½¿ç”¨ã—ãŸã„ã®ã§ã€
 	if (!isEnabled) {
-		// ‘½Œ¾Œê‚ğg—p‰Â”\‚É‚·‚é
+		// å¤šè¨€èªã‚’ä½¿ç”¨å¯èƒ½ã«ã™ã‚‹
 		mxResult = MxPluginPort_Project_MultiLang_SetEnabled(true);
 	}
 
@@ -97,28 +143,28 @@ bool MultiLangTextController::SetProjectMLEnable()
 }
 
 /// <summary>
-/// ƒvƒƒWƒFƒNƒg‚Ég—p‚µ‚½‚¢Œ¾Œêƒy[ƒW‚ğ’Ç‰Á‚ÅƒZƒbƒg‚·‚é
-/// Šù‘¶ƒy[ƒW‚Æd•¡‚·‚éê‡‚ÍƒXƒLƒbƒv‚Å¬Œ÷‚Æ‚·‚é
+/// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã«ä½¿ç”¨ã—ãŸã„è¨€èªãƒšãƒ¼ã‚¸ã‚’è¿½åŠ ã§ã‚»ãƒƒãƒˆã™ã‚‹
+/// æ—¢å­˜ãƒšãƒ¼ã‚¸ã¨é‡è¤‡ã™ã‚‹å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—ã§æˆåŠŸã¨ã™ã‚‹
 /// </summary>
-/// <param name="list">’Ç‰Ág—p‚µ‚½‚¢Œ¾Œêƒy[ƒW</param>
-/// <returns>ƒy[ƒWİ’è‚Ì¬”Û</returns>
+/// <param name="list">è¿½åŠ ä½¿ç”¨ã—ãŸã„è¨€èªãƒšãƒ¼ã‚¸</param>
+/// <returns>ãƒšãƒ¼ã‚¸è¨­å®šã®æˆå¦</returns>
 bool MultiLangTextController::SetPageNames(std::vector<std::string>& list)
 {
 	BOOL mxResult = false;
 	std::vector<int> appendIndexList;
 
-	// ’Ç‰Á‚µ‚½‚¢ƒy[ƒW–¼‚ªŠù‚É‘¶İ‚·‚é‚©Šm”F‚µA‚È‚¢ê‡A’Ç‰ÁƒŠƒXƒg‚ÌƒCƒ“ƒfƒbƒNƒX‚ÅƒŠƒXƒg‚ğì‚é
+	// è¿½åŠ ã—ãŸã„ãƒšãƒ¼ã‚¸åãŒæ—¢ã«å­˜åœ¨ã™ã‚‹ã‹ç¢ºèªã—ã€ãªã„å ´åˆã€è¿½åŠ ãƒªã‚¹ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã§ãƒªã‚¹ãƒˆã‚’ä½œã‚‹
 	for (size_t index = 0; index < list.size(); index++)
 	{
 		bool exists = std::find(this->pageNames.begin(), this->pageNames.end(), list[index]) != this->pageNames.end();
-		// ‘¶İ‚µ‚È‚©‚Á‚½ê‡A‚»‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Û‚·‚é
+		// å­˜åœ¨ã—ãªã‹ã£ãŸå ´åˆã€ãã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä¿æŒã™ã‚‹
 		if (!exists)
 		{
 			appendIndexList.push_back(index);
 		}
 	}
 
-	// •Û‚µ‚½ƒCƒ“ƒfƒbƒNƒX‚ÌŒ¾Œêƒy[ƒW‚ğ’Ç‰Á‚·‚é
+	// ä¿æŒã—ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®è¨€èªãƒšãƒ¼ã‚¸ã‚’è¿½åŠ ã™ã‚‹
 	for (size_t index = 0; index < appendIndexList.size(); index++)
 	{
 		int pageIndex = appendIndexList[index];
@@ -134,6 +180,20 @@ bool MultiLangTextController::SetPageNames(std::vector<std::string>& list)
 	return true;
 }
 
+/// <summary>
+/// ãƒšãƒ¼ã‚¸ç•ªå·ï¼ã®è¨€èªåã‚’å–å¾—
+/// </summary>
+/// <returns>ãƒšãƒ¼ã‚¸ç•ªå·ï¼ã®è¨€èªå</returns>
+string MultiLangTextController::GetFirstPageName() {
+	string pageNameStr = "";
+	bool mxResult = false;
+	char* pageName = nullptr;
+	mxResult = MxPluginPort_Project_MultiLang_GetName(0, &pageName);
+	if (mxResult) {
+		pageNameStr = string(pageName);
+	}
+	return pageNameStr;
+}
 
 
 bool MultiLangTextController::SetTextProperty(int castNumber, TextData& textData) {
@@ -177,4 +237,44 @@ bool MultiLangTextController::SetTextProperty(int castNumber, TextData& textData
 	}
 
 	return true;
+}
+
+/// <summary>
+/// ã‚­ãƒ£ã‚¹ãƒˆåã«ã‚ˆã‚‹ãƒ†ã‚­ã‚¹ãƒˆã‚­ãƒ£ã‚¹ãƒˆç•ªå·æ¤œç´¢
+/// </summary>
+/// <param name="castname">ã‚­ãƒ£ã‚¹ãƒˆå</param>
+/// <returns>ã‚­ãƒ£ã‚¹ãƒˆç•ªå·ï¼ˆå¤±æ•—ï¼š-1ï¼‰</returns>
+int MultiLangTextController::FindTextCastNumber(std::string& castname)
+{
+	int castNumber = MxPluginPort_Cast_FindCast(ct_Text, (char*)castname.c_str());
+	return castNumber;
+}
+
+
+/// <summary>
+/// ãƒ†ã‚­ã‚¹ãƒˆã‚­ãƒ£ã‚¹ãƒˆæ›¸ãè¾¼ã¿ãƒ†ã‚¹ãƒˆé–¢æ•°
+/// </summary>
+void MultiLangTextController::TestWriteTextCast()
+{
+	int castNumber = 10;
+	int resultNumber;
+	bool mxResult;
+	string castName = "Text10";
+	string text10Eng = "Hello\nWorld";
+	resultNumber = MxPluginPort_Cast_CreateTextEx(castNumber, (char*)castName.c_str(), set_ANSI);
+	mxResult = MxPluginPort_Cast_Text_CreateLanguage(resultNumber, 0);
+	mxResult = MxPluginPort_Cast_Text_SetTextDataANSI(resultNumber, 0, text10Eng.c_str());
+	mxResult = MxPluginPort_Cast_Text_SetFontColor(resultNumber, 0, 0x0000ff);
+	mxResult = MxPluginPort_Cast_Text_SetFontSize(resultNumber, 0, 20);
+
+	castNumber = 11;
+	castName = "Text11";
+	wstring text11Kor = L"ì•„ë‹ˆ\nì˜¤";
+	resultNumber = MxPluginPort_Cast_CreateTextEx(castNumber, (char*)castName.c_str(), set_UTF);
+	mxResult = MxPluginPort_Cast_Text_CreateLanguage(resultNumber, 2);
+	mxResult = MxPluginPort_Cast_Text_SetTextDataWIDE(resultNumber, 2, text11Kor.c_str());
+	mxResult = MxPluginPort_Cast_Text_SetFontColor(resultNumber, 2, 0x00ff00);
+	mxResult = MxPluginPort_Cast_Text_SetFontSize(resultNumber, 2, 28);
+
+
 }

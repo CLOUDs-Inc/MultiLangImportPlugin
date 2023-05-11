@@ -46,30 +46,6 @@ bool DataAccessor::GetProjectInfo(SdkData& data)
 }
 
 /// <summary>
-/// デフォルト言語設定
-/// </summary>
-/// <param name="writeData">書き込み管理データ</param>
-/// <returns>処理成否</returns>
-bool DataAccessor::SetDefaultLanguage(WriteData& writeData)
-{
-	bool result = true;
-	int mxResult;
-
-	// デフォルト言語が設定されていなければ(-1)、trueで終了
-	if (writeData.selectedLanguageIndex < 0) {
-		return result;
-	}
-
-	// デフォルト言語インデックス
-	int defaultLangIndex = writeData.selectedLanguageIndex;
-	
-	// デフォルト言語設定
-
-
-	return result;
-}
-
-/// <summary>
 /// テキストキャストデータ書き込み
 /// </summary>
 /// <param name="writeData">書き込み管理データ</param>
@@ -89,6 +65,8 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 
 
 	MultiLangTextController mlTextController(writeData);
+
+	bool importResult = mlTextController.ImportTextData();
 
 	// 言語ページ追加処理の有無確認
 	if (writeData.flagAddIfLanguagePageNotFound)
@@ -114,6 +92,12 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 
 	}
 
+	// 言語ページ番号０の言語名
+	string firstPageName = mlTextController.GetFirstPageName();
+
+	
+	// tttest
+	mlTextController.TestWriteTextCast();
 
 
 	// キャスト毎追加処理

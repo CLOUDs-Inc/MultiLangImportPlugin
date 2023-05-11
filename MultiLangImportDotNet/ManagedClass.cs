@@ -101,12 +101,18 @@ namespace MultiLangImportDotNet
         }
 
         /// <summary>
-        /// dll側へデフォルト言語インデックスを転送
+        /// sdk側へデフォルト言語名を転送
         /// </summary>
         /// <returns></returns>
-        public int DownloadDefaultLanguageIndex()
+        public string DownloadDefaultLanguageName()
         {
-            return this.appData.DefaultLanguageIndex;
+            string resultName = string.Empty;
+            if (0 <= this.appData.DefaultLanguageIndex)
+            {
+                resultName = this.appData.LanguageNameListInside[this.appData.DefaultLanguageIndex];
+                resultName = Utils.ForcelyConvertToANSI(resultName);
+            }
+            return resultName;
         }
 
         public int DownloadSubcastNameIndex()
@@ -116,22 +122,22 @@ namespace MultiLangImportDotNet
 
         public int DownloadLanguageNameCount()
         {
-            return this.appData.LanguageNameList.Count;
+            return this.appData.LanguageNameListModified.Count;
         }
 
         public string[] DownloadLanguageNameArray()
         {
-            return this.appData.LanguageNameList.ToArray();
+            return this.appData.LanguageNameListModified.ToArray();
         }
 
         public int DownloadTextCastNameCount()
         {
-            return this.appData.TextCastNameList.Count;
+            return this.appData.TextCastNameListInside.Count;
         }
 
         public string[] DownloadTextCastNameArray()
         {
-            return this.appData.TextCastNameList.ToArray();
+            return this.appData.TextCastNameListModified.ToArray();
         }
 
         public string DownloadSubcastConjunctionString()
@@ -141,18 +147,24 @@ namespace MultiLangImportDotNet
 
         public object[,] DownloadTextDataTable()
         {
-            int rowCount = this.appData.TextCastNameList.Count;
-            int colCount = this.appData.LanguageNameList.Count;
+            int rowCount = this.appData.TextDataTable.GetLength(0);
+            int colCount = this.appData.TextDataTable.GetLength(1);
+            //int rowCount = this.appData.TextCastNameList.Count;
+            int outputColSize = this.appData.LanguageNameListModified.Count;
 
-            object[,] dlTextDataTable = new Object[rowCount,colCount];
+            object[,] dlTextDataTable = new Object[rowCount, outputColSize];
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                for (int colIndex = 0; colIndex < colCount; colIndex++)
+                int colTgtIdx = 0;
+                for(int colSrcIdx = 0; colSrcIdx < colCount; colSrcIdx++)
                 {
-                    var textData = this.appData.TextDataTable[rowIndex, colIndex];
+                    // サブキャストに指定された列データはスキップする
+                    if (colSrcIdx == this.appData.OptionData.SubcastIndex) continue;
+
+                    var textData = this.appData.TextDataTable[rowIndex, colSrcIdx];
                     if (textData != null)
                     {
-                        dlTextDataTable[rowIndex, colIndex] = Activator.CreateInstance(this.typeCLITextData, new object[] {
+                        dlTextDataTable[rowIndex, colTgtIdx] = Activator.CreateInstance(this.typeCLITextData, new object[] {
                             textData.Text,
                             textData.FontName,
                             textData.FontSize,
@@ -166,6 +178,7 @@ namespace MultiLangImportDotNet
                             textData.CanConvertToANSI
                         });
                     }
+                    colTgtIdx++;
                 }
             }
 

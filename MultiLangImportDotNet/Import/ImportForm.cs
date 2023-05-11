@@ -55,9 +55,9 @@ namespace MultiLangImportDotNet.Import
         {
             // デフォルト言語指定をリセット
             appData.DefaultLanguageIndex = -1;
-            appData.LanguageNameList = reader.LanguageNameList;
+            appData.LanguageNameListInside = reader.LanguageNameList;
             appData.LangHasTextWithUnusableCharList = reader.LangHasTextWithUnusableCharList;
-            appData.TextCastNameList = reader.TextCastNameList;
+            appData.TextCastNameListInside = reader.TextCastNameList;
             appData.TextDataTable = reader.TextDataTable;
             // サブキャスト列指定をリセット
             appData.OptionData.SubcastIndex = -1;
@@ -194,7 +194,7 @@ namespace MultiLangImportDotNet.Import
         private void SetDefaultLanguage(ApplicationData appData)
         {
             // テーブルの列表題（言語名）を設定
-            for (int langIndex = 0; langIndex < appData.LanguageNameList.Count; langIndex++)
+            for (int langIndex = 0; langIndex < appData.LanguageNameListInside.Count; langIndex++)
             {
                 this.dataGridViewTextMod.Columns[langIndex].HeaderText = GetTargetColumnHeaderText(langIndex);
             }
@@ -246,16 +246,16 @@ namespace MultiLangImportDotNet.Import
 
             if(colIndex == this.appData.DefaultLanguageIndex)
             {
-                headerText = this.appData.LanguageNameList[colIndex] + " (DEFAULT)";
+                headerText = this.appData.LanguageNameListInside[colIndex] + " (DEFAULT)";
             }
             else if(this.appData.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME] &&
                 (colIndex == this.appData.OptionData.SubcastIndex))
             {
-                headerText = string.Format("Subcast({0})", this.appData.LanguageNameList[colIndex]);
+                headerText = string.Format("Subcast({0})", this.appData.LanguageNameListInside[colIndex]);
             }
             else
             {
-                headerText = this.appData.LanguageNameList[colIndex];
+                headerText = this.appData.LanguageNameListInside[colIndex];
             }
 
             return headerText;
@@ -365,7 +365,7 @@ namespace MultiLangImportDotNet.Import
         private void buttonDefaultLanguage_Click(object sender, EventArgs e)
         {
             // デフォルト言語選択フォームを展開する
-            var langForm = new SelectLangForm(this.appData.LanguageNameList, this.appData.DefaultLanguageIndex, this.appData.OptionData.SubcastIndex);
+            var langForm = new SelectLangForm(this.appData.LanguageNameListInside, this.appData.DefaultLanguageIndex, this.appData.OptionData.SubcastIndex);
             if (DialogResult.OK != langForm.ShowDialog(this))
             {
                 return;
@@ -415,6 +415,8 @@ namespace MultiLangImportDotNet.Import
             SetImportFormSettingToAppData(this.appData);
 
 
+
+
             // フォーム呼び出し元に通知OK
             this.DialogResult = DialogResult.OK;
 
@@ -429,9 +431,9 @@ namespace MultiLangImportDotNet.Import
 
             // 文字データ以外のセルのクリックは無視
             if(rowIndex < 0 || 
-               appData.TextCastNameList.Count <= rowIndex ||
+               appData.TextCastNameListInside.Count <= rowIndex ||
                colIndex < 0 ||
-               appData.LanguageNameList.Count <= colIndex)
+               appData.LanguageNameListInside.Count <= colIndex)
             {
                 return;
             }

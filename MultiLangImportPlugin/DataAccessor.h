@@ -18,7 +18,6 @@ public:
 
 	bool GetProjectInfo(SdkData& data);
 
-	bool SetDefaultLanguage(WriteData& writeData);
 	bool SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData& sdkData);
 
 };

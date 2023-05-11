@@ -73,18 +73,6 @@ namespace MultiLangImportDotNet.Import
         {
             SetOptionFormSettingToAppData(this.appData.OptionData);
 
-            // サブキャスト名の使用On＆サブキャスト列選択済みの場合に限り
-            if (this.appData.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME]
-                && this.appData.OptionData.SubcastIndex != -1)
-            {
-                // サブキャスト名を接続した名前リストを生成保持しておく
-                bool combineResult = this.appData.SetCombinedNameForTextCast();
-                if (!combineResult)
-                {
-                    MessageBox.Show("Failed to make combined Textcast names with subcasts.");
-                    return;
-                }
-            }
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -103,7 +91,7 @@ namespace MultiLangImportDotNet.Import
             this.checkBoxUseUnderscore.Checked = optionData.Flags[OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME];
             this.textBoxConjunction.Text = optionData.ConjunctionString;
 
-            this.listBoxSubcastName.Items.AddRange(this.appData.LanguageNameList.ToArray());
+            this.listBoxSubcastName.Items.AddRange(this.appData.LanguageNameListInside.ToArray());
             this.listBoxSubcastName.SelectedIndex = optionData.SubcastIndex;
         }
 

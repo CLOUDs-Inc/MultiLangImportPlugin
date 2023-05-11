@@ -16,8 +16,10 @@ WrapperIf::WrapperIf(HWND hWnd, HINSTANCE hinstDLL, LPVOID lpvReserved)
 /// <param name="writeData">書き込み用データ保持領域</param>
 void WrapperIf::DownloadAllUIData(WriteData& writeData)
 {
-	// デフォルト言語インデックス
-	writeData.selectedLanguageIndex = DownloadInteger("DefaultLanguageIndex");
+	// デフォルト言語名称
+	char* pDefaultLangName = DownloadString("DownloadDefaultLanguageName");
+	writeData.defaultLanguageName = std::string(pDefaultLangName);
+	delete[] pDefaultLangName;
 	// サブキャスト扱い列インデックス
 	writeData.subcastNameIndex = DownloadInteger("SubcastNameIndex");
 

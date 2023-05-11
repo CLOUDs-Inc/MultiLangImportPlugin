@@ -181,6 +181,7 @@
     <ClCompile Include="SingleLogger.cpp" />
     <ClCompile Include="UnicodeLogger.cpp" />
     <ClCompile Include="WrapperIf.cpp" />
+    <ClCompile Include="WriteData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
