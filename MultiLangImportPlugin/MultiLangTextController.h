@@ -15,7 +15,20 @@ private:
 
 	UnicodeLogger* pLogger = nullptr;
 
+	int  GetNewTextCastNumber();
 	bool GetPageNames(std::vector<std::string>& list);
+	int  GetPageNumber(std::string pageName);
+	bool AddPageNames();
+	bool ImportTextDataTable();
+
+	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
+	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
+	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);
+	bool CreateLangPageToTextCast(int castNumber, int pageNumber, bool& createPageFlag);
+	bool SetTextProperty(int castNumber, int pageNumber, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool createPageFlag, bool isUTF);
+
+
+	bool CheckTextDataRowMustBeUTF(std::vector<TextData>& textDataRow);
 
 public:
 	/// <summary>
@@ -35,7 +48,6 @@ public:
 	bool SetProjectMLEnable();
 	bool SetPageNames(std::vector<std::string>& list);
 
-	bool SetTextProperty(int castNumber, TextData& textData);
 
 
 	string GetFirstPageName();

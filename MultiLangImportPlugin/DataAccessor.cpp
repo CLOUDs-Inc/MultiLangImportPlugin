@@ -66,73 +66,10 @@ bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData&
 
 	MultiLangTextController mlTextController(writeData);
 
-	bool importResult = mlTextController.ImportTextData();
+	result = mlTextController.ImportTextData();
 
-	// 言語ページ追加処理の有無確認
-	if (writeData.flagAddIfLanguagePageNotFound)
-	{
-		// 追加言語のリストを作成（サブキャスト用としているExcel列データを外すため）
-		vector<string> appendPageNameList;
-		for (size_t index = 0; index < writeData.languageNameList.size(); index++)
-		{
-			// サブキャスト名使用Onなら、サブキャストに使用した列のページ名は追加しない
-			if (writeData.flagUseSubcastName && writeData.subcastNameIndex == (int)index)
-			{
-				continue;
-			}
-
-			appendPageNameList.push_back(writeData.languageNameList[index]);
-		}
-
-		// 言語ページ追加処理
-		mlTextController.SetPageNames(appendPageNameList);
-		
-		// ログ：追加言語
-
-
-	}
-
-	// 言語ページ番号０の言語名
-	string firstPageName = mlTextController.GetFirstPageName();
-
-	
 	// tttest
-	mlTextController.TestWriteTextCast();
-
-
-	// キャスト毎追加処理
-	// CastNum=MxPluginPort_Cast_CreateText(CastNum,NULL);
-
-	// 既存同一キャスト名検索
-
-	// キャスト追加 or 参照
-
-	// 文字コード指定
-
-	// 言語ページ指定
-
-	// テキスト
-
-	// フォント名
-
-	// フォントサイズ
-
-	// フォント色(RGB)
-
-	// フォントスタイル
-
-
-
-
-
-
-
-
-
-
-	// キャスト毎追加処理ここまで
-
-
+	//mlTextController.TestWriteTextCast();
 	return result;
 }
 

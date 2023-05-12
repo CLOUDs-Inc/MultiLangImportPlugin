@@ -19,11 +19,6 @@ int WriteData::getColumnIndexOfPageName(string pageName)
 	// 距離（インデクス）を取得
 	result = std::distance(this->languageNameList.begin(), iter);
 
-	// サブキャスト指定列は言語名ではないとみなすので-1
-	if (result == this->subcastNameIndex) {
-		result = -1;
-	}
-
 	return result;
 }
 
