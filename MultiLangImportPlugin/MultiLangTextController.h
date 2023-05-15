@@ -21,6 +21,8 @@ private:
 	bool AddPageNames();
 	bool ImportTextDataTable();
 
+	bool UpdateTextCast(std::string& castname, std::vector<TextData>& textDataRow);
+
 	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
 	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);

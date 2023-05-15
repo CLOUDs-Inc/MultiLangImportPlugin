@@ -97,7 +97,10 @@ bool MultiLangTextController::AddPageNames()
 	return true;
 }
 
-
+/// <summary>
+/// UI側テキストデータのプロジェクトへのインポート開始
+/// </summary>
+/// <returns>インポート成否</returns>
 bool MultiLangTextController::ImportTextDataTable()
 {
 	int rowCount = (int)this->writeData.textDataTable.size();
@@ -112,6 +115,12 @@ bool MultiLangTextController::ImportTextDataTable()
 	return true;
 }
 
+/// <summary>
+/// UI側テキストデータテーブルの行ごとにインポート
+/// </summary>
+/// <param name="castname">テキストキャスト名</param>
+/// <param name="textDataRow">テキストデータテーブル１行</param>
+/// <returns>インポート成否</returns>
 bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow)
 {
 	bool result = false;
@@ -120,6 +129,17 @@ bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vect
 	int castNumber = FindTextCastNumber(castname);
 	if (0 <= castNumber) {
 		// 指定の名前でキャストが既に存在する
+		// 「既存のテキストキャストを更新しない」チェック
+		if (this->writeData.flagNotUpdateExistingTextCast) {
+			// 「更新しない：On」なので何もしない
+			// ログ：スキップ
+			this->pLogger->log("CAST [" + castname + "]: Skipped.");
+			result = true;
+		}
+		else {
+			// 更新する
+			//result = this->UpdateTextCast(castname, textDataRow);
+		}
 	}
 	else {
 		// 指定の名前のキャストは存在しない
@@ -131,7 +151,7 @@ bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vect
 		else {
 			// 追加しない：何もしない
 			// ログ：スキップ
-			this->pLogger->log("CAST [" + castname + "]: Skipped");
+			this->pLogger->log("CAST [" + castname + "]: Skipped.");
 			result = true;
 		}
 	}
@@ -139,6 +159,27 @@ bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vect
 	return result;
 }
 
+/// <summary>
+/// 既存テキストキャストの更新としてテキストデータをインポートする
+/// </summary>
+/// <param name="castname">テキストキャスト名</param>
+/// <param name="textDataRow">テキストデータテーブル１行</param>
+/// <returns>インポート成否</returns>
+bool MultiLangTextController::UpdateTextCast(std::string& castname, std::vector<TextData>& textDataRow)
+{
+	bool result = false;
+
+
+	return result;
+}
+
+
+/// <summary>
+/// 新規テキストキャストとしてテキストデータをインポートする
+/// </summary>
+/// <param name="castname">テキストキャスト名</param>
+/// <param name="textDataRow">テキストデータテーブル１行</param>
+/// <returns>インポート成否</returns>
 bool MultiLangTextController::ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow)
 {
 	bool result = false;

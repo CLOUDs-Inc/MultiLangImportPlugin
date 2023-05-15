@@ -168,7 +168,7 @@ namespace MultiLangImportWrapper
 						textData.fontName = marshal_as<std::string>(fontNameManaged);
 						textData.fontSize = textDataManaged->fontSize;
 						textData.colorR = textDataManaged->colorR;
-						textData.colorG = textDataManaged->colorB;
+						textData.colorG = textDataManaged->colorG;
 						textData.colorB = textDataManaged->colorB;
 						textData.isValidData = true;
 						textData.isBold = textDataManaged->isBold;
