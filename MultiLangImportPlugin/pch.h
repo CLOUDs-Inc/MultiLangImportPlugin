@@ -23,10 +23,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdio>
 #include <codecvt>
 
 
 #include "Const.h"
+#include "Utils.h"
 #include "TextData.h"
 #include "SdkData.h"
 #include "WriteData.h"

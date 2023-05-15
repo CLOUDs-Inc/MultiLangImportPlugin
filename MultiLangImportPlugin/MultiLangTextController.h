@@ -23,6 +23,7 @@ private:
 
 	bool UpdateTextCast(std::string& castname, std::vector<TextData>& textDataRow);
 
+	bool ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow);
 	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
 	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);

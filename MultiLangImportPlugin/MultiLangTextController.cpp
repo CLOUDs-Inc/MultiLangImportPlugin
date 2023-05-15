@@ -107,12 +107,102 @@ bool MultiLangTextController::ImportTextDataTable()
 
 	for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 		bool result = this->ImportTextDataRow(this->writeData.textCastNameListConjMod[rowIndex], this->writeData.textDataTable[rowIndex]);
+		// bool result = this->ImportTextDataRow2(rowIndex, this->writeData.textDataTable[rowIndex]);
 		if (!result) {
 			return false;
 		}
 	}
 
 	return true;
+}
+
+
+
+bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow)
+{
+	bool result = false;
+
+	int castIndex = -1;
+	int cloneCastIndex = -1;
+
+	bool addFlag = false; // 
+	string logMsg = "";
+
+	// サブキャスト使用の是非で処理が分かれる
+	// check:option:サブキャスト名を使用する
+	if (!this->writeData.flagUseSubcastName)
+	{
+		// check:option:サブキャスト名を使用する:Off
+		// 既存のキャストを検索
+		castIndex = FindTextCastNumber(this->writeData.textCastNameListLoneMod[rowIndex]);
+		if (castIndex == -1) {
+			// 新規テキストキャスト
+			
+			// check:不明なテキストキャストを新規に追加
+			if (this->writeData.flagAddIfTextCastNotFound) {
+				// 新規追加するので、新しいキャスト番号を取得する
+				castIndex = GetNewTextCastNumber();
+				// キャスト番号は新規追加用であることを示すフラグ
+				addFlag = true;
+				// インポートログ：追加
+				logMsg = format("CAST [%4d: %s]: Added", castIndex, this->writeData.textCastNameListLoneMod[rowIndex]);
+			}
+		}
+		else {
+			// キャストは既存
+
+			// check:既存のテキストキャストを更新しない
+			if (this->writeData.flagNotUpdateExistingTextCast) {
+				castIndex = -1;
+			}
+
+			// インポートログを追加
+			if (castIndex != 1) {
+				logMsg = format("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex]);
+			}
+			else {
+				logMsg = format("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex]);
+			}
+		}
+	}
+	else
+	{
+		// check:option:サブキャスト名を使用する:On
+
+		// check:option:キャスト検索時にサブキャスト名を使用
+		if (this->writeData.flagUseSubcastNameWhenSearchingForCast) {
+			castIndex = FindTextCastNumber(this->writeData.textCastNameListConjMod[rowIndex]);
+		}
+		else {
+			castIndex = FindTextCastNumber(this->writeData.textCastNameListLoneMod[rowIndex]);
+			if (-1 == castIndex)
+			{
+				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast) {
+					// サブキャスト名を含んだキャスト名で既存のキャストを再検索
+					castIndex = FindTextCastNumber(this->writeData.textCastNameListConjMod[rowIndex]);
+				}
+			}
+			else
+			{
+				// サブキャスト作成時に元のキャストのクローンとして作成するかどうかを判別
+				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast &&
+					this->writeData.textCastNameListConjMod[rowIndex] != this->writeData.textCastNameListLoneMod[rowIndex])
+				{
+					cloneCastIndex = castIndex;
+					castIndex = FindTextCastNumber(this->writeData.textCastNameListConjMod[rowIndex]);
+				}
+			}
+		}
+
+		if (-1 == castIndex) {
+			// 不明なテキストキャストを新規追加
+		}
+		else {
+			// 既存のテキストキャストは更新しない
+		}
+	}
+
+	return result;
 }
 
 /// <summary>
