@@ -81,7 +81,7 @@ namespace MultiLangImportDotNet
         /// <summary>
         /// サブキャスト接続文字列（未修正）
         /// </summary>
-        public string ConjunctionStringInside { get; set; }
+        public string ConjunctionStringInside { get; set; } = "_";
 
         /// <summary>
         /// テキストキャスト名リスト（サブキャスト"なし"&ANSI変換済み）
@@ -151,7 +151,7 @@ namespace MultiLangImportDotNet
         /// </summary>
         public string ConjunctionStringMod
         {
-            get => Utils.ForcelyConvertToANSI(ConjunctionStringInside);
+            get { return Utils.ForcelyConvertToANSI(ConjunctionStringInside); }
         }
 
         /// <summary>
