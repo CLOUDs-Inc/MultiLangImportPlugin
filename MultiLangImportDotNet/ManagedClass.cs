@@ -135,14 +135,24 @@ namespace MultiLangImportDotNet
             return this.appData.TextCastNameListInside.Count;
         }
 
-        public string[] DownloadTextCastNameArray()
+        public string[] DownloadTextCastNameArrayLoneMod()
         {
-            return this.appData.TextCastNameListModified.ToArray();
+            return this.appData.TextCastNameListLoneMod.ToArray();
+        }
+
+        public string[] DownloadSubPartNameArrayMod()
+        {
+            return this.appData.SubPartNameListMod.ToArray();
+        }
+
+        public string[] DownloadTextCastNameArrayConjMod()
+        {
+            return this.appData.TextCastNameListConjMod.ToArray();
         }
 
         public string DownloadSubcastConjunctionString()
         {
-            return this.appData.OptionData.ConjunctionString;
+            return this.appData.ConjunctionStringMod;
         }
 
         public object[,] DownloadTextDataTable()

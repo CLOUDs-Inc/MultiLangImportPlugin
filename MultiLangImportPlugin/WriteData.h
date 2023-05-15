@@ -16,9 +16,19 @@ public:
 	vector<string> languageNameList;
 
 	/// <summary>
-	/// テキストキャスト名リスト
+	/// テキストキャスト名リスト（サブキャスト加工なし）
 	/// </summary>
-	vector<string> textCastNameList;
+	vector<string> textCastNameListLoneMod;
+
+	/// <summary>
+	/// サブキャスト部分名リスト
+	/// </summary>
+	vector<string> subPartNameListMod;
+
+	/// <summary>
+	/// テキストキャスト名リスト（サブキャスト加工済み）
+	/// </summary>
+	vector<string> textCastNameListConjMod;
 
 	string importExcelFileFullPath;
 	wstring importExcelFileFullPathWide;

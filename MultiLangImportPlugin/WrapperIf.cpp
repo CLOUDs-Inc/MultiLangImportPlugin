@@ -61,21 +61,55 @@ void WrapperIf::DownloadAllUIData(WriteData& writeData)
 	int textCastNameCount = DownloadInteger("TextCastNameCount");
 	int languageNameCount = DownloadInteger("LanguageNameCount");
 
-	// テキストキャスト名リストをUIから下ろす
-	char** textCastNameArray = DownloadStringArray("TextCastNameArray");
+	// テキストキャスト名リスト（サブキャスト加工なし）をUIから下ろす
+	char** textCastNameArrayLoneMod = DownloadStringArray("TextCastNameArrayLoneMod");
 	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++)
 	{
-		std::string textCastName = std::string(textCastNameArray[castIndex]);
+		std::string textCastName = std::string(textCastNameArrayLoneMod[castIndex]);
 
 		// テキストキャスト名リストに保持
-		writeData.textCastNameList.push_back(textCastName);
+		writeData.textCastNameListLoneMod.push_back(textCastName);
 	}
 
 	// テキストキャスト名リストのメモリ解放
 	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++) {
-		delete[] textCastNameArray[castIndex];
+		delete[] textCastNameArrayLoneMod[castIndex];
 	}
-	delete[] textCastNameArray;
+	delete[] textCastNameArrayLoneMod;
+
+
+	// サブキャスト部分名リストをUIから下ろす
+	char** subPartNameArrayMod = DownloadStringArray("SubPartNameArrayMod");
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++)
+	{
+		std::string textCastName = std::string(subPartNameArrayMod[castIndex]);
+
+		// テキストキャスト名リストに保持
+		writeData.subPartNameListMod.push_back(textCastName);
+	}
+
+	// テキストキャスト名リストのメモリ解放
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++) {
+		delete[] subPartNameArrayMod[castIndex];
+	}
+	delete[] subPartNameArrayMod;
+
+
+	// テキストキャスト名リスト（サブキャスト加工済み）をUIから下ろす
+	char** textCastNameArrayConjMod = DownloadStringArray("TextCastNameArrayConjMod");
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++)
+	{
+		std::string textCastName = std::string(textCastNameArrayConjMod[castIndex]);
+
+		// テキストキャスト名リストに保持
+		writeData.textCastNameListConjMod.push_back(textCastName);
+	}
+
+	// テキストキャスト名リストのメモリ解放
+	for (int castIndex = 0; castIndex < textCastNameCount; castIndex++) {
+		delete[] textCastNameArrayConjMod[castIndex];
+	}
+	delete[] textCastNameArrayConjMod;
 
 
 

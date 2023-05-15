@@ -189,50 +189,53 @@
 #define IDMxPluginPort_Project_SetPropertyInt			0x700
 #define IDMxPluginPort_Project_GetPropertyInt			0x701
 
-#define	IDMxPluginPort_Cast_Text_GetLineCount			0x1000
-#define	IDMxPluginPort_Cast_Text_GetLineString			0x1001
-#define	IDMxPluginPort_Cast_Text_GetLangAssigned		0x1002
-#define	IDMxPluginPort_Cast_Text_CreateLanguage			0x1003
-#define	IDMxPluginPort_Cast_Text_RemoveLanguage			0x1004
-#define	IDMxPluginPort_Cast_Text_SetTextData			0x1005
-#define	IDMxPluginPort_Cast_Text_SetFontColor			0x1007
-#define	IDMxPluginPort_Cast_Text_GetFontColor			0x1008
-#define	IDMxPluginPort_Cast_Text_SetBackColor			0x1009
-#define	IDMxPluginPort_Cast_Text_GetBackColor			0x100A
-#define	IDMxPluginPort_Cast_Text_SetFontHeight			0x100B
-#define	IDMxPluginPort_Cast_Text_GetFontHeight			0x100C
-#define	IDMxPluginPort_Cast_Text_SetFontSize			0x100D
-#define	IDMxPluginPort_Cast_Text_GetFontSize			0x100E
-#define	IDMxPluginPort_Cast_Text_SetFontName			0x100F
-#define	IDMxPluginPort_Cast_Text_GetFontName			0x1010
-#define	IDMxPluginPort_Cast_Text_SetFontCharSet			0x1011
-#define	IDMxPluginPort_Cast_Text_GetFontCharSet			0x1012
-#define	IDMxPluginPort_Cast_Text_SetTransparent			0x1013
-#define	IDMxPluginPort_Cast_Text_GetTransparent			0x1014
-#define	IDMxPluginPort_Cast_Text_SetItemDistance		0x1015
-#define	IDMxPluginPort_Cast_Text_GetItemDistance		0x1016
-#define	IDMxPluginPort_Cast_Text_SetBackward			0x1017
-#define	IDMxPluginPort_Cast_Text_GetBackward			0x1018
-#define	IDMxPluginPort_Cast_Text_SetAlphaEnabled		0x1019
-#define	IDMxPluginPort_Cast_Text_GetAlphaEnabled		0x101A
-#define	IDMxPluginPort_Cast_Text_SetCenterX				0x101B
-#define	IDMxPluginPort_Cast_Text_GetCenterX				0x101C
-#define	IDMxPluginPort_Cast_Text_SetCenterY				0x101D
-#define	IDMxPluginPort_Cast_Text_GetCenterY				0x101E
-#define	IDMxPluginPort_Cast_Text_SetFixSize				0x101F
-#define	IDMxPluginPort_Cast_Text_GetFixSize				0x1020
-#define	IDMxPluginPort_Cast_Text_GetWidth				0x1021
-#define	IDMxPluginPort_Cast_Text_GetHeight				0x1022
-#define	IDMxPluginPort_Cast_Text_SetEncode				0x1023
-#define	IDMxPluginPort_Cast_Text_GetEncode				0x1024
-#define	IDMxPluginPort_Cast_Text_SetAlignment			0x1025
-#define	IDMxPluginPort_Cast_Text_GetAlignment			0x1026
-#define	IDMxPluginPort_Cast_Text_SetAlignmentWidth		0x1027
-#define	IDMxPluginPort_Cast_Text_GetAlignmentWidth		0x1028
-#define	IDMxPluginPort_Cast_Text_SetClickEnabled		0x1029
-#define	IDMxPluginPort_Cast_Text_GetClickEnabled		0x102A
-#define	IDMxPluginPort_Cast_Text_SetAntialias			0x102B
-#define	IDMxPluginPort_Cast_Text_GetAntialias			0x102C
+#define IDMxPluginPort_Cast_Text_GetLineCount			(0x1000)
+#define IDMxPluginPort_Cast_Text_GetLineString			(0x1001)
+#define IDMxPluginPort_Cast_Text_GetLanguageAssigned	(0x1002)
+#define IDMxPluginPort_Cast_Text_CreateLanguage			(0x1003)
+#define IDMxPluginPort_Cast_Text_RemoveLanguage			(0x1004)
+#define IDMxPluginPort_Cast_Text_SetTextData			(0x1005)
+//IDMxPluginPort_Cast_Text_GetTextData					(0x1006)
+#define IDMxPluginPort_Cast_Text_SetFontColor			(0x1007)
+#define IDMxPluginPort_Cast_Text_GetFontColor			(0x1008)
+#define IDMxPluginPort_Cast_Text_SetBackColor			(0x1009)
+#define IDMxPluginPort_Cast_Text_GetBackColor			(0x100A)
+#define IDMxPluginPort_Cast_Text_SetFontHeight			(0x100B)
+#define IDMxPluginPort_Cast_Text_GetFontHeight			(0x100C)
+#define IDMxPluginPort_Cast_Text_SetFontSize			(0x100D)
+#define IDMxPluginPort_Cast_Text_GetFontSize			(0x100E)
+#define IDMxPluginPort_Cast_Text_SetFontName			(0x100F)
+#define IDMxPluginPort_Cast_Text_GetFontName			(0x1010)
+#define IDMxPluginPort_Cast_Text_SetFontCharSet			(0x1011)
+#define IDMxPluginPort_Cast_Text_GetFontCharSet			(0x1012)
+#define IDMxPluginPort_Cast_Text_SetFontStyle			(0x1013)
+#define IDMxPluginPort_Cast_Text_GetFontStyle			(0x1014)
+#define IDMxPluginPort_Cast_Text_SetTransparent			(0x1015)
+#define IDMxPluginPort_Cast_Text_GetTransparent			(0x1016)
+#define IDMxPluginPort_Cast_Text_SetItemDistance		(0x1017)
+#define IDMxPluginPort_Cast_Text_GetItemDistance		(0x1018)
+#define IDMxPluginPort_Cast_Text_SetBackward			(0x1019)
+#define IDMxPluginPort_Cast_Text_GetBackward			(0x101A)
+#define IDMxPluginPort_Cast_Text_SetAlphaEnabled		(0x101B)
+#define IDMxPluginPort_Cast_Text_GetAlphaEnabled		(0x101C)
+#define IDMxPluginPort_Cast_Text_SetCenterX				(0x101D)
+#define IDMxPluginPort_Cast_Text_GetCenterX				(0x101E)
+#define IDMxPluginPort_Cast_Text_SetCenterY				(0x101F)
+#define IDMxPluginPort_Cast_Text_GetCenterY				(0x1020)
+#define IDMxPluginPort_Cast_Text_SetFixSize				(0x1021)
+#define IDMxPluginPort_Cast_Text_GetFixSize				(0x1022)
+#define IDMxPluginPort_Cast_Text_GetWidth				(0x1023)
+#define IDMxPluginPort_Cast_Text_GetHeight				(0x1024)
+#define IDMxPluginPort_Cast_Text_SetEncode				(0x1025)
+#define IDMxPluginPort_Cast_Text_GetEncode				(0x1026)
+#define IDMxPluginPort_Cast_Text_SetAlignment			(0x1027)
+#define IDMxPluginPort_Cast_Text_GetAlignment			(0x1028)
+#define IDMxPluginPort_Cast_Text_SetAlignmentWidth		(0x1029)
+#define IDMxPluginPort_Cast_Text_GetAlignmentWidth		(0x102A)
+#define IDMxPluginPort_Cast_Text_SetClickEnabled		(0x102B)
+#define IDMxPluginPort_Cast_Text_GetClickEnabled		(0x102C)
+#define IDMxPluginPort_Cast_Text_SetAntialias			(0x102D)
+#define IDMxPluginPort_Cast_Text_GetAntialias			(0x102E)
 
 #define	IDMxPluginPort_End								0xFF
 
@@ -426,49 +429,51 @@ typedef BOOL(_cdecl* TMxPluginPort_Primitive_QuadPolygon)(int CastNumber, char* 
 typedef BOOL(_cdecl* TMxPluginPort_Project_SetPropertyInt)(int ID, int Value);
 typedef BOOL(_cdecl* TMxPluginPort_Project_GetPropertyInt)(int ID, int* Value);
 
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineCount)(int CastNumber, int LangNum, int* Count);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineString)(int CastNumber, int LineNumber, int LangNum, void** St);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLangAssigned)(int CastNumber, int LangNum, BOOL* Result);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_CreateLanguage)(int CastNumber, int LangNum);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_RemoveLanguage)(int CastNumber, int LangNum);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTextData)(int CastNumber, int LangNum, int Encode, const void* Data);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontColor)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontColor)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackColor)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackColor)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontHeight)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontHeight)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontSize)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontSize)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontName)(int CastNumber, int LangNum, const char* Name);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontName)(int CastNumber, int LangNum, const char** Name);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontCharSet)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontCharSet)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTransparent)(int CastNumber, int LangNum, BOOL	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetTransparent)(int CastNumber, int LangNum, BOOL* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetItemDistance)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetItemDistance)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackward)(int CastNumber, int LangNum, BOOL	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackward)(int CastNumber, int LangNum, BOOL* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlphaEnabled)(int CastNumber, int LangNum, BOOL	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlphaEnabled)(int CastNumber, int LangNum, BOOL* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterX)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterX)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterY)(int CastNumber, int LangNum, int	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterY)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFixSize)(int CastNumber, int LangNum, BOOL	Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFixSize)(int CastNumber, int LangNum, BOOL* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetWidth)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetHeight)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetEncode)(int CastNumber, TTextStringEncodeType* Encode);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlignment)(int CastNumber, int LangNum, TTextAlignment		Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlignment)(int CastNumber, int LangNum, TTextAlignment* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineCount)		(int CastNumber, int LangNum, int* Count);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLineString)	(int CastNumber, int LineNum, int LangNum, void** St);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetLangAssigned)	(int CastNumber, int LangNum, BOOL* Result);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_CreateLanguage)	(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_RemoveLanguage)	(int CastNumber, int LangNum);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTextData)		(int CastNumber, int LangNum, int Encode, const void* Data);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontColor)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontColor)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackColor)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackColor)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontHeight)	(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontHeight)	(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontSize)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontSize)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontName)		(int CastNumber, int LangNum, const char* Name);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontName)		(int CastNumber, int LangNum, const char** Name);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontCharSet)	(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontCharSet)	(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFontStyle)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFontStyle)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetTransparent)	(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetTransparent)	(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetItemDistance)	(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetItemDistance)	(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetBackward)		(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetBackward)		(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlphaEnabled)	(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlphaEnabled)	(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterX)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterX)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetCenterY)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetCenterY)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetFixSize)		(int CastNumber, int LangNum, BOOL	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetFixSize)		(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetWidth)			(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetHeight)		(int CastNumber, int LangNum, int* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetEncode)		(int CastNumber, int* Encode);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlignment)		(int CastNumber, int LangNum, int	Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlignment)		(int CastNumber, int LangNum, int* Value);
 typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAlignmentWidth)(int CastNumber, int LangNum, int	Value);
 typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAlignmentWidth)(int CastNumber, int LangNum, int* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetClickEnabled)(int CastNumber, int LangNum, BOOL  Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetClickEnabled)(int CastNumber, int LangNum, BOOL* Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAntialias)(int CastNumber, int LangNum, BOOL  Value);
-typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAntialias)(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetClickEnabled)	(int CastNumber, int LangNum, BOOL  Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetClickEnabled)	(int CastNumber, int LangNum, BOOL* Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_SetAntialias)		(int CastNumber, int LangNum, BOOL  Value);
+typedef BOOL(_cdecl* TMxPluginPort_Cast_Text_GetAntialias)		(int CastNumber, int LangNum, BOOL* Value);
 
 //DLLÇÃä÷êîÇíËã`
 TMxPluginPort_System_AddMemu				subMxPluginPort_System_AddMemu = NULL;
@@ -505,8 +510,8 @@ TMxPluginPort_Event_Cast_GetNewName			subMxPluginPort_Event_Cast_GetNewName = NU
 
 TMxPluginPort_Project_Init					subMxPluginPort_Project_Init = NULL;
 TMxPluginPort_Project_LoadCabinet			subMxPluginPort_Project_LoadCabinet = NULL;
-TMxPluginPort_Project_LoadCabinetEx 		subMxPluginPort_Project_LoadCabinetEx = NULL;
-TMxPluginPort_Project_SetScreenSize 		subMxPluginPort_Project_SetScreenSize = NULL;
+TMxPluginPort_Project_LoadCabinetEx			subMxPluginPort_Project_LoadCabinetEx = NULL;
+TMxPluginPort_Project_SetScreenSize			subMxPluginPort_Project_SetScreenSize = NULL;
 TMxPluginPort_Project_GetContentsPath		subMxPluginPort_Project_GetContentsPath = NULL;
 TMxPluginPort_Project_GetContentsName		subMxPluginPort_Project_GetContentsName = NULL;
 TMxPluginPort_Project_GetContentsSaved		subMxPluginPort_Project_GetContentsSaved = NULL;
@@ -572,19 +577,19 @@ TMxPluginPort_Project_MultiLang_Remove		subMxPluginPort_Project_MultiLang_Remove
 
 TMxPluginPort_Cast_FindBlank				subMxPluginPort_Cast_FindBlank = NULL;
 TMxPluginPort_Cast_FindBlankSince			subMxPluginPort_Cast_FindBlankSince = NULL;
-TMxPluginPort_Cast_GetCastCount 			subMxPluginPort_Cast_GetCastCount = NULL;
-TMxPluginPort_Cast_CreateCamera 			subMxPluginPort_Cast_CreateCamera = NULL;
+TMxPluginPort_Cast_GetCastCount				subMxPluginPort_Cast_GetCastCount = NULL;
+TMxPluginPort_Cast_CreateCamera				subMxPluginPort_Cast_CreateCamera = NULL;
 TMxPluginPort_Cast_CreateLight				subMxPluginPort_Cast_CreateLight = NULL;
 TMxPluginPort_Cast_Delete					subMxPluginPort_Cast_Delete = NULL;
-TMxPluginPort_Cast_UseCheck 				subMxPluginPort_Cast_UseCheck = NULL;
+TMxPluginPort_Cast_UseCheck					subMxPluginPort_Cast_UseCheck = NULL;
 TMxPluginPort_Cast_GetCastName				subMxPluginPort_Cast_GetCastName = NULL;
 TMxPluginPort_Cast_SetCastName				subMxPluginPort_Cast_SetCastName = NULL;
 TMxPluginPort_Cast_SaveToFile				subMxPluginPort_Cast_SaveToFile = NULL;
 TMxPluginPort_Cast_FindCast					subMxPluginPort_Cast_FindCast = NULL;
 TMxPluginPort_Cast_CreateWave				subMxPluginPort_Cast_CreateWave = NULL;
 TMxPluginPort_Cast_CreateText				subMxPluginPort_Cast_CreateText = NULL;
-TMxPluginPort_Cast_CreateScript 			subMxPluginPort_Cast_CreateScript = NULL;
-TMxPluginPort_Cast_CreateScriptEx 			subMxPluginPort_Cast_CreateScriptEx = NULL;
+TMxPluginPort_Cast_CreateScript				subMxPluginPort_Cast_CreateScript = NULL;
+TMxPluginPort_Cast_CreateScriptEx			subMxPluginPort_Cast_CreateScriptEx = NULL;
 TMxPluginPort_Cast_CreateTexture			subMxPluginPort_Cast_CreateTexture = NULL;
 TMxPluginPort_Cast_CreateTextureEx			subMxPluginPort_Cast_CreateTextureEx = NULL;
 TMxPluginPort_Cast_CreateBitmap				subMxPluginPort_Cast_CreateBitmap = NULL;
@@ -596,9 +601,9 @@ TMxPluginPort_Cast_Exchange					subMxPluginPort_Cast_Exchange = NULL;
 TMxPluginPort_Score_GetScoreName			subMxPluginPort_Score_GetScoreName = NULL;
 TMxPluginPort_Score_GetScoreCount			subMxPluginPort_Score_GetScoreCount = NULL;
 TMxPluginPort_Score_GetTrackCount			subMxPluginPort_Score_GetTrackCount = NULL;
-TMxPluginPort_Score_CreateScore 			subMxPluginPort_Score_CreateScore = NULL;
-TMxPluginPort_Score_CreateTrack 			subMxPluginPort_Score_CreateTrack = NULL;
-TMxPluginPort_Score_DeleteTrack 			subMxPluginPort_Score_DeleteTrack = NULL;
+TMxPluginPort_Score_CreateScore				subMxPluginPort_Score_CreateScore = NULL;
+TMxPluginPort_Score_CreateTrack				subMxPluginPort_Score_CreateTrack = NULL;
+TMxPluginPort_Score_DeleteTrack				subMxPluginPort_Score_DeleteTrack = NULL;
 TMxPluginPort_Score_Trim					subMxPluginPort_Score_Trim = NULL;
 TMxPluginPort_Score_GetLength				subMxPluginPort_Score_GetLength = NULL;
 TMxPluginPort_Score_Find					subMxPluginPort_Score_Find = NULL;
@@ -621,7 +626,7 @@ TMxPluginPort_Score_ClearAnnotation			subMxPluginPort_Score_ClearAnnotation = NU
 TMxPluginPort_Score_InsertAnnotationData	subMxPluginPort_Score_InsertAnnotationData = NULL;
 TMxPluginPort_Score_RemoveAnnotationData	subMxPluginPort_Score_RemoveAnnotationData = NULL;
 
-TMxPluginPort_Track_GetCastType 			subMxPluginPort_Track_GetCastType = NULL;
+TMxPluginPort_Track_GetCastType				subMxPluginPort_Track_GetCastType = NULL;
 TMxPluginPort_Track_GetCastNumber			subMxPluginPort_Track_GetCastNumber = NULL;
 TMxPluginPort_Track_SetCastNumber			subMxPluginPort_Track_SetCastNumber = NULL;
 TMxPluginPort_Track_GetLength				subMxPluginPort_Track_GetLength = NULL;
@@ -677,6 +682,8 @@ TMxPluginPort_Cast_Text_SetFontName			subMxPluginPort_Cast_Text_SetFontName = NU
 TMxPluginPort_Cast_Text_GetFontName			subMxPluginPort_Cast_Text_GetFontName = NULL;
 TMxPluginPort_Cast_Text_SetFontCharSet		subMxPluginPort_Cast_Text_SetFontCharSet = NULL;
 TMxPluginPort_Cast_Text_GetFontCharSet		subMxPluginPort_Cast_Text_GetFontCharSet = NULL;
+TMxPluginPort_Cast_Text_SetFontStyle		subMxPluginPort_Cast_Text_SetFontStyle = NULL;
+TMxPluginPort_Cast_Text_GetFontStyle		subMxPluginPort_Cast_Text_GetFontStyle = NULL;
 TMxPluginPort_Cast_Text_SetTransparent		subMxPluginPort_Cast_Text_SetTransparent = NULL;
 TMxPluginPort_Cast_Text_GetTransparent		subMxPluginPort_Cast_Text_GetTransparent = NULL;
 TMxPluginPort_Cast_Text_SetItemDistance		subMxPluginPort_Cast_Text_SetItemDistance = NULL;
@@ -900,7 +907,7 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_Cast_Text_GetLineCount: { subMxPluginPort_Cast_Text_GetLineCount = (TMxPluginPort_Cast_Text_GetLineCount)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_GetLineString: { subMxPluginPort_Cast_Text_GetLineString = (TMxPluginPort_Cast_Text_GetLineString)FuncAddr; break; }
 
-	case	IDMxPluginPort_Cast_Text_GetLangAssigned: { subMxPluginPort_Cast_Text_GetLangAssigned = (TMxPluginPort_Cast_Text_GetLangAssigned)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetLanguageAssigned: { subMxPluginPort_Cast_Text_GetLangAssigned = (TMxPluginPort_Cast_Text_GetLangAssigned)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_CreateLanguage: { subMxPluginPort_Cast_Text_CreateLanguage = (TMxPluginPort_Cast_Text_CreateLanguage)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_RemoveLanguage: { subMxPluginPort_Cast_Text_RemoveLanguage = (TMxPluginPort_Cast_Text_RemoveLanguage)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_SetTextData: { subMxPluginPort_Cast_Text_SetTextData = (TMxPluginPort_Cast_Text_SetTextData)FuncAddr; break; }
@@ -916,6 +923,8 @@ BOOL MxPlugin_SetProcAddress(int ID, void* FuncAddr)
 	case	IDMxPluginPort_Cast_Text_GetFontName: { subMxPluginPort_Cast_Text_GetFontName = (TMxPluginPort_Cast_Text_GetFontName)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_SetFontCharSet: { subMxPluginPort_Cast_Text_SetFontCharSet = (TMxPluginPort_Cast_Text_SetFontCharSet)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_GetFontCharSet: { subMxPluginPort_Cast_Text_GetFontCharSet = (TMxPluginPort_Cast_Text_GetFontCharSet)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_SetFontStyle: { subMxPluginPort_Cast_Text_SetFontStyle = (TMxPluginPort_Cast_Text_SetFontStyle)FuncAddr; break; }
+	case	IDMxPluginPort_Cast_Text_GetFontStyle: { subMxPluginPort_Cast_Text_GetFontStyle = (TMxPluginPort_Cast_Text_GetFontStyle)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_SetTransparent: { subMxPluginPort_Cast_Text_SetTransparent = (TMxPluginPort_Cast_Text_SetTransparent)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_GetTransparent: { subMxPluginPort_Cast_Text_GetTransparent = (TMxPluginPort_Cast_Text_GetTransparent)FuncAddr; break; }
 	case	IDMxPluginPort_Cast_Text_SetItemDistance: { subMxPluginPort_Cast_Text_SetItemDistance = (TMxPluginPort_Cast_Text_SetItemDistance)FuncAddr; break; }
@@ -1051,8 +1060,8 @@ BOOL MxPluginPort_Event_GetEventType(HINSTANCE hinstDLL, int* Type)
 
 BOOL MxPluginPort_Event_GetPreEvent(HINSTANCE hinstDLL, BOOL* Flag)
 {
-	if (subMxPluginPort_Event_GetPreEvent) return subMxPluginPort_Event_GetPreEvent(hinstDLL, Flag);
 	if (Flag != NULL) *Flag = FALSE;
+	if (subMxPluginPort_Event_GetPreEvent) return subMxPluginPort_Event_GetPreEvent(hinstDLL, Flag);
 	return FALSE;
 }
 
@@ -2093,7 +2102,7 @@ BOOL MxPluginPort_Cast_Text_GetLanguageAssigned(int CastNumber, int LangNum, boo
 	if (subMxPluginPort_Cast_Text_GetLangAssigned) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetLangAssigned(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = (tmpFlag != 0);
 		return lbResult;
 	}
 	return FALSE;
@@ -2201,6 +2210,24 @@ BOOL MxPluginPort_Cast_Text_GetFontCharSet(int CastNumber, int LangNum, int* Val
 	return FALSE;
 }
 
+BOOL MxPluginPort_Cast_Text_SetFontStyle(int CastNumber, int LangNum, TTextFontStyleType Value)
+{
+	if (subMxPluginPort_Cast_Text_SetFontStyle) return subMxPluginPort_Cast_Text_SetFontStyle(CastNumber, LangNum, (int)Value);
+	return FALSE;
+}
+
+BOOL MxPluginPort_Cast_Text_GetFontStyle(int CastNumber, int LangNum, TTextFontStyleType* Value)
+{
+	if (Value != NULL) *Value = fs_Regular;
+	if (subMxPluginPort_Cast_Text_GetFontStyle) {
+		int tmpValue;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetFontStyle(CastNumber, LangNum, &tmpValue);
+		if (Value != NULL) *Value = (TTextFontStyleType)tmpValue;
+		return lbResult;
+	}
+	return FALSE;
+}
+
 BOOL MxPluginPort_Cast_Text_SetTransparent(int CastNumber, int LangNum, bool Flag)
 {
 	if (subMxPluginPort_Cast_Text_SetTransparent) return subMxPluginPort_Cast_Text_SetTransparent(CastNumber, LangNum, Flag);
@@ -2213,7 +2240,7 @@ BOOL MxPluginPort_Cast_Text_GetTransparent(int CastNumber, int LangNum, bool* Fl
 	if (subMxPluginPort_Cast_Text_GetTransparent) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetTransparent(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = (tmpFlag != 0);
 		return lbResult;
 	}
 	return FALSE;
@@ -2244,7 +2271,7 @@ BOOL MxPluginPort_Cast_Text_GetBackward(int CastNumber, int LangNum, bool* Flag)
 	if (subMxPluginPort_Cast_Text_GetBackward) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetBackward(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = (tmpFlag != 0);
 		return lbResult;
 	}
 	return FALSE;
@@ -2262,7 +2289,7 @@ BOOL MxPluginPort_Cast_Text_GetAlphaEnabled(int CastNumber, int LangNum, bool* F
 	if (subMxPluginPort_Cast_Text_GetAlphaEnabled) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetAlphaEnabled(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = (tmpFlag != 0);
 		return lbResult;
 	}
 	return FALSE;
@@ -2306,7 +2333,7 @@ BOOL MxPluginPort_Cast_Text_GetFixSize(int CastNumber, int LangNum, bool* Flag)
 	if (subMxPluginPort_Cast_Text_GetFixSize) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetFixSize(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = (tmpFlag != 0);
 		return lbResult;
 	}
 	return FALSE;
@@ -2329,20 +2356,30 @@ BOOL MxPluginPort_Cast_Text_GetHeight(int CastNumber, int LangNum, int* Value)
 BOOL MxPluginPort_Cast_Text_GetEncode(int CastNumber, TTextStringEncodeType* Encode)
 {
 	if (Encode != NULL) *Encode = set_ANSI;
-	if (subMxPluginPort_Cast_Text_GetEncode) return subMxPluginPort_Cast_Text_GetEncode(CastNumber, Encode);
+	if (subMxPluginPort_Cast_Text_GetEncode) {
+		int tmpValue;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetEncode(CastNumber, &tmpValue);
+		if (Encode != NULL) *Encode = (TTextStringEncodeType)tmpValue;
+		return lbResult;
+	}
 	return FALSE;
 }
 
-BOOL MxPluginPort_Cast_Text_SetAlignment(int CastNumber, int LangNum, TTextAlignment	Value)
+BOOL MxPluginPort_Cast_Text_SetAlignment(int CastNumber, int LangNum, TTextAlignment Value)
 {
-	if (subMxPluginPort_Cast_Text_SetAlignment) return subMxPluginPort_Cast_Text_SetAlignment(CastNumber, LangNum, Value);
+	if (subMxPluginPort_Cast_Text_SetAlignment) return subMxPluginPort_Cast_Text_SetAlignment(CastNumber, LangNum, (int)Value);
 	return FALSE;
 }
 
 BOOL MxPluginPort_Cast_Text_GetAlignment(int CastNumber, int LangNum, TTextAlignment* Value)
 {
 	if (Value != NULL) *Value = talign_None;
-	if (subMxPluginPort_Cast_Text_GetAlignment) return subMxPluginPort_Cast_Text_GetAlignment(CastNumber, LangNum, Value);
+	if (subMxPluginPort_Cast_Text_GetAlignment) {
+		int tmpValie;
+		BOOL lbResult = subMxPluginPort_Cast_Text_GetAlignment(CastNumber, LangNum, &tmpValie);
+		if (Value != NULL) *Value = (TTextAlignment)tmpValie;
+		return lbResult;
+	}
 	return FALSE;
 }
 
@@ -2371,7 +2408,7 @@ BOOL MxPluginPort_Cast_Text_GetClickEnabled(int CastNumber, int LangNum, bool* F
 	if (subMxPluginPort_Cast_Text_GetClickEnabled) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetClickEnabled(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = tmpFlag != 0;
 		return lbResult;
 	}
 	return FALSE;
@@ -2389,7 +2426,7 @@ BOOL MxPluginPort_Cast_Text_GetAntialias(int CastNumber, int LangNum, bool* Flag
 	if (subMxPluginPort_Cast_Text_GetAntialias) {
 		BOOL tmpFlag;
 		BOOL lbResult = subMxPluginPort_Cast_Text_GetAntialias(CastNumber, LangNum, &tmpFlag);
-		*Flag = tmpFlag != 0;
+		if (Flag != NULL) *Flag = tmpFlag != 0;
 		return lbResult;
 	}
 	return FALSE;

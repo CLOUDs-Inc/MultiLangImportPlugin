@@ -31,9 +31,16 @@ namespace MultiLangImportDotNet.Import
             optionData.ConjunctionString = this.textBoxConjunction.Text.Trim();
 
             // 使用不可言語を選択している場合は、選択を解除(index:-1)とする
-            optionData.SubcastIndex = appData.LangHasTextWithUnusableCharList[this.listBoxSubcastName.SelectedIndex]
-                ? -1
-                : this.listBoxSubcastName.SelectedIndex;
+            if(0 <= this.listBoxSubcastName.SelectedIndex)
+            {
+                optionData.SubcastIndex = appData.LangHasTextWithUnusableCharList[this.listBoxSubcastName.SelectedIndex]
+                    ? -1
+                    : this.listBoxSubcastName.SelectedIndex;
+            }
+            else
+            {
+                optionData.SubcastIndex = -1;
+            }
         }
 
         private void checkBoxUseSubcastName_CheckedChanged(object sender, EventArgs e)

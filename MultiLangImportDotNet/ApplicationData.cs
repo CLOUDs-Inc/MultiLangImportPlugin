@@ -49,14 +49,68 @@ namespace MultiLangImportDotNet
         public List<bool> LangHasTextWithUnusableCharList { get; set; }
 
         /// <summary>
-        /// テキストキャスト名リスト
+        /// テキストキャスト名リスト（未修正）
         /// </summary>
         public List<string> TextCastNameListInside { get; set; }
 
         /// <summary>
-        /// テキストキャスト名リスト（サブキャスト時加工済み＆ANSI変換済み）
+        /// サブキャスト名サブ部分リスト（未修正）
         /// </summary>
-        public List<string> TextCastNameListModified
+        public List<string> SubPartNameListInside
+        {
+            get
+            {
+                List<string> modList = new List<string>();
+                for (int index = 0; index < TextCastNameListInside.Count; index++)
+                {
+                    string subname = string.Empty;
+                    if(this.OptionData.SubcastIndex != -1)
+                    {
+                        var textData = TextDataTable[index, this.OptionData.SubcastIndex];
+                        if (textData != null)
+                        {
+                            subname = TextDataTable[index, this.OptionData.SubcastIndex].Text;
+                        }
+                    }
+                    modList.Add(subname);
+                }
+                return modList;
+            }
+        }
+
+        /// <summary>
+        /// サブキャスト接続文字列（未修正）
+        /// </summary>
+        public string ConjunctionStringInside { get; set; }
+
+        /// <summary>
+        /// テキストキャスト名リスト（サブキャスト"なし"&ANSI変換済み）
+        /// </summary>
+        public List<string> TextCastNameListLoneMod
+        {
+            get
+            {
+                var modList = TextCastNameListInside.Select((name) => Utils.ForcelyConvertToANSI(name)).ToList();
+                return modList;
+            }
+        }
+
+        /// <summary>
+        /// サブキャスト名サブ部分リスト（ANSI変換済み）
+        /// </summary>
+        public List<string> SubPartNameListMod
+        {
+            get
+            {
+                var modList = SubPartNameListInside.Select((name) => Utils.ForcelyConvertToANSI(name)).ToList();
+                return modList;
+            }
+        }
+
+        /// <summary>
+        /// テキストキャスト名リスト（サブキャスト加工済み＆ANSI変換済み）
+        /// </summary>
+        public List<string> TextCastNameListConjMod
         {
             get
             {
@@ -90,6 +144,14 @@ namespace MultiLangImportDotNet
                 }
                 return modList;
             }
+        }
+
+        /// <summary>
+        /// サブキャスト接続文字列（未修正）
+        /// </summary>
+        public string ConjunctionStringMod
+        {
+            get => Utils.ForcelyConvertToANSI(ConjunctionStringInside);
         }
 
         /// <summary>

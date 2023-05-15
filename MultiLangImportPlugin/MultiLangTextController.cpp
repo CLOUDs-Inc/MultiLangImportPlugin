@@ -106,7 +106,7 @@ bool MultiLangTextController::ImportTextDataTable()
 	int rowCount = (int)this->writeData.textDataTable.size();
 
 	for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-		bool result = this->ImportTextDataRow(this->writeData.textCastNameList[rowIndex], this->writeData.textDataTable[rowIndex]);
+		bool result = this->ImportTextDataRow(this->writeData.textCastNameListConjMod[rowIndex], this->writeData.textDataTable[rowIndex]);
 		if (!result) {
 			return false;
 		}

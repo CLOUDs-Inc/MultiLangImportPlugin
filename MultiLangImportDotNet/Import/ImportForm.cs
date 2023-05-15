@@ -360,6 +360,9 @@ namespace MultiLangImportDotNet.Import
                 PaintSubcastInfoToSelectedColumn(-1);
             }
 
+            // サブキャスト接続文字列を管理エリアにコピー
+            this.appData.ConjunctionStringInside = this.appData.OptionData.ConjunctionString;
+
         }
 
         private void buttonDefaultLanguage_Click(object sender, EventArgs e)

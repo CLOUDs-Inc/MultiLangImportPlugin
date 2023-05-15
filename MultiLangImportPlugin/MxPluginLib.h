@@ -606,6 +606,8 @@ BOOL MxPluginPort_Cast_Text_SetFontName(int CastNumber, int LangNum, const char*
 BOOL MxPluginPort_Cast_Text_GetFontName(int CastNumber, int LangNum, const char** Name);
 BOOL MxPluginPort_Cast_Text_SetFontCharSet(int CastNumber, int LangNum, int	Value);
 BOOL MxPluginPort_Cast_Text_GetFontCharSet(int CastNumber, int LangNum, int* Value);
+BOOL MxPluginPort_Cast_Text_SetFontStyle(int CastNumber, int LangNum, TTextFontStyleType	Value);
+BOOL MxPluginPort_Cast_Text_GetFontStyle(int CastNumber, int LangNum, TTextFontStyleType* Value);
 BOOL MxPluginPort_Cast_Text_SetTransparent(int CastNumber, int LangNum, bool	Flag);
 BOOL MxPluginPort_Cast_Text_GetTransparent(int CastNumber, int LangNum, bool* Flag);
 BOOL MxPluginPort_Cast_Text_SetItemDistance(int CastNumber, int LangNum, int	Value);
