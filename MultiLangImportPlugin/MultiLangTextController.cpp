@@ -1,6 +1,23 @@
 ﻿#include "pch.h"
 
 /// <summary>
+/// 内部限定format関数
+/// </summary>
+/// <typeparam name="...Args"></typeparam>
+/// <param name="fmt"></param>
+/// <param name="...args"></param>
+/// <returns></returns>
+template <typename ... Args>
+std::string MXFormat(const std::string& fmt, Args ... args)
+{
+	size_t len = std::snprintf(nullptr, 0, fmt.c_str(), args ...);
+	std::vector<char> buf(len + 1);
+	std::snprintf(&buf[0], len + 1, fmt.c_str(), args ...);
+	return std::string(&buf[0], &buf[0] + len);
+}
+
+
+/// <summary>
 /// コンストラクタ
 /// </summary>
 /// <param name="on">ログ機能OnOff</param>
@@ -144,8 +161,17 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 				castIndex = GetNewTextCastNumber();
 				// キャスト番号は新規追加用であることを示すフラグ
 				addFlag = true;
+
+				bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
+				// キャスト名で新規キャストを作成
+				result = CreateNewTextCast(castIndex, this->writeData.textCastNameListLoneMod[rowIndex], isUnicode);
+				if (!result) {
+					return false;
+				}
+				 
 				// インポートログ：追加
-				logMsg = format("CAST [%4d: %s]: Added", castIndex, this->writeData.textCastNameListLoneMod[rowIndex]);
+				logMsg = MXFormat("CAST [%4d: %s]: Added", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str());
+				this->pLogger->log(logMsg);
 			}
 		}
 		else {
@@ -158,10 +184,12 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 
 			// インポートログを追加
 			if (castIndex != 1) {
-				logMsg = format("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex]);
+				logMsg = MXFormat("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str());
+				this->pLogger->log(logMsg);
 			}
 			else {
-				logMsg = format("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex]);
+				logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str());
+				this->pLogger->log(logMsg);
 			}
 		}
 	}
@@ -171,12 +199,15 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 
 		// check:option:キャスト検索時にサブキャスト名を使用
 		if (this->writeData.flagUseSubcastNameWhenSearchingForCast) {
+			// サブキャスト名で既存テキストキャストが存在するかチェック
 			castIndex = FindTextCastNumber(this->writeData.textCastNameListConjMod[rowIndex]);
 		}
 		else {
+			// 非サブキャスト名で既存テキストキャストが存在するかチェック
 			castIndex = FindTextCastNumber(this->writeData.textCastNameListLoneMod[rowIndex]);
 			if (-1 == castIndex)
 			{
+				// check:option:新規キャスト作成時にサブキャスト名を付加
 				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast) {
 					// サブキャスト名を含んだキャスト名で既存のキャストを再検索
 					castIndex = FindTextCastNumber(this->writeData.textCastNameListConjMod[rowIndex]);
@@ -194,13 +225,274 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 			}
 		}
 
-		if (-1 == castIndex) {
-			// 不明なテキストキャストを新規追加
+		// ここの時点でcastIndex:-1の場合、既存のテキストキャストがないことを示す
+		if (-1 == castIndex)
+		{
+			// check:不明なテキストキャストを新規に追加
+			if (this->writeData.flagAddIfTextCastNotFound)
+			{
+				// 新しいキャスト番号を取得する
+				castIndex = GetNewTextCastNumber();
+
+				bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
+
+				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast) {
+					// サブキャスト名で新規キャストを作成
+					result = CreateNewTextCast(castIndex, this->writeData.textCastNameListConjMod[rowIndex], isUnicode);
+					if (!result) {
+						return false;
+					}
+				}
+				else {
+					// キャスト名で新規キャストを作成
+					result = CreateNewTextCast(castIndex, this->writeData.textCastNameListLoneMod[rowIndex], isUnicode);
+					if (!result) {
+						return false;
+					}
+				}
+
+				// インポートログを追加
+				if (cloneCastIndex == -1) {
+					std::string castname = this->GetTextCastNameOfProject(castIndex);
+					logMsg = MXFormat("CAST [%4d: %s]: Added", castIndex, castname.c_str());
+				}
+				else {
+					std::string castname = this->GetTextCastNameOfProject(castIndex);
+					std::string cloneCastname = this->GetTextCastNameOfProject(cloneCastIndex);
+					logMsg = MXFormat("CAST [%4d: %s]: Added by duplicating cast [%4d: %s]",
+						castIndex, castname.c_str(),
+						cloneCastIndex, cloneCastname.c_str()
+					);
+				}
+
+			}
 		}
-		else {
-			// 既存のテキストキャストは更新しない
+		else
+		{
+			// テキストキャストが既存
+			// check:既存のテキストキャストを更新しない
+			if (this->writeData.flagNotUpdateExistingTextCast) {
+				castIndex = -1;
+			}
+
+			// インポートログを追加
+			if (-1 != castIndex) {
+				std::string castname = this->GetTextCastNameOfProject(castIndex);
+				logMsg = MXFormat("CAST [%4d: %s]: Update", castIndex, castname.c_str());
+				this->pLogger->log(logMsg);
+			}
+			else {
+				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast
+					|| this->writeData.flagUseSubcastNameWhenSearchingForCast)
+				{
+					logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListConjMod[rowIndex].c_str());
+					this->pLogger->log(logMsg);
+				}
+				else
+				{
+					logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str());
+					this->pLogger->log(logMsg);
+				}
+			}
+
 		}
 	}
+
+	// 対象のキャストがなければ何もしない
+	if (castIndex == -1) {
+		return true;
+	}
+
+
+	if (cloneCastIndex != -1) {
+		// プロパティコピー元のテキストキャストを取得して内容を複製
+		result = CloneTextCast(castIndex, cloneCastIndex);
+		if (!result) {
+			return result;
+		}
+	}
+
+
+	return result;
+}
+
+
+bool MultiLangTextController::CloneTextCast(int toCastNumber, int fromCastNumber)
+{
+	bool result = false;
+	BOOL mxResult;
+
+	// 言語ページの最大数を取得（言語カウンタのリミット用）
+	int langPageMax;
+	mxResult = MxPluginPort_Project_MultiLang_GetCount(&langPageMax);
+	if (!mxResult) {
+		this->pLogger->log("[error]Failed to read language number of project");
+		return result;
+	}
+
+	// 指定テキストキャストの言語ページを取得
+	for (int pageIndex = 0; pageIndex < langPageMax; pageIndex++) {
+		bool langAssigned = false;
+		mxResult = MxPluginPort_Cast_Text_GetLanguageAssigned(fromCastNumber, pageIndex, &langAssigned);
+		if (!mxResult) {
+			this->pLogger->log(MXFormat("[error]Failed to check language assignment of CAST[%4d]:page[%d]", fromCastNumber, pageIndex));
+			return result;
+		}
+
+		// from側に言語ページがなければスキップ
+		if (!langAssigned) {
+			continue;
+		}
+
+		mxResult = MxPluginPort_Cast_Text_GetLanguageAssigned(toCastNumber, pageIndex, &langAssigned);
+		if (!mxResult) {
+			this->pLogger->log(MXFormat("[error]Failed to check language assignment of CAST[%4d]:page[%d]", toCastNumber, pageIndex));
+			return result;
+		}
+
+		// to側に言語ページがなければページを追加する
+		if (!langAssigned) {
+			MxPluginPort_Cast_Text_CreateLanguage(toCastNumber, pageIndex);
+		}
+
+		// プロパティをコピーする
+		bool flag;
+		// フォント名
+		char* fontName;
+		mxResult = MxPluginPort_Cast_Text_GetFontName(fromCastNumber, pageIndex, (const char**)&fontName);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontName(toCastNumber, pageIndex, fontName);
+		}
+		// スタイル
+		TTextFontStyleType style;
+		mxResult = MxPluginPort_Cast_Text_GetFontStyle(fromCastNumber, pageIndex, &style);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontStyle(toCastNumber, pageIndex, style);
+		}
+		// charset
+		int charsetValue;
+		mxResult = MxPluginPort_Cast_Text_GetFontCharSet(fromCastNumber, pageIndex, &charsetValue);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontCharSet(toCastNumber, pageIndex, charsetValue);
+		}
+		// サイズ
+		int sizeVal;
+		mxResult = MxPluginPort_Cast_Text_GetFontSize(fromCastNumber, pageIndex, &sizeVal);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontSize(toCastNumber, pageIndex, sizeVal);
+		}
+		// 高さ
+		int height;
+		mxResult = MxPluginPort_Cast_Text_GetFontHeight(fromCastNumber, pageIndex, &height);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontHeight(toCastNumber, pageIndex, height);
+		}
+		// 色
+		int color;
+		mxResult = MxPluginPort_Cast_Text_GetFontColor(fromCastNumber, pageIndex, &color);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontColor(toCastNumber, pageIndex, color);
+		}
+		// 背景色
+		mxResult = MxPluginPort_Cast_Text_GetBackColor(fromCastNumber, pageIndex, &color);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetBackColor(toCastNumber, pageIndex, color);
+		}
+		// 透明
+		bool transparent;
+		mxResult = MxPluginPort_Cast_Text_GetTransparent(fromCastNumber, pageIndex, &transparent);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetTransparent(toCastNumber, pageIndex, transparent);
+		}
+		// text alpha enabled
+		bool textAlpha;
+		mxResult = MxPluginPort_Cast_Text_GetAlphaEnabled(fromCastNumber, pageIndex, &textAlpha);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetAlphaEnabled(toCastNumber, pageIndex, textAlpha);
+		}
+		// text anti-aliasing
+		bool antiAlias;
+		mxResult = MxPluginPort_Cast_Text_GetAntialias(fromCastNumber, pageIndex, &antiAlias);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetAntialias(toCastNumber, pageIndex, antiAlias);
+		}
+		// pickup disabled
+		mxResult = MxPluginPort_Cast_Text_GetClickEnabled(fromCastNumber, pageIndex, &flag);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetClickEnabled(toCastNumber, pageIndex, flag);
+		}
+		// text align
+		TTextAlignment align;
+		mxResult = MxPluginPort_Cast_Text_GetAlignment(fromCastNumber, pageIndex, &align);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetAlignment(toCastNumber, pageIndex, align);
+		}
+		// Z position
+		mxResult = MxPluginPort_Cast_Text_GetBackward(fromCastNumber, pageIndex, &flag);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetBackward(toCastNumber, pageIndex, flag);
+		}
+		// fix size text
+		mxResult = MxPluginPort_Cast_Text_GetFixSize(fromCastNumber, pageIndex, &flag);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFixSize(toCastNumber, pageIndex, flag);
+		}
+		// item distance
+		int distance;
+		mxResult = MxPluginPort_Cast_Text_GetItemDistance(fromCastNumber, pageIndex, &distance);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetItemDistance(toCastNumber, pageIndex, distance);
+		}
+		// fix width
+		int width;
+		mxResult = MxPluginPort_Cast_Text_GetAlignmentWidth(fromCastNumber, pageIndex, &width);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetAlignmentWidth(toCastNumber, pageIndex, width);
+		}
+		// center X
+		int centerX;
+		mxResult = MxPluginPort_Cast_Text_GetCenterX(fromCastNumber, pageIndex, &centerX);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetCenterX(toCastNumber, pageIndex, centerX);
+		}
+		// center Y
+		int centerY;
+		mxResult = MxPluginPort_Cast_Text_GetCenterY(fromCastNumber, pageIndex, &centerY);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetCenterY(fromCastNumber, pageIndex, centerY);
+		}
+	}
+	return true;
+}
+
+bool MultiLangTextController::GetTextData(int castNumber, std::vector<TextData>& outputTextDataRow, std::vector<int>& outputLangPages)
+{
+	bool result = false;
+	BOOL mxResult;
+
+	// 言語ページの最大数を取得（言語カウンタのリミット用）
+	int langPageMax;
+	mxResult = MxPluginPort_Project_MultiLang_GetCount(&langPageMax);
+	if (!mxResult) {
+		this->pLogger->log("[error]Failed to read language number of project");
+		return result;
+	}
+
+	// 指定テキストキャストの言語ページを取得
+	for (int pageIndex = 0; pageIndex < langPageMax; pageIndex++) {
+		bool langAssigned = false;
+		mxResult = MxPluginPort_Cast_Text_GetLanguageAssigned(castNumber, pageIndex, &langAssigned);
+		if (!mxResult) {
+			this->pLogger->log(MXFormat("[error]Failed to check language assignment of CAST[%4d]:page[%d]", castNumber, pageIndex));
+			return result;
+		}
+		if (langAssigned) {
+			// このテキストキャストはこの言語ページを含んでいる
+			outputLangPages.push_back(pageIndex);
+		}
+	}
+
+
 
 	return result;
 }
@@ -261,6 +553,34 @@ bool MultiLangTextController::UpdateTextCast(std::string& castname, std::vector<
 
 
 	return result;
+}
+
+
+/// <summary>
+/// 新規テキストキャストを指定番号で作成する
+/// </summary>
+/// <param name="castNumber">新規キャスト番号</param>
+/// <param name="castname">新規キャスト名</param>
+/// <param name="isUnicode">Unicodeフラグ</param>
+/// <returns></returns>
+bool MultiLangTextController::CreateNewTextCast(int castNumber, std::string& castname, bool isUnicode)
+{
+	int resultNumber;
+
+	if (isUnicode) {
+		resultNumber = MxPluginPort_Cast_CreateTextEx(castNumber, (char*)castname.c_str(), set_UTF);
+	}
+	else {
+		resultNumber = MxPluginPort_Cast_CreateTextEx(castNumber, (char*)castname.c_str(), set_ANSI);
+	}
+
+	// テキストキャスト生成エラーを確認
+	if (castNumber != resultNumber) {
+		this->pLogger->log("[error]Failed to create new text cast[" + castname + "]" + (isUnicode ? "[UTF]" : "[ANSI]"));
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -404,6 +724,30 @@ int MultiLangTextController::GetNewTextCastNumber()
 	int number = MxPluginPort_Cast_GetCastCount(ct_Text);
 	return number;
 }
+
+
+/// <summary>
+/// キャスト名によるテキストキャスト番号検索
+/// </summary>
+/// <param name="castname">キャスト名</param>
+/// <returns>キャスト番号（失敗：-1）</returns>
+int MultiLangTextController::FindTextCastNumber(std::string& castname)
+{
+	int castNumber = MxPluginPort_Cast_FindCast(ct_Text, (char*)castname.c_str());
+	return castNumber;
+}
+
+
+/// <summary>
+/// キャスト番号によるテキストキャスト名の取得
+/// </summary>
+/// <param name="castNumber">キャスト番号</param>
+/// <returns>キャスト名</returns>
+string MultiLangTextController::GetTextCastNameOfProject(int castNumber)
+{
+	return "";
+}
+
 
 /// <summary>
 /// プロジェクト内の言語リストを取得する
@@ -706,17 +1050,6 @@ bool MultiLangTextController::SetTextProperty(
 	}
 
 	return true;
-}
-
-/// <summary>
-/// キャスト名によるテキストキャスト番号検索
-/// </summary>
-/// <param name="castname">キャスト名</param>
-/// <returns>キャスト番号（失敗：-1）</returns>
-int MultiLangTextController::FindTextCastNumber(std::string& castname)
-{
-	int castNumber = MxPluginPort_Cast_FindCast(ct_Text, (char*)castname.c_str());
-	return castNumber;
 }
 
 

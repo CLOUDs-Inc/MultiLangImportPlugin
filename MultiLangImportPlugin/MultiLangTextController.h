@@ -15,7 +15,10 @@ private:
 
 	UnicodeLogger* pLogger = nullptr;
 
-	int  GetNewTextCastNumber();
+	int GetNewTextCastNumber();
+	int FindTextCastNumber(std::string& castname);
+	string GetTextCastNameOfProject(int castNumber);
+
 	bool GetPageNames(std::vector<std::string>& list);
 	int  GetPageNumber(std::string pageName);
 	bool AddPageNames();
@@ -24,6 +27,10 @@ private:
 	bool UpdateTextCast(std::string& castname, std::vector<TextData>& textDataRow);
 
 	bool ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow);
+	bool CreateNewTextCast(int castnumber, std::string& castname, bool isUnicode);
+	bool GetTextData(int castNumber, std::vector<TextData>& outputTextDataRow, std::vector<int>& outputLangPages);
+	bool CloneTextCast(int toCastNumber, int fromCastNumber);
+
 	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
 	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);
@@ -56,7 +63,6 @@ public:
 	string GetFirstPageName();
 
 
-	int FindTextCastNumber(std::string& castname);
 
 
 	void TestWriteTextCast();
