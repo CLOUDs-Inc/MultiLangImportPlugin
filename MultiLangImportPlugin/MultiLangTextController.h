@@ -24,12 +24,13 @@ private:
 	bool AddPageNames();
 	bool ImportTextDataTable();
 
+	bool UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex);
 	bool UpdateTextCast(std::string& castname, std::vector<TextData>& textDataRow);
 
 	bool ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow);
 	bool CreateNewTextCast(int castnumber, std::string& castname, bool isUnicode);
-	bool GetTextData(int castNumber, std::vector<TextData>& outputTextDataRow, std::vector<int>& outputLangPages);
 	bool CloneTextCast(int toCastNumber, int fromCastNumber);
+	void CloneTextCastPage(int toCastNumber, int toLangPage, int fromCastNumber, int fromLangPage, bool enableFontName, bool enableFontSize, bool enableFontColor);
 
 	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
 	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);

@@ -145,6 +145,8 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 	bool addFlag = false; // 
 	string logMsg = "";
 
+	bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
+
 	// サブキャスト使用の是非で処理が分かれる
 	// check:option:サブキャスト名を使用する
 	if (!this->writeData.flagUseSubcastName)
@@ -162,7 +164,6 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 				// キャスト番号は新規追加用であることを示すフラグ
 				addFlag = true;
 
-				bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
 				// キャスト名で新規キャストを作成
 				result = CreateNewTextCast(castIndex, this->writeData.textCastNameListLoneMod[rowIndex], isUnicode);
 				if (!result) {
@@ -234,8 +235,6 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 				// 新しいキャスト番号を取得する
 				castIndex = GetNewTextCastNumber();
 
-				bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
-
 				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast) {
 					// サブキャスト名で新規キャストを作成
 					result = CreateNewTextCast(castIndex, this->writeData.textCastNameListConjMod[rowIndex], isUnicode);
@@ -303,7 +302,6 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 		return true;
 	}
 
-
 	if (cloneCastIndex != -1) {
 		// プロパティコピー元のテキストキャストを取得して内容を複製
 		result = CloneTextCast(castIndex, cloneCastIndex);
@@ -312,11 +310,31 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 		}
 	}
 
+	// 指定ターゲットテキストキャストをUnicode化する
+	if (isUnicode) {
+		// まだUnicodeでなければ
+		TTextStringEncodeType encode;
+		MxPluginPort_Cast_Text_GetEncode(castIndex, &encode);
+		if (encode == set_ANSI) {
+			// テキストキャストのエンコードをUTFに変換
+			MxPluginPort_CastPropety_SetDataInt(ct_Text, castIndex, cp_Text_StringEncode, set_UTF);
+		}
+	}
+
+	for (int colIndex = 0; colIndex < textDataRow.size(); colIndex++) {
+		result = UpdateTextCastLangPage(castIndex, textDataRow[colIndex], this->writeData.languageNameList[colIndex], isUnicode, cloneCastIndex);
+	}
 
 	return result;
 }
 
 
+/// <summary>
+/// 既存のテキストキャスト間で文字列以外のプロパティデータをコピーする
+/// </summary>
+/// <param name="toCastNumber">dstテキストキャスト番号</param>
+/// <param name="fromCastNumber">srcテキストキャスト番号</param>
+/// <returns>成否</returns>
 bool MultiLangTextController::CloneTextCast(int toCastNumber, int fromCastNumber)
 {
 	bool result = false;
@@ -356,145 +374,133 @@ bool MultiLangTextController::CloneTextCast(int toCastNumber, int fromCastNumber
 		}
 
 		// プロパティをコピーする
-		bool flag;
-		// フォント名
-		char* fontName;
-		mxResult = MxPluginPort_Cast_Text_GetFontName(fromCastNumber, pageIndex, (const char**)&fontName);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontName(toCastNumber, pageIndex, fontName);
-		}
-		// スタイル
-		TTextFontStyleType style;
-		mxResult = MxPluginPort_Cast_Text_GetFontStyle(fromCastNumber, pageIndex, &style);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontStyle(toCastNumber, pageIndex, style);
-		}
-		// charset
-		int charsetValue;
-		mxResult = MxPluginPort_Cast_Text_GetFontCharSet(fromCastNumber, pageIndex, &charsetValue);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontCharSet(toCastNumber, pageIndex, charsetValue);
-		}
-		// サイズ
-		int sizeVal;
-		mxResult = MxPluginPort_Cast_Text_GetFontSize(fromCastNumber, pageIndex, &sizeVal);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontSize(toCastNumber, pageIndex, sizeVal);
-		}
-		// 高さ
-		int height;
-		mxResult = MxPluginPort_Cast_Text_GetFontHeight(fromCastNumber, pageIndex, &height);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontHeight(toCastNumber, pageIndex, height);
-		}
-		// 色
-		int color;
-		mxResult = MxPluginPort_Cast_Text_GetFontColor(fromCastNumber, pageIndex, &color);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFontColor(toCastNumber, pageIndex, color);
-		}
-		// 背景色
-		mxResult = MxPluginPort_Cast_Text_GetBackColor(fromCastNumber, pageIndex, &color);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetBackColor(toCastNumber, pageIndex, color);
-		}
-		// 透明
-		bool transparent;
-		mxResult = MxPluginPort_Cast_Text_GetTransparent(fromCastNumber, pageIndex, &transparent);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetTransparent(toCastNumber, pageIndex, transparent);
-		}
-		// text alpha enabled
-		bool textAlpha;
-		mxResult = MxPluginPort_Cast_Text_GetAlphaEnabled(fromCastNumber, pageIndex, &textAlpha);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetAlphaEnabled(toCastNumber, pageIndex, textAlpha);
-		}
-		// text anti-aliasing
-		bool antiAlias;
-		mxResult = MxPluginPort_Cast_Text_GetAntialias(fromCastNumber, pageIndex, &antiAlias);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetAntialias(toCastNumber, pageIndex, antiAlias);
-		}
-		// pickup disabled
-		mxResult = MxPluginPort_Cast_Text_GetClickEnabled(fromCastNumber, pageIndex, &flag);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetClickEnabled(toCastNumber, pageIndex, flag);
-		}
-		// text align
-		TTextAlignment align;
-		mxResult = MxPluginPort_Cast_Text_GetAlignment(fromCastNumber, pageIndex, &align);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetAlignment(toCastNumber, pageIndex, align);
-		}
-		// Z position
-		mxResult = MxPluginPort_Cast_Text_GetBackward(fromCastNumber, pageIndex, &flag);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetBackward(toCastNumber, pageIndex, flag);
-		}
-		// fix size text
-		mxResult = MxPluginPort_Cast_Text_GetFixSize(fromCastNumber, pageIndex, &flag);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetFixSize(toCastNumber, pageIndex, flag);
-		}
-		// item distance
-		int distance;
-		mxResult = MxPluginPort_Cast_Text_GetItemDistance(fromCastNumber, pageIndex, &distance);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetItemDistance(toCastNumber, pageIndex, distance);
-		}
-		// fix width
-		int width;
-		mxResult = MxPluginPort_Cast_Text_GetAlignmentWidth(fromCastNumber, pageIndex, &width);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetAlignmentWidth(toCastNumber, pageIndex, width);
-		}
-		// center X
-		int centerX;
-		mxResult = MxPluginPort_Cast_Text_GetCenterX(fromCastNumber, pageIndex, &centerX);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetCenterX(toCastNumber, pageIndex, centerX);
-		}
-		// center Y
-		int centerY;
-		mxResult = MxPluginPort_Cast_Text_GetCenterY(fromCastNumber, pageIndex, &centerY);
-		if (mxResult) {
-			MxPluginPort_Cast_Text_SetCenterY(fromCastNumber, pageIndex, centerY);
-		}
+		CloneTextCastPage(toCastNumber, pageIndex, fromCastNumber, pageIndex, true, true, true);
 	}
 	return true;
 }
 
-bool MultiLangTextController::GetTextData(int castNumber, std::vector<TextData>& outputTextDataRow, std::vector<int>& outputLangPages)
+
+void MultiLangTextController::CloneTextCastPage(
+	int toCastNumber, int toLangPage, int fromCastNumber, int fromLangPage,
+	bool enableFontName, bool enableFontSize, bool enableFontColor
+)
 {
-	bool result = false;
 	BOOL mxResult;
+	bool flag;
 
-	// 言語ページの最大数を取得（言語カウンタのリミット用）
-	int langPageMax;
-	mxResult = MxPluginPort_Project_MultiLang_GetCount(&langPageMax);
-	if (!mxResult) {
-		this->pLogger->log("[error]Failed to read language number of project");
-		return result;
+	// プロパティをコピーする
+	
+	if (enableFontName) {
+		// フォント名
+		char* fontName;
+		mxResult = MxPluginPort_Cast_Text_GetFontName(fromCastNumber, fromLangPage, (const char**)&fontName);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontName(toCastNumber, toLangPage, fontName);
+		}
+		// スタイル
+		TTextFontStyleType style;
+		mxResult = MxPluginPort_Cast_Text_GetFontStyle(fromCastNumber, fromLangPage, &style);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontStyle(toCastNumber, toLangPage, style);
+		}
+		// charset
+		int charsetValue;
+		mxResult = MxPluginPort_Cast_Text_GetFontCharSet(fromCastNumber, fromLangPage, &charsetValue);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontCharSet(toCastNumber, toLangPage, charsetValue);
+		}
+	}
+	if (enableFontSize) {
+		// サイズ
+		int sizeVal;
+		mxResult = MxPluginPort_Cast_Text_GetFontSize(fromCastNumber, fromLangPage, &sizeVal);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontSize(toCastNumber, toLangPage, sizeVal);
+		}
+		// 高さ
+		int height;
+		mxResult = MxPluginPort_Cast_Text_GetFontHeight(fromCastNumber, fromLangPage, &height);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontHeight(toCastNumber, toLangPage, height);
+		}
+	}
+	if (enableFontColor) {
+		// 色
+		int color;
+		mxResult = MxPluginPort_Cast_Text_GetFontColor(fromCastNumber, fromLangPage, &color);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetFontColor(toCastNumber, toLangPage, color);
+		}
+		// 背景色
+		mxResult = MxPluginPort_Cast_Text_GetBackColor(fromCastNumber, fromLangPage, &color);
+		if (mxResult) {
+			MxPluginPort_Cast_Text_SetBackColor(toCastNumber, toLangPage, color);
+		}
 	}
 
-	// 指定テキストキャストの言語ページを取得
-	for (int pageIndex = 0; pageIndex < langPageMax; pageIndex++) {
-		bool langAssigned = false;
-		mxResult = MxPluginPort_Cast_Text_GetLanguageAssigned(castNumber, pageIndex, &langAssigned);
-		if (!mxResult) {
-			this->pLogger->log(MXFormat("[error]Failed to check language assignment of CAST[%4d]:page[%d]", castNumber, pageIndex));
-			return result;
-		}
-		if (langAssigned) {
-			// このテキストキャストはこの言語ページを含んでいる
-			outputLangPages.push_back(pageIndex);
-		}
+	// 透明
+	bool transparent;
+	mxResult = MxPluginPort_Cast_Text_GetTransparent(fromCastNumber, fromLangPage, &transparent);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetTransparent(toCastNumber, toLangPage, transparent);
 	}
-
-
-
-	return result;
+	// text alpha enabled
+	bool textAlpha;
+	mxResult = MxPluginPort_Cast_Text_GetAlphaEnabled(fromCastNumber, fromLangPage, &textAlpha);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetAlphaEnabled(toCastNumber, toLangPage, textAlpha);
+	}
+	// text anti-aliasing
+	bool antiAlias;
+	mxResult = MxPluginPort_Cast_Text_GetAntialias(fromCastNumber, fromLangPage, &antiAlias);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetAntialias(toCastNumber, toLangPage, antiAlias);
+	}
+	// pickup disabled
+	mxResult = MxPluginPort_Cast_Text_GetClickEnabled(fromCastNumber, fromLangPage, &flag);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetClickEnabled(toCastNumber, toLangPage, flag);
+	}
+	// text align
+	TTextAlignment align;
+	mxResult = MxPluginPort_Cast_Text_GetAlignment(fromCastNumber, fromLangPage, &align);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetAlignment(toCastNumber, toLangPage, align);
+	}
+	// Z position
+	mxResult = MxPluginPort_Cast_Text_GetBackward(fromCastNumber, fromLangPage, &flag);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetBackward(toCastNumber, toLangPage, flag);
+	}
+	// fix size text
+	mxResult = MxPluginPort_Cast_Text_GetFixSize(fromCastNumber, fromLangPage, &flag);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetFixSize(toCastNumber, toLangPage, flag);
+	}
+	// item distance
+	int distance;
+	mxResult = MxPluginPort_Cast_Text_GetItemDistance(fromCastNumber, fromLangPage, &distance);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetItemDistance(toCastNumber, toLangPage, distance);
+	}
+	// fix width
+	int width;
+	mxResult = MxPluginPort_Cast_Text_GetAlignmentWidth(fromCastNumber, fromLangPage, &width);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetAlignmentWidth(toCastNumber, toLangPage, width);
+	}
+	// center X
+	int centerX;
+	mxResult = MxPluginPort_Cast_Text_GetCenterX(fromCastNumber, fromLangPage, &centerX);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetCenterX(toCastNumber, toLangPage, centerX);
+	}
+	// center Y
+	int centerY;
+	mxResult = MxPluginPort_Cast_Text_GetCenterY(fromCastNumber, fromLangPage, &centerY);
+	if (mxResult) {
+		MxPluginPort_Cast_Text_SetCenterY(fromCastNumber, toLangPage, centerY);
+	}
 }
 
 /// <summary>
@@ -540,6 +546,72 @@ bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vect
 
 	return result;
 }
+
+bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex)
+{
+	bool result = false;
+	bool flagNewPage = false; // 言語ページ作成フラグ
+	// 言語ページを作成
+
+	// 言語ページ番号を取得
+	int pageNumber = this->GetPageNumber(langPageName);
+	if (pageNumber == -1 && this->writeData.flagAddIfLanguagePageNotFound) {
+		// 言語ページを追加
+		result = CreateLangPageToTextCast(castNumber, pageNumber, flagNewPage);
+	}
+	else {
+		// ページが既存か、「不明な言語ページを新規に追加」チェックが無いなら何もしない
+		return true;
+	}
+
+	if (-1 != cloneIndex && -1 != pageNumber) {
+		// コピー元のテキストキャストと同じ値を設定
+		CloneTextCastPage(castNumber, pageNumber, cloneIndex, pageNumber, true, true, true);
+	}
+	else {
+		// 先頭ページのプロパティを継承
+		if (pageNumber != 0 && this->writeData.flagInheritPropertiesOfTheFirstLangPage) {
+			if (!this->writeData.flagInheritOnlyNewLangPage || flagNewPage) {
+				CloneTextCastPage(
+					castNumber, pageNumber, castNumber, 0,
+					!this->writeData.flagApplyFontNameToTextCast,
+					!this->writeData.flagApplyFontSizeToTextCast,
+					!this->writeData.flagApplyTextColorToTextCast
+				);
+			}
+		}
+
+		// フォントの更新
+		// font();
+	}
+
+	// テキストデータの更新
+	if (this->writeData.flagApplyStringToTextCast)
+	{
+		BOOL mxResult;
+		if (isUnicode) {
+			mxResult = MxPluginPort_Cast_Text_SetTextDataWIDE(castNumber, pageNumber, textData.wtext.c_str());
+			if (!mxResult) {
+				this->pLogger->log(
+					L"[error]Failed to set string to Cast[" + ::to_wstring(castNumber) + L"],Page[" + ::to_wstring(pageNumber) + L"]"
+				);
+				return false;
+			}
+		}
+		else {
+			mxResult = MxPluginPort_Cast_Text_SetTextDataANSI(castNumber, pageNumber, textData.text.c_str());
+			if (!mxResult) {
+				this->pLogger->log(
+					"[error]Failed to set string to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
+				);
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 
 /// <summary>
 /// 既存テキストキャストの更新としてテキストデータをインポートする
