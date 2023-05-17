@@ -163,7 +163,6 @@
     <ClInclude Include="SdkData.h" />
     <ClInclude Include="SingleLogger.h" />
     <ClInclude Include="UnicodeLogger.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="WrapperIf.h" />
     <ClInclude Include="WriteData.h" />
     <ClInclude Include="TextData.h" />
@@ -181,7 +180,6 @@
     </ClCompile>
     <ClCompile Include="SingleLogger.cpp" />
     <ClCompile Include="UnicodeLogger.cpp" />
-    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WrapperIf.cpp" />
     <ClCompile Include="WriteData.cpp" />
   </ItemGroup>

@@ -14,6 +14,7 @@ public:
 	UnicodeLogger(bool on);
 	~UnicodeLogger();
 	std::string getLogFileFullPath();
+	std::string getLogDateString();
 
 	void log(const std::string& message);
 	void log(const std::wstring& message);

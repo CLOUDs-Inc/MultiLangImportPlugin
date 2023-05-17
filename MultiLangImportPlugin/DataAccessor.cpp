@@ -71,7 +71,6 @@ bool DataAccessor::GetProjectInfo(SdkData& data)
 bool DataAccessor::SetTextCastDataInMultiLanguage(WriteData& writeData, SdkData& sdkData)
 {
 	bool result = true;
-	int mxResult;
 
 	string logDir = GetDirectoryFromPath(sdkData.projectPath);
 	// ƒƒK[‚ğæ“¾
