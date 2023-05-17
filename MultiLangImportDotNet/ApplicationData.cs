@@ -14,9 +14,19 @@ namespace MultiLangImportDotNet
         public string ImportExcelFilePath { get; set; }
 
         /// <summary>
+        /// SDKプロジェクト多言語使用状況
+        /// </summary>
+        public bool MultiLangEnabled { get; set; }
+
+        /// <summary>
+        /// SDKプロジェクト言語数状況（処理前）
+        /// </summary>
+        public int LangPageNumberPrev { get; set; }
+
+        /// <summary>
         /// デフォルト設定言語インデクス
         /// </summary>
-        public int DefaultLanguageIndex { get; set; }
+        public int DefaultLanguageIndex { get; set; } = -1;
 
         /// <summary>
         /// 言語名リスト
@@ -24,22 +34,40 @@ namespace MultiLangImportDotNet
         public List<string> LanguageNameListInside { get; set; }
 
         /// <summary>
-        /// 言語名リスト（ANSI変換済み＆サブキャスト列除去済み）
+        /// 言語名リスト（ANSI変換済み＆サブキャスト列除去済み＆デフォルト言語先頭移動済み）
         /// </summary>
         public List<string> LanguageNameListModified
         {
             get
             {
                 List<string> modList = new List<string>();
-                for(int index = 0; index < LanguageNameListInside.Count; index++)
+                
+                // デフォルト言語はリストの先頭に移動させる
+                if(this.DefaultLanguageIndex != -1)
+                {
+                    string name = Utils.ForcelyConvertToANSI(LanguageNameListInside[this.DefaultLanguageIndex]);
+                    modList.Add(name);
+                }
+
+                for (int index = 0; index < LanguageNameListInside.Count; index++)
                 {
                     if (index == this.OptionData.SubcastIndex) continue;
+                    if (index == this.DefaultLanguageIndex) continue;
 
                     string name = Utils.ForcelyConvertToANSI(LanguageNameListInside[index]);
                     modList.Add(name);
                 }
                 return modList;
             }
+        }
+
+        /// <summary>
+        /// デフォルト言語が設定されているか
+        /// </summary>
+        public bool IsSetDefaultLanguage
+        {
+            // 設定されている（-1以外）ならtrue
+            get { return -1 != DefaultLanguageIndex; }
         }
 
         /// <summary>
@@ -305,7 +333,6 @@ namespace MultiLangImportDotNet
         public ApplicationData()
         {
             this.Flags = new Dictionary<string, bool>();
-            this.DefaultLanguageIndex = -1;
             this.OptionData = new OptionData();
         }
     }

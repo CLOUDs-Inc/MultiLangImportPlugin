@@ -37,10 +37,28 @@ bool DataAccessor::GetProjectInfo(SdkData& data)
 		return false;
 	}
 
+	// 多言語使用設定をプロジェクトから取得
+	BOOL enabled;
+	BOOL mxResult = MxPluginPort_Project_MultiLang_GetEnabled(&enabled);
+	if (!mxResult) {
+		return false;
+	}
+
+	// 多言語使用ページ数をプロジェクトから取得
+	int pageNumber = 0;
+	mxResult = MxPluginPort_Project_MultiLang_GetCount(&pageNumber);
+	if (!mxResult) {
+		return false;
+	}
+
 	// プロジェクトファイルパスを保持
 	data.projectPath = string(pProjectPath);
 	// プロジェクト名を保持
 	data.projectName = string(pProjectName);
+	// 多言語使用状態を保持
+	data.multiLangEnabled = enabled ? true : false;
+	// 多言語使用ページ数を保持
+	data.langPageNumber = pageNumber;
 
 	return true;
 }

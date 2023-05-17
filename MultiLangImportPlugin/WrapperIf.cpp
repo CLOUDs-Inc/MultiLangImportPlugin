@@ -232,10 +232,13 @@ void WrapperIf::execute()
 	DataAccessor dataAccessor(hinstDLL, lpvReserved);
 
 	// SDKからプロジェクト情報を取得し、.net側にアップする
-	dataAccessor.GetProjectInfo(sdkData);
+	process_result = dataAccessor.GetProjectInfo(sdkData);
+	if (!process_result) {
+		return;
+	}
 
 	// (char*に切り替えた)プロジェクト情報を.NET側に転送
-	UploadProjectInfo(sdkData.projectPath.c_str(), sdkData.projectName.c_str());
+	UploadProjectInfo(sdkData.projectPath.c_str(), sdkData.projectName.c_str(), sdkData.multiLangEnabled, sdkData.langPageNumber);
 
 
 	// UI側に生成処理開始を依頼

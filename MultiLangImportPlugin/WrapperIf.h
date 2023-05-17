@@ -23,7 +23,7 @@
 typedef bool(*PProcCreateWrapper)();
 typedef bool(*PProcBeginProcess)();
 
-typedef void(*PProcUploadProjectInfo)(const char* filepath, const char* projectName);
+typedef void(*PProcUploadProjectInfo)(const char* filepath, const char* projectName, bool multiLangEnabled, int langPageNumber);
 typedef void(*PProcUploadTextCastNames)(int names_len, char** names);
 
 typedef TextData** (*PProcDownloadTextDataTable)();

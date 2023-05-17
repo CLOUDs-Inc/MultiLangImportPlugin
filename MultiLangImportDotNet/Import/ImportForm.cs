@@ -223,7 +223,8 @@ namespace MultiLangImportDotNet.Import
         private void SetEnableUIAfterExcelImport()
         {
             // デフォルト言語指定機能、サブキャスト機能、インポート機能を有効に
-            this.buttonDefaultLanguage.Enabled = true;
+
+            this.buttonDefaultLanguage.Enabled = !this.appData.MultiLangEnabled || this.appData.LangPageNumberPrev == 1;
             this.buttonOption.Enabled = true;
             this.buttonImport.Enabled = true;
             // Apply propertiesを有効に

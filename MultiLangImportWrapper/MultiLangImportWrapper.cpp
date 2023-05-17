@@ -109,7 +109,9 @@ namespace MultiLangImportWrapper
 		/// </summary>
 		/// <param name="filepath"></param>
 		/// <param name="projectname"></param>
-		void UploadProjectInfo(char* filepath, char* projectname) override {
+		/// <param name="multiLangEnabled"></param>
+		/// <param name="langPageNumber"></param>
+		void UploadProjectInfo(char* filepath, char* projectname, bool multiLangEnabled, int langPageNumber) override {
 			MethodInfo^ methodInfo = managedType->GetMethod("UploadProjectInfo");
 
 			String^ filepathStr = nullptr;
@@ -121,9 +123,11 @@ namespace MultiLangImportWrapper
 				projectnameStr = gcnew String(projectname);
 			}
 
-			cli::array<Object^>^ args = gcnew cli::array<Object^>(2);
+			cli::array<Object^>^ args = gcnew cli::array<Object^>(4);
 			args[0] = filepathStr;
 			args[1] = projectnameStr;
+			args[2] = multiLangEnabled;
+			args[3] = langPageNumber;
 			methodInfo->Invoke(managedObject, args);
 
 			return;
@@ -364,11 +368,13 @@ bool BeginProcess()
 /// </summary>
 /// <param name="filepath">プロジェクトファイルパス</param>
 /// <param name="projectname">プロジェクト名</param>
-void UploadProjectInfo(char* filepath, char* projectname)
+/// <param name="projectname">多言語使用状況</param>
+/// <param name="langPageNumber">多言語使用ページ数状況</param>
+void UploadProjectInfo(char* filepath, char* projectname, bool multiLangEnabled, int langPageNumber)
 {
 	if (wrapper != nullptr)
 	{
-		wrapper->UploadProjectInfo(filepath, projectname);
+		wrapper->UploadProjectInfo(filepath, projectname, multiLangEnabled, langPageNumber);
 	}
 }
 

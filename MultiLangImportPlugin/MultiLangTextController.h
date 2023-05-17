@@ -9,7 +9,6 @@ private:
 
 	WriteData writeData;
 
-	std::vector<std::string> pageNames;
 	std::string firstPageName;
 	int columnIndexOfFirstPageName;
 
@@ -20,8 +19,8 @@ private:
 	string GetTextCastNameOfProject(int castNumber);
 
 	bool GetPageNames(std::vector<std::string>& list);
-	int  GetPageNumber(std::string pageName);
-	bool AddPageNames();
+	int GetProjectLangNumber(std::string pageName);
+	bool AddPageNames(std::vector<std::string>& list);
 	bool ImportTextDataTable();
 
 	bool UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex);
@@ -54,10 +53,7 @@ public:
 
 	bool ImportTextData();
 
-	bool IsEnabled();
-	bool SetDefaultLanguage(WriteData& writeData);
 	bool SetProjectMLEnable();
-	bool SetPageNames(std::vector<std::string>& list);
 
 
 

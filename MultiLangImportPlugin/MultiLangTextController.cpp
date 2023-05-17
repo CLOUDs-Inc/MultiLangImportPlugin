@@ -32,18 +32,6 @@ MultiLangTextController::MultiLangTextController(WriteData& writeData)
 	// クラス生成時に多言語使用状態にし、他の処理の前に多言語使用可能状況を準備する
 	// 他の処理の際、enable:trueを確認すること
 	this->isEnable = SetProjectMLEnable();
-
-	if (!this->isEnable) {
-		return;
-	}
-
-	bool result;
-	result = this->GetPageNames(this->pageNames);
-	if (!result) {
-		this->isEnable = false;
-		return;
-	}
-
 }
 
 /// <summary>
@@ -62,8 +50,15 @@ bool MultiLangTextController::ImportTextData()
 {
 	bool result = true;
 
+	result = this->SetProjectMLEnable();
+	if (!result) {
+		this->pLogger->log(L"[error]Failed to set multi language available.");
+		return false;
+	}
+
 	// UI側指定の言語名をページとして追加する
-	result = AddPageNames();
+	// 言語ページ追加処理
+	result = AddPageNames(writeData.languageNameList);
 	if (!result) {
 		this->pLogger->log(L"[error]Failed to add language pages.");
 		return false;
@@ -81,23 +76,11 @@ bool MultiLangTextController::ImportTextData()
 }
 
 
-
-
-
-
-/// <summary>
-/// プロジェクトの多言語使用可否状態の取得
-/// </summary>
-/// <returns></returns>
-bool MultiLangTextController::IsEnabled()
-{
-	return this->isEnable;
-}
-
 /// <summary>
 /// 
 /// </summary>
 /// <returns></returns>
+#if 0
 bool MultiLangTextController::AddPageNames()
 {
 	// 言語ページ追加処理の有無確認
@@ -113,6 +96,7 @@ bool MultiLangTextController::AddPageNames()
 
 	return true;
 }
+#endif
 
 /// <summary>
 /// UI側テキストデータのプロジェクトへのインポート開始
@@ -123,8 +107,8 @@ bool MultiLangTextController::ImportTextDataTable()
 	int rowCount = (int)this->writeData.textDataTable.size();
 
 	for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-		bool result = this->ImportTextDataRow(this->writeData.textCastNameListConjMod[rowIndex], this->writeData.textDataTable[rowIndex]);
-		// bool result = this->ImportTextDataRow2(rowIndex, this->writeData.textDataTable[rowIndex]);
+		//bool result = this->ImportTextDataRow(this->writeData.textCastNameListConjMod[rowIndex], this->writeData.textDataTable[rowIndex]);
+		bool result = this->ImportTextDataRow2(rowIndex, this->writeData.textDataTable[rowIndex]);
 		if (!result) {
 			return false;
 		}
@@ -549,12 +533,13 @@ bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vect
 
 bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex)
 {
+	BOOL mxResult = FALSE;
 	bool result = false;
 	bool flagNewPage = false; // 言語ページ作成フラグ
 	// 言語ページを作成
 
 	// 言語ページ番号を取得
-	int pageNumber = this->GetPageNumber(langPageName);
+	int pageNumber = this->GetProjectLangNumber(langPageName);
 	if (pageNumber == -1 && this->writeData.flagAddIfLanguagePageNotFound) {
 		// 言語ページを追加
 		result = CreateLangPageToTextCast(castNumber, pageNumber, flagNewPage);
@@ -582,7 +567,42 @@ bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& t
 		}
 
 		// フォントの更新
-		// font();
+		// check:フォント名をテキストキャストに反映
+		if (this->writeData.flagApplyFontNameToTextCast) {
+			if (!textData.fontName.empty()) {
+				// フォント名を設定
+				mxResult = MxPluginPort_Cast_Text_SetFontName(castNumber, pageNumber, textData.fontName.c_str());
+				if (!mxResult) {
+					this->pLogger->log(
+						MXFormat("[error]Failed to set font name[%s] to Cast[%d],Page[%d]", textData.fontName.c_str(), castNumber, pageNumber)
+					);
+					return false;
+				}
+			}
+		}
+		// check:フォントサイズをテキストキャストに反映
+		if (this->writeData.flagApplyFontSizeToTextCast) {
+			mxResult = MxPluginPort_Cast_Text_SetFontSize(castNumber, pageNumber, (int)textData.fontSize);
+			if (!mxResult) {
+				this->pLogger->log(
+					"[error]Failed to set font size to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
+				);
+				return false;
+			}
+		}
+		// check:文字色をテキストキャストに反映
+		if (this->writeData.flagApplyTextColorToTextCast) {
+			int colorValue = (textData.colorR & 0x000000ff)
+				+ ((textData.colorG << 8) & 0x0000ff00)
+				+ ((textData.colorB << 16) & 0x00ff0000);
+			mxResult = MxPluginPort_Cast_Text_SetFontColor(castNumber, pageNumber, colorValue);
+			if (!mxResult) {
+				this->pLogger->log(
+					"[error]Failed to set font color to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
+				);
+				return false;
+			}
+		}
 	}
 
 	// テキストデータの更新
@@ -726,7 +746,7 @@ bool MultiLangTextController::SetTextDataCellToTextCast(int castNumber, int colI
 
 	std::string langName = this->writeData.languageNameList[colIndex];
 	
-	int pageNumber = this->GetPageNumber(langName);
+	int pageNumber = this->GetProjectLangNumber(langName);
 	if (pageNumber < 0) {
 		// プロジェクトに言語ページが登録されていないので、追加せずスキップ
 		return true;
@@ -862,40 +882,74 @@ bool MultiLangTextController::GetPageNames(std::vector<std::string>& list)
 /// </summary>
 /// <param name="pageName">言語名</param>
 /// <returns>プロジェクトのページ番号(-1:存在せず）</returns>
-int MultiLangTextController::GetPageNumber(std::string pageName)
+int MultiLangTextController::GetProjectLangNumber(std::string targetName)
 {
 	int pageNumber = -1;
 
-	// SDK側言語リストからページ名を検索するイテレータを取得
-	auto iter = std::find(this->pageNames.begin(), this->pageNames.end(), pageName);
-	if (iter == this->pageNames.end()) {
-		// 見つからない場合-1
-		return pageNumber;
+	// SDK側言語リストからページ名で検索しページ番号を取得
+	BOOL mxResult;
+
+	// プロジェクト内の言語数を取得
+	int pageCount;
+	mxResult = MxPluginPort_Project_MultiLang_GetCount(&pageCount);
+	if (!mxResult) {
+		this->pLogger->log(L"[error]Failed to get count of language pages of project.");
+		return -1;
 	}
 
-	// 距離（インデクス）を取得
-	pageNumber = std::distance(this->pageNames.begin(), iter);
+	// プロジェクト内言語のそれぞれに対して。
+	for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+	{
+		char* pname = nullptr;
+		// 言語名文字列(ANSI)を取得
+		mxResult = MxPluginPort_Project_MultiLang_GetName(pageIndex, &pname);
+		if (!mxResult) {
+			this->pLogger->log(L"[error]Failed to get name of language page of number " + to_wstring(pageIndex));
+			return -1;
+		}
+		
+		std::string pageName = std::string(pname);
+		if (pageName == targetName) {
+			// 見つかった
+			pageNumber = pageIndex;
+			break;
+		}
+	}
+
 	return pageNumber;
 }
 
 /// <summary>
-/// デフォルト言語設定
+/// プロジェクトに使用したい言語ページを追加でセットする
+/// 既存ページと重複する場合はスキップで成功とする
 /// </summary>
-/// <param name="writeData">書き込み管理データ</param>
-/// <returns>処理成否</returns>
-bool MultiLangTextController::SetDefaultLanguage(WriteData& writeData)
+/// <param name="list">追加使用したい言語ページ</param>
+/// <returns>ページ設定の成否</returns>
+bool MultiLangTextController::AddPageNames(std::vector<std::string>& langNameList)
 {
-	bool result = true;
-	int mxResult;
+	// デフォルト言語とする言語ページを設定
+	if (!this->writeData.defaultLanguageName.empty())
+	{
+		// デフォルト言語を設定できるのは、多言語未使用時か設定済み言語ページがデフォルト０の時のみ
+		// 言語ページ0の言語名を更新する
+		MxPluginPort_Project_MultiLang_SetName(0, this->writeData.defaultLanguageName.c_str());
+		this->pLogger->log(MXFormat("LANGUAGE [%s]: Set Default", this->writeData.defaultLanguageName.c_str()));
+	}
 
-	// デフォルト言語名
-	writeData.defaultLanguageName;
+	// 言語ページの更新
+	for (int uiLangIndex = 0; uiLangIndex < langNameList.size(); uiLangIndex++)
+	{
+		int projLangNumber = this->GetProjectLangNumber(langNameList[uiLangIndex]);
+		if(projLangNumber == -1 && this->writeData.flagAddIfLanguagePageNotFound)
+		{
+			MxPluginPort_Project_MultiLang_Add(langNameList[uiLangIndex].c_str());
+			this->pLogger->log(MXFormat("LANGUAGE[%s]: Added", langNameList[uiLangIndex].c_str()));
+		}
+	}
 
-	// デフォルト言語設定
-
-
-	return result;
+	return true;
 }
+
 
 /// <summary>
 /// テキストデータ行をUTFで扱わなければいけないか判定する
@@ -946,47 +1000,6 @@ bool MultiLangTextController::SetProjectMLEnable()
 	return mxResult;
 }
 
-/// <summary>
-/// プロジェクトに使用したい言語ページを追加でセットする
-/// 既存ページと重複する場合はスキップで成功とする
-/// </summary>
-/// <param name="list">追加使用したい言語ページ</param>
-/// <returns>ページ設定の成否</returns>
-bool MultiLangTextController::SetPageNames(std::vector<std::string>& list)
-{
-	std::vector<int> appendIndexList;
-
-	// 追加したいページ名が既に存在するか確認し、ない場合、追加リストのインデックスでリストを作る
-	for (size_t index = 0; index < list.size(); index++)
-	{
-		bool exists = std::find(this->pageNames.begin(), this->pageNames.end(), list[index]) != this->pageNames.end();
-		// 存在しなかった場合、そのインデックスを保持する
-		if (!exists)
-		{
-			appendIndexList.push_back(index);
-		}
-	}
-
-	// 保持したインデックスの言語ページを追加する
-	for (size_t index = 0; index < appendIndexList.size(); index++)
-	{
-		int pageIndex = appendIndexList[index];
-		BOOL mxResult = MxPluginPort_Project_MultiLang_Add(list[pageIndex].c_str());
-		if (!mxResult) {
-			this->pLogger->log("[error]Failed to add language page: " + list[pageIndex]);
-			return false;
-		}
-
-		std::string msg = "LANGUAGE [" + list[pageIndex] + "]: Added";
-		this->pLogger->log(msg);
-	}
-
-	// 言語ページリストを更新する
-	this->pageNames.clear();
-	bool result = this->GetPageNames(this->pageNames);
-
-	return true;
-}
 
 /// <summary>
 /// ページ番号０の言語名を取得

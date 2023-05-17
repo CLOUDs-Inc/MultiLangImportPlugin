@@ -20,7 +20,7 @@ namespace MultiLangImportWrapper {
 		virtual ~Wrapper() = default;
 		virtual bool BeginProcess() = 0;
 
-		virtual void UploadProjectInfo(char* filepath, char* projectname) = 0;
+		virtual void UploadProjectInfo(char* filepath, char* projectname, bool multiLangEnabled, int langPageNumber) = 0;
 
 		virtual TextData** DownloadTextDataTable() = 0;
 		virtual char** DownloadStringArray(const std::string& arrayName) = 0;
@@ -46,7 +46,7 @@ extern "C" {
 	DLLAPI bool CreateWrapper();
 	DLLAPI bool BeginProcess();
 
-	DLLAPI void UploadProjectInfo(char* filepath, char* projectname);
+	DLLAPI void UploadProjectInfo(char* filepath, char* projectname, bool multiLangEnabled, int langPageNumber);
 
 	DLLAPI TextData** DownloadTextDataTable();
 	DLLAPI char** DownloadStringArray(const std::string& arrayName);

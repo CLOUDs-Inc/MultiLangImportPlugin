@@ -23,6 +23,16 @@ namespace MultiLangImportDotNet
         string projectName;
 
         /// <summary>
+        /// SDKプロジェクト多言語使用フラグ
+        /// </summary>
+        bool multiLangEnabled;
+
+        /// <summary>
+        /// SDKプロジェクト言語数状況（処理前）
+        /// </summary>
+        public int langPageNumberPrev;
+
+        /// <summary>
         /// アプリケーション管理データ
         /// </summary>
         ApplicationData appData;
@@ -53,6 +63,8 @@ namespace MultiLangImportDotNet
 
             // アプリ管理データを新規化
             this.appData = new ApplicationData();
+            this.appData.MultiLangEnabled = this.multiLangEnabled;
+            this.appData.LangPageNumberPrev = this.langPageNumberPrev;
 
             //Logger.SetFilePath(Path.GetDirectoryName(projectFilePath) + "\\Plugin_DressUpTextCodeGen.log");
 
@@ -75,10 +87,12 @@ namespace MultiLangImportDotNet
         /// </summary>
         /// <param name="filepathObj">プロジェクトファイルパス</param>
         /// <param name="projectnameObj">プロジェクト名</param>
-        public void UploadProjectInfo(object filepathObj, object projectnameObj)
+        public void UploadProjectInfo(object filepathObj, object projectnameObj, object multiLangEnabled, object langPageNumber)
         {
             this.projectFilePath = filepathObj as string;
             this.projectName = projectnameObj as string;
+            this.multiLangEnabled = (bool)multiLangEnabled;
+            this.langPageNumberPrev = (int)langPageNumber;
         }
 
         /// <summary>
@@ -166,10 +180,36 @@ namespace MultiLangImportDotNet
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
                 int colTgtIdx = 0;
-                for(int colSrcIdx = 0; colSrcIdx < colCount; colSrcIdx++)
+
+                // デフォルト言語列に指定された列データは既に先頭に設定されているのでスキップする
+                if(-1 != this.appData.DefaultLanguageIndex)
+                {
+                    var textData = this.appData.TextDataTable[rowIndex, this.appData.DefaultLanguageIndex];
+                    if (textData != null)
+                    {
+                        dlTextDataTable[rowIndex, colTgtIdx] = Activator.CreateInstance(this.typeCLITextData, new object[] {
+                            textData.Text,
+                            textData.FontName,
+                            textData.FontSize,
+                            (int)textData.FontColor.R,
+                            (int)textData.FontColor.G,
+                            (int)textData.FontColor.B,
+                            textData.IsBold,
+                            textData.IsItalic,
+                            textData.IsUnderline,
+                            textData.IsStrike,
+                            textData.CanConvertToANSI
+                        });
+                    }
+                    colTgtIdx++;
+                }
+
+                for (int colSrcIdx = 0; colSrcIdx < colCount; colSrcIdx++)
                 {
                     // サブキャストに指定された列データはスキップする
                     if (colSrcIdx == this.appData.OptionData.SubcastIndex) continue;
+                    // デフォルト言語列に指定された列データは既に先頭に設定されているのでスキップする
+                    if (colSrcIdx == this.appData.DefaultLanguageIndex) continue;
 
                     var textData = this.appData.TextDataTable[rowIndex, colSrcIdx];
                     if (textData != null)
