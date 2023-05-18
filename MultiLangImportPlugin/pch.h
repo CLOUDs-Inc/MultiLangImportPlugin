@@ -16,6 +16,7 @@
 #include <crtdbg.h>
 #include <Shlwapi.h>
 #include <fileapi.h>
+#include <shellapi.h>
 #include <Windows.h>
 
 #include <algorithm>
@@ -24,6 +25,7 @@
 #include <fstream>
 #include <string>
 #include <cstdio>
+#include <cmath>
 #include <codecvt>
 
 

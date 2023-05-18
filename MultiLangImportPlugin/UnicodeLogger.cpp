@@ -20,7 +20,8 @@ UnicodeLogger::~UnicodeLogger() {
 		this->openFlag = false;
 
 		// ログファイルを表示する
-		system(filepath.c_str());
+		auto filepath = this->getLogFileFullPathWide();
+		ShellExecute(nullptr, L"open", filepath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
 }
 
@@ -74,7 +75,7 @@ std::string UnicodeLogger::getLogFilename()
 {
 	std::time_t now = std::time(nullptr);
 	char buf[80];
-	std::strftime(buf, sizeof(buf), "MLTImportLog_%Y%m%d%H%M%S.log", std::localtime(&now));
+	std::strftime(buf, sizeof(buf), "MLTImportLog_%Y%m%d%H%M%S.txt", std::localtime(&now));
 
 	return std::string(buf);
 }
@@ -88,6 +89,24 @@ std::string UnicodeLogger::getLogFileFullPath()
 	return dirname + filename;
 }
 
+std::wstring UnicodeLogger::getLogFileFullPathWide()
+{
+	std::string fullpath = this->filepath;
+	// ANSI -> wstring
+	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, fullpath.c_str(), -1, (wchar_t*)NULL, 0);
+
+	wchar_t* cpUCS2 = new wchar_t[iBufferSize];
+
+	// ANSI -> wstring
+	MultiByteToWideChar(CP_ACP, 0, fullpath.c_str(), -1, cpUCS2, iBufferSize);
+
+	// stringの生成
+	std::wstring wstr(cpUCS2, cpUCS2 + iBufferSize - 1);
+
+	delete[] cpUCS2;
+	
+	return wstr;
+}
 
 std::string UnicodeLogger::getLogDateString()
 {

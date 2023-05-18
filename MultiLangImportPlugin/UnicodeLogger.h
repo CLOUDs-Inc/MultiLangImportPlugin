@@ -10,11 +10,12 @@ class UnicodeLogger {
 
 	std::string getTempDirectory();
 	std::string getLogFilename();
+	std::string getLogFileFullPath();
 
 public:
 	UnicodeLogger(bool on);
 	~UnicodeLogger();
-	std::string getLogFileFullPath();
+	std::wstring getLogFileFullPathWide();
 	std::string getLogDateString();
 
 	void log(const std::string& message);

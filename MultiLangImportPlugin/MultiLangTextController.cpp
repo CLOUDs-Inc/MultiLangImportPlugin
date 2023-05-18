@@ -119,8 +119,7 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 	int castIndex = -1;
 	int cloneCastIndex = -1;
 
-	bool addFlag = false; // 
-	string logMsg = "";
+	bool addedCastFlag = false; // 新規追加テキストキャストであることを示すフラグ
 
 	bool isUnicode = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
 
@@ -138,8 +137,9 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 			if (this->writeData.flagAddIfTextCastNotFound) {
 				// 新規追加するので、新しいキャスト番号を取得する
 				castIndex = GetNewTextCastNumber();
+
 				// キャスト番号は新規追加用であることを示すフラグ
-				addFlag = true;
+				addedCastFlag = true;
 
 				// キャスト名で新規キャストを作成
 				result = CreateNewTextCast(castIndex, this->writeData.textCastNameListLoneMod[rowIndex], isUnicode);
@@ -148,8 +148,9 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 				}
 				 
 				// インポートログ：追加
-				logMsg = MXFormat("CAST [%4d: %s]: Added", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str());
-				this->pLogger->log(logMsg);
+				this->pLogger->log(
+					MXFormat("CAST [%4d: %s]: Added", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str())
+				);
 			}
 		}
 		else {
@@ -162,12 +163,14 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 
 			// インポートログを追加
 			if (castIndex != 1) {
-				logMsg = MXFormat("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str());
-				this->pLogger->log(logMsg);
+				this->pLogger->log(
+					MXFormat("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str())
+				);
 			}
 			else {
-				logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str());
-				this->pLogger->log(logMsg);
+				this->pLogger->log(
+					MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str())
+				);
 			}
 		}
 	}
@@ -230,17 +233,21 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 				// インポートログを追加
 				if (cloneCastIndex == -1) {
 					std::string castname = this->GetTextCastNameOfProject(castIndex);
-					logMsg = MXFormat("CAST [%4d: %s]: Added", castIndex, castname.c_str());
+					this->pLogger->log(MXFormat("CAST [%4d: %s]: Added", castIndex, castname.c_str()));
 				}
 				else {
 					std::string castname = this->GetTextCastNameOfProject(castIndex);
 					std::string cloneCastname = this->GetTextCastNameOfProject(cloneCastIndex);
-					logMsg = MXFormat("CAST [%4d: %s]: Added by duplicating cast [%4d: %s]",
-						castIndex, castname.c_str(),
-						cloneCastIndex, cloneCastname.c_str()
+					this->pLogger->log(
+						MXFormat("CAST [%4d: %s]: Added by duplicating cast [%4d: %s]",
+							castIndex, castname.c_str(),
+							cloneCastIndex, cloneCastname.c_str()
+						)
 					);
 				}
 
+				// キャスト番号は新規追加用であることを示すフラグ
+				addedCastFlag = true;
 			}
 		}
 		else
@@ -254,20 +261,17 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 			// インポートログを追加
 			if (-1 != castIndex) {
 				std::string castname = this->GetTextCastNameOfProject(castIndex);
-				logMsg = MXFormat("CAST [%4d: %s]: Update", castIndex, castname.c_str());
-				this->pLogger->log(logMsg);
+				this->pLogger->log(MXFormat("CAST [%4d: %s]: Update", castIndex, castname.c_str()));
 			}
 			else {
 				if (this->writeData.flagAddSubcastNameWhenCreatingANewCast
 					|| this->writeData.flagUseSubcastNameWhenSearchingForCast)
 				{
-					logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListConjMod[rowIndex].c_str());
-					this->pLogger->log(logMsg);
+					this->pLogger->log(MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListConjMod[rowIndex].c_str()));
 				}
 				else
 				{
-					logMsg = MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str());
-					this->pLogger->log(logMsg);
+					this->pLogger->log(MXFormat("CAST [%s]: Skipped", this->writeData.textCastNameListLoneMod[rowIndex].c_str()));
 				}
 			}
 
@@ -299,7 +303,7 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 	}
 
 	for (int colIndex = 0; colIndex < textDataRow.size(); colIndex++) {
-		result = UpdateTextCastLangPage(castIndex, textDataRow[colIndex], this->writeData.languageNameList[colIndex], isUnicode, cloneCastIndex);
+		result = UpdateTextCastLangPage(castIndex, textDataRow[colIndex], this->writeData.languageNameList[colIndex], isUnicode, cloneCastIndex, addedCastFlag);
 	}
 
 	return result;
@@ -524,7 +528,7 @@ void MultiLangTextController::CloneTextCastPage(
 //	return result;
 //}
 
-bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex)
+bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex, bool addedCastFlag)
 {
 	BOOL mxResult = FALSE;
 	bool result = false;
@@ -533,17 +537,15 @@ bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& t
 
 	// 言語ページ番号を取得
 	int pageNumber = this->GetProjectLangNumber(langPageName);
-	bool assigned = false;
-	MxPluginPort_Cast_Text_GetLanguageAssigned(castNumber, pageNumber, &assigned);
-	if (!assigned && this->writeData.flagAddIfLanguagePageNotFound) {
-		// 言語ページを追加
-		result = CreateLangPageToTextCast(castNumber, pageNumber, flagNewPage);
-	}
-	else {
-		// ページが既存か、「不明な言語ページを新規に追加」チェックが無いなら何もしない
+
+	if (pageNumber == -1) {
 		return true;
 	}
 
+	// 言語ページを追加
+	result = CreateLangPageToTextCast(castNumber, pageNumber, addedCastFlag, flagNewPage);
+
+	// テキストキャストのプロパティを更新
 	if (-1 != cloneIndex && -1 != pageNumber) {
 		// コピー元のテキストキャストと同じ値を設定
 		CloneTextCastPage(castNumber, pageNumber, cloneIndex, pageNumber, true, true, true);
@@ -596,6 +598,21 @@ bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& t
 					"[error]Failed to set font color to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
 				);
 				return false;
+			}
+
+			int backColor;
+			mxResult = MxPluginPort_Cast_Text_GetBackColor(castNumber, pageNumber, &backColor);
+			if (!mxResult) {
+				this->pLogger->log(
+					"[error]Failed to get back color to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
+				);
+				return false;
+			}
+
+			// フォント色と背景色が同一の時、背景色を調整する
+			if (colorValue == backColor) {
+				backColor = ChooseBackColor(colorValue);
+				MxPluginPort_Cast_Text_SetBackColor(castNumber, pageNumber, backColor);
 			}
 		}
 	}
@@ -715,47 +732,48 @@ bool MultiLangTextController::CreateNewTextCast(int castNumber, std::string& cas
 /// <param name="isFirstPropInherit">継承用先頭言語テキストデータ有効フラグ</param>
 /// <param name="isUTF">文字列UTFフラグ</param>
 /// <returns>成否</returns>
-bool MultiLangTextController::SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF)
-{
-	bool result = true;
-
-	// 文字列が空白であれば無効データとみなしているので何もしない
-	if (!textData.isValidData) {
-		return true;
-	}
-
-	std::string langName = this->writeData.languageNameList[colIndex];
-	
-	int pageNumber = this->GetProjectLangNumber(langName);
-	if (pageNumber < 0) {
-		// プロジェクトに言語ページが登録されていないので、追加せずスキップ
-		return true;
-	}
-
-	bool createPageFlag = false;
-	result = CreateLangPageToTextCast(castNumber, pageNumber, createPageFlag);
-	if (!result) {
-		// ログはCreateLangPageToTextCast関数の中にある
-		return false;
-	}
-
-	result = SetTextProperty(castNumber, pageNumber, textData, inheritPropData, isFirstPropInherit, createPageFlag, isUTF);
-	if (!result) {
-		// ログはSetTextProperty関数の中にある
-		return false;
-	}
-
-	return result;
-}
+//bool MultiLangTextController::SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF)
+//{
+//	bool result = true;
+//
+//	// 文字列が空白であれば無効データとみなしているので何もしない
+//	if (!textData.isValidData) {
+//		return true;
+//	}
+//
+//	std::string langName = this->writeData.languageNameList[colIndex];
+//	
+//	int pageNumber = this->GetProjectLangNumber(langName);
+//	if (pageNumber < 0) {
+//		// プロジェクトに言語ページが登録されていないので、追加せずスキップ
+//		return true;
+//	}
+//
+//	bool createPageFlag = false;
+//	result = CreateLangPageToTextCast(castNumber, pageNumber, createPageFlag);
+//	if (!result) {
+//		// ログはCreateLangPageToTextCast関数の中にある
+//		return false;
+//	}
+//
+//	result = SetTextProperty(castNumber, pageNumber, textData, inheritPropData, isFirstPropInherit, createPageFlag, isUTF);
+//	if (!result) {
+//		// ログはSetTextProperty関数の中にある
+//		return false;
+//	}
+//
+//	return result;
+//}
 
 /// <summary>
 /// 番号指定のテキストキャストにプロジェクトの指定の言語ページを追加する（既存の場合は成功）
 /// </summary>
 /// <param name="castNumber">書き込み先テキストキャスト番号</param>
 /// <param name="pageNumber">プロジェクト言語ページ番号</param>
+/// <param name="addedCastFlag">対象テキストキャストが新規追加されたものかどうか</param>
 /// <param name="createPageFlag">[out]新規ページ作成フラグ</param>
 /// <returns>成否</returns>
-bool MultiLangTextController::CreateLangPageToTextCast(int castNumber, int pageNumber, bool& createPageFlag)
+bool MultiLangTextController::CreateLangPageToTextCast(int castNumber, int pageNumber, bool addedCastFlag, bool& createPageFlag)
 {
 	BOOL mxResult = FALSE;
 	bool exist = false;
@@ -770,7 +788,15 @@ bool MultiLangTextController::CreateLangPageToTextCast(int castNumber, int pageN
 		return false;
 	}
 
-	if (exist) {
+	if (exist)
+	{
+		// 既にテキストキャストに指定の言語ページがある場合は、後続の「テキストキャストに言語ページ生成」は行わない
+		// ただしテキストキャスト新規作成時にはデフォルトで第０ページが存在するので、その場合は
+		// スキップしながら言語ページを追加したものとみなす
+		if (pageNumber == 0 && addedCastFlag) {
+			// [out]
+			createPageFlag = true;
+		}
 		// 指定のテキストキャストには指定の言語ページがあるので成功・スキップ
 		return true;
 	}
@@ -817,7 +843,11 @@ int MultiLangTextController::FindTextCastNumber(std::string& castname)
 /// <returns>キャスト名</returns>
 string MultiLangTextController::GetTextCastNameOfProject(int castNumber)
 {
-	return "";
+	// スクリプトキャスト名の取得
+	char castname[MAX_PATH] = { 0 };
+	MxPluginPort_Cast_GetCastName(ct_Text, castNumber, castname, MAX_PATH);
+	std::string castnameString = std::string(castname);
+	return castnameString;
 }
 
 
@@ -1117,6 +1147,34 @@ bool MultiLangTextController::SetTextProperty(
 	return true;
 }
 
+double MultiLangTextController::color_lum(int c)
+{
+	double tmp = c / 255.0;
+	if (tmp <= 0.03828) {
+		return tmp / 12.92;
+	}
+	else {
+		return std::pow((tmp + 0.0055) / 1.055, 2.4);
+	}
+}
+
+int MultiLangTextController::ChooseBackColor(int color) {
+	double lw = 1.0;
+	double lb = 0.0;
+	double r = color_lum(color & 0x000000ff);
+	double g = color_lum((color >> 8) & 0x000000ff);
+	double b = color_lum((color >> 16) & 0x000000ff);
+	double l = r * 0.2126f + g * 0.7152f + b * 0.0722;
+
+	double cw = (lw * 0.05) / (l + 0.05);
+	double cb = (l * 0.05) / (lb + 0.05);
+	if (cw < cb) {
+		return 0x00000000; // black
+	}
+	else {
+		return 0x00ffffff; // white
+	}
+}
 
 /// <summary>
 /// テキストキャスト書き込みテスト関数

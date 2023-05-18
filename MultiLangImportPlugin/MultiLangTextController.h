@@ -23,7 +23,7 @@ private:
 	bool AddPageNames(std::vector<std::string>& list);
 	bool ImportTextDataTable();
 
-	bool UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex);
+	bool UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex, bool addedCastFlag);
 
 	bool ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow);
 	bool CreateNewTextCast(int castnumber, std::string& castname, bool isUnicode);
@@ -33,11 +33,14 @@ private:
 //	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
 //	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);
-	bool CreateLangPageToTextCast(int castNumber, int pageNumber, bool& createPageFlag);
+	bool CreateLangPageToTextCast(int castNumber, int pageNumber, bool addedCastFlag, bool& createPageFlag);
 	bool SetTextProperty(int castNumber, int pageNumber, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool createPageFlag, bool isUTF);
 
 
 	bool CheckTextDataRowMustBeUTF(std::vector<TextData>& textDataRow);
+
+	double color_lum(int c);
+	int ChooseBackColor(int color);
 
 public:
 	/// <summary>
