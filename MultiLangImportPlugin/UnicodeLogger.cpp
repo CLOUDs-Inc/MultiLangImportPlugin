@@ -5,7 +5,7 @@
 /// </summary>
 UnicodeLogger::UnicodeLogger(bool on) {
 	if (on) {
-		std::string filepath = getLogFileFullPath();
+		filepath = getLogFileFullPath();
 		logFile.open(filepath, std::ios::app);
 	}
 	this->openFlag = logFile.is_open();
@@ -18,6 +18,9 @@ UnicodeLogger::~UnicodeLogger() {
 	if (logFile.is_open()) {
 		logFile.close();
 		this->openFlag = false;
+
+		// ログファイルを表示する
+		system(filepath.c_str());
 	}
 }
 

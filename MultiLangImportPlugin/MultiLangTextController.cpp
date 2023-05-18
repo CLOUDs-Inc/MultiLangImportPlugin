@@ -26,10 +26,10 @@ MultiLangTextController::MultiLangTextController(WriteData& writeData)
 	this->writeData = writeData;
 	this->pLogger = new UnicodeLogger(writeData.flagLogOutput);
 
-	std::wstring wmsg = L"# Import File: " + writeData.importExcelFileFullPathWide;
-	this->pLogger->log(wmsg);
 	std::string msg = "# Import Date: " + this->pLogger->getLogDateString();
 	this->pLogger->log(msg);
+	std::wstring wmsg = L"# Import File: " + writeData.importExcelFileFullPathWide;
+	this->pLogger->log(wmsg);
 	this->pLogger->log("");
 }
 
@@ -62,12 +62,6 @@ bool MultiLangTextController::ImportTextData()
 		this->pLogger->log(L"[error]Failed to add language pages.");
 		return false;
 	}
-
-	// 第一言語名を取得する
-	this->firstPageName = this->GetFirstPageName();
-
-	// 第一言語名がUI側の何列目かを取得する
-	this->columnIndexOfFirstPageName = writeData.getColumnIndexOfPageName(this->firstPageName);
 
 	result = ImportTextDataTable();
 
