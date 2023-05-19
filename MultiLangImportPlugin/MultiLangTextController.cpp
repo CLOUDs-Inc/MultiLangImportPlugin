@@ -140,7 +140,7 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 			}
 
 			// インポートログを追加
-			if (castIndex != 1) {
+			if (castIndex != -1) {
 				this->pLogger->log(
 					MXFormat("CAST [%4d: %s]: Update", castIndex, this->writeData.textCastNameListLoneMod[rowIndex].c_str())
 				);
