@@ -78,8 +78,7 @@ bool MultiLangTextController::ImportTextDataTable()
 	int rowCount = (int)this->writeData.textDataTable.size();
 
 	for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-		//bool result = this->ImportTextDataRow(this->writeData.textCastNameListConjMod[rowIndex], this->writeData.textDataTable[rowIndex]);
-		bool result = this->ImportTextDataRow2(rowIndex, this->writeData.textDataTable[rowIndex]);
+		bool result = this->ImportTextDataRow(rowIndex, this->writeData.textDataTable[rowIndex]);
 		if (!result) {
 			return false;
 		}
@@ -89,8 +88,13 @@ bool MultiLangTextController::ImportTextDataTable()
 }
 
 
-
-bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow)
+/// <summary>
+/// UI側テキストデータ１行分をプロジェクトへインポート
+/// </summary>
+/// <param name="rowIndex">行番号</param>
+/// <param name="textDataRow">１行データ</param>
+/// <returns>成否</returns>
+bool MultiLangTextController::ImportTextDataRow(int rowIndex, std::vector<TextData>& textDataRow)
 {
 	bool result = false;
 
@@ -282,6 +286,9 @@ bool MultiLangTextController::ImportTextDataRow2(int rowIndex, std::vector<TextD
 
 	for (int colIndex = 0; colIndex < textDataRow.size(); colIndex++) {
 		result = UpdateTextCastLangPage(castIndex, textDataRow[colIndex], this->writeData.languageNameList[colIndex], isUnicode, cloneCastIndex, addedCastFlag);
+		if (!result) {
+			return result;
+		}
 	}
 
 	return result;
@@ -458,7 +465,7 @@ void MultiLangTextController::CloneTextCastPage(
 	int centerY;
 	mxResult = MxPluginPort_Cast_Text_GetCenterY(fromCastNumber, fromLangPage, &centerY);
 	if (mxResult) {
-		MxPluginPort_Cast_Text_SetCenterY(fromCastNumber, toLangPage, centerY);
+		MxPluginPort_Cast_Text_SetCenterY(toCastNumber, toLangPage, centerY);
 	}
 }
 
@@ -479,6 +486,9 @@ bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& t
 
 	// 言語ページを追加
 	result = CreateLangPageToTextCast(castNumber, pageNumber, addedCastFlag, flagNewPage);
+	if (!result) {
+		return result;
+	}
 
 	// テキストキャストのプロパティを更新
 	if (-1 != cloneIndex && -1 != pageNumber) {
@@ -796,7 +806,7 @@ bool MultiLangTextController::AddPageNames(std::vector<std::string>& langNameLis
 		if(projLangNumber == -1 && this->writeData.flagAddIfLanguagePageNotFound)
 		{
 			MxPluginPort_Project_MultiLang_Add(langNameList[uiLangIndex].c_str());
-			this->pLogger->log(MXFormat("LANGUAGE[%s]: Added", langNameList[uiLangIndex].c_str()));
+			this->pLogger->log(MXFormat("LANGUAGE [%s]: Added", langNameList[uiLangIndex].c_str()));
 		}
 	}
 
@@ -869,126 +879,6 @@ string MultiLangTextController::GetFirstPageName() {
 	return pageNameStr;
 }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="castNumber">書き込み先テキストキャスト番号</param>
-/// <param name="pageNumber">プロジェクト言語ページ番号</param>
-/// <param name="textData">書き込みテキストデータ</param>
-/// <param name="inheritPropData">継承用先頭言語テキストデータ</param>
-/// <param name="isFirstPropInherit">継承用先頭言語テキストデータ有効フラグ</param>
-/// <param name="createPageFlag">新規言語ページ作成発生フラグ</param>
-/// <param name="isUTF">文字列UTFフラグ</param>
-/// <returns>成否</returns>
-bool MultiLangTextController::SetTextProperty(
-	int castNumber, int pageNumber, TextData& textData, TextData& inheritPropData,
-	bool isFirstPropInherit, bool createPageFlag, bool isUTF)
-{
-	bool mxResult = false;
-
-	bool inherit;
-
-	// 先頭言語ページの継承チェックを付けていない場合
-	if (!this->writeData.flagInheritPropertiesOfTheFirstLangPage) {
-		// 継承せず
-		inherit = false;
-	}
-	else {
-		// 新規の言語ページのみ継承チェック
-		if (this->writeData.flagInheritOnlyNewLangPage) {
-			// チェックつき
-			// 新規言語ページの作成が発生していた時のみ継承する
-			if (createPageFlag) {
-				inherit = true;
-			}
-			else {
-				inherit = false;
-			}
-		}
-		else {
-			// チェックなし->テキストキャストにすでに指定言語があっても継承する
-			inherit = true;
-		}
-	}
-
-	// 継承Onでも継承データが有効でない場合は継承しない
-	if (!isFirstPropInherit) {
-		inherit = false;
-	}
-
-	TextData usedPropData = inherit ? inheritPropData : textData;
-
-	// フォント名をテキストキャストに反映チェック　対象：フォント名、フォントスタイル
-	if (this->writeData.flagApplyFontNameToTextCast){
-		// フォント名を設定
-		mxResult = MxPluginPort_Cast_Text_SetFontName(castNumber, pageNumber, usedPropData.fontName.c_str());
-		if (!mxResult) {
-			this->pLogger->log(
-				"[error]Failed to set font name[" + usedPropData.fontName + "] to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
-			);
-			return false;
-		}
-
-		// フォントスタイルを設定
-		mxResult;
-		if (!mxResult) {
-			this->pLogger->log(
-				"[error]Failed to set font style to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
-			);
-			return false;
-		}
-	}
-
-	// フォントサイズをテキストキャストに反映チェック　対象：サイズ
-	if (this->writeData.flagApplyFontSizeToTextCast) {
-		mxResult = MxPluginPort_Cast_Text_SetFontSize(castNumber, pageNumber, (int)usedPropData.fontSize);
-		if (!mxResult) {
-			this->pLogger->log(
-				"[error]Failed to set font size to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
-			);
-			return false;
-		}
-	}
-
-	// 文字色をテキストキャストに反映チェック　対象：フォント色
-	if (this->writeData.flagApplyTextColorToTextCast) {
-		int colorValue = (textData.colorR & 0x000000ff)
-			+ ((textData.colorG << 8) & 0x0000ff00)
-			+ ((textData.colorB << 16) & 0x00ff0000);
-		mxResult = MxPluginPort_Cast_Text_SetFontColor(castNumber, pageNumber, colorValue);
-		if (!mxResult) {
-			this->pLogger->log(
-				"[error]Failed to set font color to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
-			);
-			return false;
-		}
-	}
-
-	// 文字列をテキストキャストに反映チェック　文字列
-	if (this->writeData.flagApplyStringToTextCast) {
-		bool isUnicodeTextCast = true;
-		if (isUTF) {
-			mxResult = MxPluginPort_Cast_Text_SetTextDataWIDE(castNumber, pageNumber, textData.wtext.c_str());
-			if (!mxResult) {
-				this->pLogger->log(
-					L"[error]Failed to set string to Cast[" + ::to_wstring(castNumber) + L"],Page[" + ::to_wstring(pageNumber) + L"]"
-				);
-				return false;
-			}
-		}
-		else {
-			mxResult = MxPluginPort_Cast_Text_SetTextDataANSI(castNumber, pageNumber, textData.text.c_str());
-			if (!mxResult) {
-				this->pLogger->log(
-					"[error]Failed to set string to Cast[" + ::to_string(castNumber) + "],Page[" + ::to_string(pageNumber) + "]"
-				);
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
 
 double MultiLangTextController::color_lum(int c)
 {

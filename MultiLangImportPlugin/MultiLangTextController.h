@@ -25,14 +25,13 @@ private:
 
 	bool UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex, bool addedCastFlag);
 
-	bool ImportTextDataRow2(int rowIndex, std::vector<TextData>& textDataRow);
+	bool ImportTextDataRow(int rowIndex, std::vector<TextData>& textDataRow);
 	bool CreateNewTextCast(int castnumber, std::string& castname, bool isUnicode);
 	bool CloneTextCast(int toCastNumber, int fromCastNumber);
 	void CloneTextCastPage(int toCastNumber, int toLangPage, int fromCastNumber, int fromLangPage, bool enableFontName, bool enableFontSize, bool enableFontColor);
 
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);
 	bool CreateLangPageToTextCast(int castNumber, int pageNumber, bool addedCastFlag, bool& createPageFlag);
-	bool SetTextProperty(int castNumber, int pageNumber, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool createPageFlag, bool isUTF);
 
 
 	bool CheckTextDataRowMustBeUTF(std::vector<TextData>& textDataRow);
