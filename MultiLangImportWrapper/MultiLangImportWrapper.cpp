@@ -35,7 +35,7 @@ using namespace System::Collections::Generic;
 //		String^ path = Environment::GetFolderPath(Environment::SpecialFolder::Personal);
 //		DirectoryInfo^ dirInfo = gcnew DirectoryInfo(path);
 //		//dirInfo = dirInfo->Parent;
-//		String^ logPath = dirInfo->ToString() + "\\..\\OutlineBuilder\\sgwrap.log";
+//		String^ logPath = dirInfo->ToString() + "\\..\\sgwrap.log";
 //		sw = gcnew StreamWriter(logPath, true);
 //
 //		sw->WriteLine("[" + System::DateTime::Now + "]" + msg);

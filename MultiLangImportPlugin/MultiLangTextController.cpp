@@ -70,28 +70,6 @@ bool MultiLangTextController::ImportTextData()
 
 
 /// <summary>
-/// 
-/// </summary>
-/// <returns></returns>
-#if 0
-bool MultiLangTextController::AddPageNames()
-{
-	// 言語ページ追加処理の有無確認
-	if (writeData.flagAddIfLanguagePageNotFound)
-	{
-		// 言語ページ追加処理
-		bool result = SetPageNames(writeData.languageNameList);
-		if (!result) {
-			this->pLogger->log(L"[error]Failed to add language pages.");
-			return false;
-		}
-	}
-
-	return true;
-}
-#endif
-
-/// <summary>
 /// UI側テキストデータのプロジェクトへのインポート開始
 /// </summary>
 /// <returns>インポート成否</returns>
@@ -484,49 +462,6 @@ void MultiLangTextController::CloneTextCastPage(
 	}
 }
 
-/// <summary>
-/// UI側テキストデータテーブルの行ごとにインポート
-/// </summary>
-/// <param name="castname">テキストキャスト名</param>
-/// <param name="textDataRow">テキストデータテーブル１行</param>
-/// <returns>インポート成否</returns>
-//bool MultiLangTextController::ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow)
-//{
-//	bool result = false;
-//
-//	// 指定の名前でキャストが既に存在するか確認する
-//	int castNumber = FindTextCastNumber(castname);
-//	if (0 <= castNumber) {
-//		// 指定の名前でキャストが既に存在する
-//		// 「既存のテキストキャストを更新しない」チェック
-//		if (this->writeData.flagNotUpdateExistingTextCast) {
-//			// 「更新しない：On」なので何もしない
-//			// ログ：スキップ
-//			this->pLogger->log("CAST [" + castname + "]: Skipped.");
-//			result = true;
-//		}
-//		else {
-//			// 更新する
-//			//result = this->UpdateTextCast(castname, textDataRow);
-//		}
-//	}
-//	else {
-//		// 指定の名前のキャストは存在しない
-//		// 不明なテキストキャストを新規に追加、するかどうか
-//		if (this->writeData.flagAddIfTextCastNotFound){
-//			// 追加する
-//			result = this->ImportTextDataAsNewCast(castname, textDataRow);
-//		}
-//		else {
-//			// 追加しない：何もしない
-//			// ログ：スキップ
-//			this->pLogger->log("CAST [" + castname + "]: Skipped.");
-//			result = true;
-//		}
-//	}
-//
-//	return result;
-//}
 
 bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& textData, std::string& langPageName, bool isUnicode, int cloneIndex, bool addedCastFlag)
 {
@@ -672,98 +607,6 @@ bool MultiLangTextController::CreateNewTextCast(int castNumber, std::string& cas
 	return true;
 }
 
-
-/// <summary>
-/// 新規テキストキャストとしてテキストデータをインポートする
-/// </summary>
-/// <param name="castname">テキストキャスト名</param>
-/// <param name="textDataRow">テキストデータテーブル１行</param>
-/// <returns>インポート成否</returns>
-//bool MultiLangTextController::ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow)
-//{
-//	bool result = false;
-//
-//	// キャスト番号の空きを取得
-//	int newCastNumber = this->GetNewTextCastNumber();
-//	int resultNumber;
-//
-//	// キャストの文字データはUnicodeにするかどうか
-//	// UIのチェックで新規キャストはUni or テキストデータがUniでなければならない
-//	bool isUTF = this->writeData.flagCreateAsUnicodeTextCast || this->CheckTextDataRowMustBeUTF(textDataRow);
-//	if (isUTF) {
-//		resultNumber = MxPluginPort_Cast_CreateTextEx(newCastNumber, (char*)castname.c_str(), set_UTF);
-//	}
-//	else {
-//		resultNumber = MxPluginPort_Cast_CreateTextEx(newCastNumber, (char*)castname.c_str(), set_ANSI);
-//	}
-//
-//	// テキストキャスト生成エラーを確認
-//	if (newCastNumber != resultNumber) {
-//		this->pLogger->log("[error]Failed to create new text cast[" + castname + "]" + (isUTF ? "[UTF]" : "[ANSI]"));
-//		return false;
-//	}
-//
-//	bool isFirstPropInherit = (-1 != this->columnIndexOfFirstPageName);
-//	TextData inheritPropData;
-//	if (isFirstPropInherit) {
-//		inheritPropData = textDataRow[this->columnIndexOfFirstPageName];
-//	}
-//
-//	int colCount = textDataRow.size();
-//	for (int colIndex = 0; colIndex < colCount; colIndex++) {
-//		result = SetTextDataCellToTextCast(newCastNumber, colIndex, textDataRow[colIndex], inheritPropData, isFirstPropInherit, isUTF);
-//		if (!result) {
-//			break;
-//		}
-//	}
-//
-//	return result;
-//}
-
-
-
-/// <summary>
-/// 番号指定のテキストキャストにある言語のテキストデータを登録する
-/// </summary>
-/// <param name="castNumber">書き込み先テキストキャスト番号</param>
-/// <param name="colIndex">UI側行番号</param>
-/// <param name="textData">書き込みテキストデータ</param>
-/// <param name="inheritPropData">継承用先頭言語テキストデータ（プロパティを使用）</param>
-/// <param name="isFirstPropInherit">継承用先頭言語テキストデータ有効フラグ</param>
-/// <param name="isUTF">文字列UTFフラグ</param>
-/// <returns>成否</returns>
-//bool MultiLangTextController::SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF)
-//{
-//	bool result = true;
-//
-//	// 文字列が空白であれば無効データとみなしているので何もしない
-//	if (!textData.isValidData) {
-//		return true;
-//	}
-//
-//	std::string langName = this->writeData.languageNameList[colIndex];
-//	
-//	int pageNumber = this->GetProjectLangNumber(langName);
-//	if (pageNumber < 0) {
-//		// プロジェクトに言語ページが登録されていないので、追加せずスキップ
-//		return true;
-//	}
-//
-//	bool createPageFlag = false;
-//	result = CreateLangPageToTextCast(castNumber, pageNumber, createPageFlag);
-//	if (!result) {
-//		// ログはCreateLangPageToTextCast関数の中にある
-//		return false;
-//	}
-//
-//	result = SetTextProperty(castNumber, pageNumber, textData, inheritPropData, isFirstPropInherit, createPageFlag, isUTF);
-//	if (!result) {
-//		// ログはSetTextProperty関数の中にある
-//		return false;
-//	}
-//
-//	return result;
-//}
 
 /// <summary>
 /// 番号指定のテキストキャストにプロジェクトの指定の言語ページを追加する（既存の場合は成功）

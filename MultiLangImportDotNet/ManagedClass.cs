@@ -47,10 +47,6 @@ namespace MultiLangImportDotNet
             Assembly a = Assembly.LoadFrom(location);
             // TextDataクラス情報をc++/cliラッパーdllから取得する
             this.typeCLITextData = a.GetType("CLITextData");
-
-            // 設定ファイルパスと配置フォルダ
-            //this.localToolFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + Properties.Resources.TOOL_NAME;
-            //this.settingFilePath = this.localToolFolder + "\\" + Properties.Resources.SETTING_FILE;
         }
 
         /// <summary>
@@ -65,8 +61,6 @@ namespace MultiLangImportDotNet
             this.appData = new ApplicationData();
             this.appData.MultiLangEnabled = this.multiLangEnabled;
             this.appData.LangPageNumberPrev = this.langPageNumberPrev;
-
-            //Logger.SetFilePath(Path.GetDirectoryName(projectFilePath) + "\\Plugin_DressUpTextCodeGen.log");
 
             // Open form
             Import.ImportForm importForm = new Import.ImportForm(this.appData);
@@ -93,15 +87,6 @@ namespace MultiLangImportDotNet
             this.projectName = projectnameObj as string;
             this.multiLangEnabled = (bool)multiLangEnabled;
             this.langPageNumberPrev = (int)langPageNumber;
-        }
-
-        /// <summary>
-        /// dll側へテーブルのスクリプトキャスト名を転送
-        /// </summary>
-        /// <returns>スクリプト名</returns>
-        public string DownloadFontColorTableScriptName()
-        {
-            return "";
         }
 
 

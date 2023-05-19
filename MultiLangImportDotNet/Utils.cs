@@ -44,16 +44,6 @@ namespace MultiLangImportDotNet
             }
 
             bool result = testedString.Any(c => UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(c));
-#if false
-            foreach(var c in testedString)
-            {
-                if (UNUSABLE_CHARS_STR_FOR_CASTNAME.Contains(c))
-                {
-                    return true;
-                }
-            }
-#endif
-
             return result;
         }
 

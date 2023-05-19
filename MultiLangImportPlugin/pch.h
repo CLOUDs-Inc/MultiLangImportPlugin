@@ -37,7 +37,6 @@
 #include "dllmain.h"
 #include "WrapperIf.h"
 #include "DataAccessor.h"
-#include "SingleLogger.h"
 #include "UnicodeLogger.h"
 #include "MultiLangTextController.h"
 

@@ -161,7 +161,6 @@
     <ClInclude Include="MxPluginLib.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SdkData.h" />
-    <ClInclude Include="SingleLogger.h" />
     <ClInclude Include="UnicodeLogger.h" />
     <ClInclude Include="WrapperIf.h" />
     <ClInclude Include="WriteData.h" />
@@ -178,10 +177,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SingleLogger.cpp" />
     <ClCompile Include="UnicodeLogger.cpp" />
     <ClCompile Include="WrapperIf.cpp" />
-    <ClCompile Include="WriteData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -63,8 +63,4 @@ public:
 	/// サブキャスト名指定インデックス
 	/// </summary>
 	int subcastNameIndex;
-
-
-	// 関数 ======================================
-	int getColumnIndexOfPageName(string pageName);
 };

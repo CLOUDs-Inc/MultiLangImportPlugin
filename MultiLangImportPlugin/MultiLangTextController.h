@@ -30,8 +30,6 @@ private:
 	bool CloneTextCast(int toCastNumber, int fromCastNumber);
 	void CloneTextCastPage(int toCastNumber, int toLangPage, int fromCastNumber, int fromLangPage, bool enableFontName, bool enableFontSize, bool enableFontColor);
 
-//	bool ImportTextDataRow(std::string& castname, std::vector<TextData>& textDataRow);
-//	bool ImportTextDataAsNewCast(std::string& castname, std::vector<TextData>& textDataRow);
 	bool SetTextDataCellToTextCast(int castNumber, int colIndex, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool isUTF);
 	bool CreateLangPageToTextCast(int castNumber, int pageNumber, bool addedCastFlag, bool& createPageFlag);
 	bool SetTextProperty(int castNumber, int pageNumber, TextData& textData, TextData& inheritPropData, bool isFirstPropInherit, bool createPageFlag, bool isUTF);
