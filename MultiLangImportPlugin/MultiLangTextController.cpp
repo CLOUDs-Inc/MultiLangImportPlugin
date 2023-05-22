@@ -385,6 +385,8 @@ void MultiLangTextController::CloneTextCastPage(
 		}
 		// 高さ
 		int height;
+		// Delphiの仕様により、符号が反転する
+		// Point値が正=>Pixel値が負。Pixel値が正=>Point値が負。
 		mxResult = MxPluginPort_Cast_Text_GetFontHeight(fromCastNumber, fromLangPage, &height);
 		if (mxResult) {
 			MxPluginPort_Cast_Text_SetFontHeight(toCastNumber, toLangPage, height);
