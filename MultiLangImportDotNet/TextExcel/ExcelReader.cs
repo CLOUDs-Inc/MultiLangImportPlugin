@@ -131,6 +131,7 @@ namespace MultiLangImportDotNet.TextExcel
             {   
                 // Excel Application block
                 var excelApp = new Excel.Application();
+                excelApp.Visible = false;
                 try
                 {
                     // Workbooks block

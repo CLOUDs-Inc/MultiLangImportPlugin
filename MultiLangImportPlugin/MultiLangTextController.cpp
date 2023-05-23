@@ -492,8 +492,14 @@ bool MultiLangTextController::UpdateTextCastLangPage(int castNumber, TextData& t
 		return result;
 	}
 
+
+	bool isCloneTextLangAssigned = false;
+	if (-1 != cloneIndex) {
+		MxPluginPort_Cast_Text_GetLanguageAssigned(cloneIndex, pageNumber, &isCloneTextLangAssigned);
+	}
 	// テキストキャストのプロパティを更新
-	if (-1 != cloneIndex && -1 != pageNumber) {
+	// クローン元のテキストキャストに言語がassigned checkされているか
+	if (isCloneTextLangAssigned) { 
 		// コピー元のテキストキャストと同じ値を設定
 		CloneTextCastPage(castNumber, pageNumber, cloneIndex, pageNumber, true, true, true);
 	}
