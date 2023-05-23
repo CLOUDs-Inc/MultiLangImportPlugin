@@ -111,6 +111,7 @@ namespace MultiLangImportDotNet.TextExcel
             List<bool> langNameANSIUnconvertableFlagList = new List<bool>();
             bool[] unusableCharLangNameFlags = null;
             List<string> textNameList = new List<string>();
+            List<int> textNameSkipIndexList = new List<int>();
             List<bool> textNameANSIUnconvertableFlagList = new List<bool>();
             Import.TextData[,] textDataTable = null;
 
@@ -154,37 +155,52 @@ namespace MultiLangImportDotNet.TextExcel
                                     //logger.Log("Multi Lang Sheet Opened.");
 
                                     // A列の"##"がある行を走査する
+                                    int rowFirst = 0;
+                                    int rowSecond = 0;
                                     int rowLang = 0;
                                     int rowStart = 0;
                                     int rowEnd = 0;
                                     var columns = sheetML.Columns;
                                     var col1 = columns[1];
-                                    var col1StartFound = col1.Find("##", SearchOrder: Excel.XlSearchOrder.xlByRows);
-                                    if(col1StartFound != null)
+                                    var col1FirstFound = col1.Find("##", SearchOrder: Excel.XlSearchOrder.xlByRows);
+                                    if(col1FirstFound != null)
                                     {
-                                        // A列の"##"がある行の後に""のある行を走査する
-                                        rowLang = col1StartFound.Row;
-                                        
-                                        var col1EndFound = col1.Find(string.Empty, After: col1StartFound, SearchOrder: Excel.XlSearchOrder.xlByRows);
-                                        if(col1EndFound != null)
+                                        // A列の"##"がある最初の行をチェックする
+                                        rowFirst = col1FirstFound.Row;
+
+                                        // A列の"##"があるもう一つの行をチェックする
+                                        var col1SecondFound = col1.Find("##", After: col1FirstFound, SearchOrder: Excel.XlSearchOrder.xlByRows);
+                                        if (col1SecondFound != null)
                                         {
-                                            rowEnd = col1EndFound.Row;
-                                            Marshal.ReleaseComObject(col1EndFound);
+                                            rowSecond = col1SecondFound.Row;
+                                            Marshal.ReleaseComObject(col1SecondFound);
                                         }
 
-                                        Marshal.ReleaseComObject(col1StartFound);
+                                        Marshal.ReleaseComObject(col1FirstFound);
                                     }
 
                                     Marshal.ReleaseComObject(col1);
                                     Marshal.ReleaseComObject(columns);
 
                                     // 行数が確認できなかった場合は、例外で処理終了
-                                    if((rowLang <= 0) || (rowEnd <= rowLang))
+                                    if(rowFirst <= 0 || rowSecond <= 0 )
                                     {
                                         throw new Exception();
                                     }
 
-                                    // データ行の開始は"##"のある行（言語名行）の次
+                                    if (rowFirst <= rowSecond)
+                                    {
+                                        rowLang = rowFirst;
+                                        rowEnd = rowSecond;
+                                    }
+                                    else
+                                    {
+                                        rowLang = rowSecond;
+                                        rowEnd = rowFirst;
+                                    }
+
+
+                                    // データ行の開始は言語名の行の次
                                     rowStart = rowLang + 1;
 
                                     // "##"が見つかった行を走査してどの列まで言語名で埋まっているかを確認する
@@ -210,13 +226,7 @@ namespace MultiLangImportDotNet.TextExcel
                                         throw new Exception();
                                     }
 
-                                    // テキストデータの行数と列数が確定したので、格納用データテーブルをnewする
-                                    textDataTable = new Import.TextData[rowEnd - rowStart, colEnd - colStart];
-
-                                    // 列数が確定：言語数が確定したので、Subcast名として使えない単語が存在する言語かどうかのフラグ配列をnewする
-                                    unusableCharLangNameFlags = new bool[colEnd - colStart];
-
-                                    // "A1:" + 言語名でブランクが見つかった列 + テキストキャスト名でブランクが見つかった行
+                                    // "A1:" + 言語名でブランクが見つかった列 + テキストキャスト名で"##"が見つかった行
                                     string ML_TEXT_TABLE_SHEET_RANGE =
                                         ML_TEXT_TABLE_SHEET_RANGE_pre + colEndLetter + rowEnd.ToString();
 
@@ -229,10 +239,18 @@ namespace MultiLangImportDotNet.TextExcel
                                         {
                                             var castNameCell = usedRange[rowIndex, 1];
                                             string castname = castNameCell.Value as string;
-                                            bool ansiConvertable = Utils.ANSIConvertTest(castname);
-                                            castname = Utils.CorrectCastNameForGrid(castname);
-                                            textNameList.Add(castname);
-                                            textNameANSIUnconvertableFlagList.Add(!ansiConvertable);
+                                            if (!string.IsNullOrWhiteSpace(castname))
+                                            {
+                                                bool ansiConvertable = Utils.ANSIConvertTest(castname);
+                                                castname = Utils.CorrectCastNameForGrid(castname);
+                                                textNameList.Add(castname);
+                                                textNameANSIUnconvertableFlagList.Add(!ansiConvertable);
+                                            }
+                                            else
+                                            {
+                                                // テキストキャスト名が空白でスキップした行インデックスを記録する
+                                                textNameSkipIndexList.Add(rowIndex);
+                                            }
 
                                             Marshal.ReleaseComObject(castNameCell);
                                         }
@@ -250,9 +268,23 @@ namespace MultiLangImportDotNet.TextExcel
                                             Marshal.ReleaseComObject(langNameCell);
                                         }
 
+                                        // テキストデータの行数と列数が確定したので、格納用データテーブルをnewする
+                                        textDataTable = new Import.TextData[
+                                            rowEnd - rowStart - textNameSkipIndexList.Count,
+                                            colEnd - colStart];
+
+                                        // 列数が確定：言語数が確定したので、Subcast名として使えない単語が存在する言語かどうかのフラグ配列をnewする
+                                        unusableCharLangNameFlags = new bool[colEnd - colStart];
+
                                         //for (int rowIndex = 0; rowIndex < (rowEnd - rowStart - 1); rowIndex++)
+                                        int targetRowIndex = 0;
                                         for (int rowIndex = rowStart; rowIndex < rowEnd; rowIndex++)
                                         {
+                                            if (textNameSkipIndexList.Contains(rowIndex))
+                                            {
+                                                continue;
+                                            }
+
                                             for (int colIndex = colStart; colIndex < colEnd; colIndex++)
                                             {
                                                 var dataCell = usedRange[rowIndex, colIndex];
@@ -305,7 +337,7 @@ namespace MultiLangImportDotNet.TextExcel
                                                                     bool isStrike = (bool)dataCellFont.Strikethrough;
 
                                                                     // 抽出したテキストデータをテーブルに格納する
-                                                                    textDataTable[rowIndex - rowStart, colIndex - colStart]
+                                                                    textDataTable[targetRowIndex, colIndex - colStart]
                                                                         = new Import.TextData(
                                                                             text, fontname, fontsize, fontColor,
                                                                             isBold, isItalic, isUnderline, isStrike, canConvToANSI
@@ -327,6 +359,9 @@ namespace MultiLangImportDotNet.TextExcel
 #endif
                                                 finally { Marshal.ReleaseComObject(dataCell); }
                                             }
+
+                                            // 次の格納行
+                                            targetRowIndex++;
                                         }
 
                                         // テキストデータテーブルの作成完了（Excelの読み取り処理終了）
