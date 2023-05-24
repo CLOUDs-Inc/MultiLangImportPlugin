@@ -82,7 +82,8 @@ namespace MultiLangImportDotNet.Import
                     this.dataGridViewTextMod.Columns[colIndex].HeaderCell.Style.ForeColor = Color.Red;
                 }
             }
-            
+
+            int rowHeaderTextWidth = 0;
             for(int rowIndex = 0; rowIndex < reader.TextTableRow; rowIndex++)
             {
                 int currentRowIndex = this.dataGridViewTextMod.Rows.Add();
@@ -91,6 +92,13 @@ namespace MultiLangImportDotNet.Import
                 {
                     this.dataGridViewTextMod.Rows[currentRowIndex].HeaderCell.Style.ForeColor = Color.Red;
                 }
+
+                int tempWidth = TextRenderer.MeasureText(
+                    this.dataGridViewTextMod.Rows[currentRowIndex].HeaderCell.Value.ToString(),
+                    this.dataGridViewTextMod.Font
+                    ).Width;
+                // 幅更新
+                rowHeaderTextWidth = (rowHeaderTextWidth < tempWidth) ? tempWidth : rowHeaderTextWidth;
 
                 for(int colIndex = 0; colIndex < reader.TextTableColumn; colIndex++)
                 {
@@ -106,6 +114,9 @@ namespace MultiLangImportDotNet.Import
                     }
                 }
             }
+
+            // 全データ表示後に行ヘッダテキスト幅に係数を掛けて行ヘッダ幅を変える
+            dataGridViewTextMod.RowHeadersWidth = (int)(rowHeaderTextWidth * 1.2f);
         }
 
         /// <summary>
