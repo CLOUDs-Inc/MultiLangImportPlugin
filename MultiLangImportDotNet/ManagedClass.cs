@@ -40,13 +40,38 @@ namespace MultiLangImportDotNet
         public ManagedClass()
         {
             // 当GUI dllパス
-            string location = Assembly.GetExecutingAssembly().Location;
+            string base_location = Assembly.GetExecutingAssembly().Location;
             // wrapper dllのパスを作成する
-            location = Path.GetDirectoryName(location) + "\\" + Properties.Resources.WRAPPER_DLL_FILENAME;
+            string location = Path.GetDirectoryName(base_location) + "\\" + Properties.Resources.WRAPPER_DLL_FILENAME;
 
             Assembly a = Assembly.LoadFrom(location);
             // TextDataクラス情報をc++/cliラッパーdllから取得する
             this.typeCLITextData = a.GetType("CLITextData");
+            Assembly asm;
+            try
+            {
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\BouncyCastle.Crypto.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\Enums.NET.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\ICSharpCode.SharpZipLib.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\MathNet.Numerics.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\Microsoft.IO.RecyclableMemoryStream.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OOXML.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OpenXml4Net.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OpenXmlFormats.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.Fonts.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.ImageSharp.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Buffers.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Memory.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Numerics.Vectors.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Runtime.CompilerServices.Unsafe.dll");
+                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Text.Encoding.CodePages.dll");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("LoadFrom error: " + ex.Message);
+                throw ex;
+            }
         }
 
         /// <summary>

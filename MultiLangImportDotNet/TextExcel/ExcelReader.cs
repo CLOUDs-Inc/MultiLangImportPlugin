@@ -11,6 +11,12 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using NPOI.HSSF.Util;
+using NPOI.SS.Util;
+
+
 namespace MultiLangImportDotNet.TextExcel
 {
     /// <summary>
@@ -96,6 +102,237 @@ namespace MultiLangImportDotNet.TextExcel
 
         public ExcelReader()
         {
+        }
+
+        public bool OpenExcelNPOI(string filepath)
+        {
+            bool result = false;
+
+            List<string> langNameList = new List<string>();
+            List<bool> langNameANSIUnconvertableFlagList = new List<bool>();
+            bool[] unusableCharLangNameFlags = null;
+            List<string> textNameList = new List<string>();
+            List<int> textNameSkipIndexList = new List<int>();
+            List<bool> textNameANSIUnconvertableFlagList = new List<bool>();
+            Import.TextData[,] textDataTable = null;
+
+            string ML_TEXT_TABLE_SHEET_RANGE_pre = "A1:"; // Multi-lang text table 多言語テキスト対応シート使用レンジテンプレート
+
+
+            // Multi Language Table Excelファイルパス用のファイルダイアログ展開
+            this.FilePathExcel = filepath;
+
+            var textcastDictionary = new OrderedDictionary();
+
+            //既存のExcelブックを読み込む
+            IWorkbook book = WorkbookFactory.Create(filepath);
+            var sheet = book.GetSheetAt(0);
+
+            int rowLangIndex = 0;
+            int rowStartIndex = 0;
+            int rowEndIndex = 0;
+
+            // A列の"##"がある行を走査する
+            bool tagFound = false;
+            for (int rowIndex = 0; rowIndex < 100; rowIndex++)
+            {
+                var row = sheet.GetRow(rowIndex);
+                if (row == null) { continue; }
+                var cell = row.GetCell(0);
+                if(cell == null) { continue; }
+                var text = cell.StringCellValue;
+
+                if (text.Trim().Equals("##"))
+                {
+                    tagFound = true;
+                    rowLangIndex = rowIndex;
+                    break;
+                }
+            }
+            // 何行か探して##がなかったのでエラー
+            if (!tagFound)
+            {
+                MessageBox.Show("Language row not found in 100 rows.");
+                return false;
+            }
+
+            // "##"が見つかった行を走査してどの列まで言語名で埋まっているかを確認する
+            int colStart = 1;
+            int colEnd = 0;
+            string colEndLetter = string.Empty;
+            var rowLangName = sheet.GetRow(rowLangIndex);
+            for (int colIndex = colStart; colIndex < 1000; colIndex++)
+            {
+                colEnd = colIndex;
+                var cell = rowLangName.GetCell(colIndex);
+                if(cell == null)
+                {
+                    break;
+                }
+                var langName = cell.StringCellValue;
+                if (string.IsNullOrWhiteSpace(langName))
+                {
+                    break;
+                }
+
+                // 言語名の確保
+                bool ansiConvertable = Utils.ANSIConvertTest(langName);
+                langNameList.Add(langName);
+                langNameANSIUnconvertableFlagList.Add(!ansiConvertable);
+            }
+
+            // データ行の開始は言語名の行の次
+            rowStartIndex = rowLangIndex + 1;
+
+            tagFound = false;
+            for (int rowIndex = rowStartIndex; rowIndex < int.MaxValue; rowIndex++)
+            {
+                rowEndIndex = rowIndex;
+
+                // 0列目（最初の列）
+                var row = sheet.GetRow(rowIndex);
+                if (row == null)
+                {
+                    // テキストキャスト名が空白でスキップした行インデックスを記録する
+                    textNameSkipIndexList.Add(rowIndex);
+                    continue;
+                }
+
+                var cell = row.GetCell(0);
+                if (cell == null)
+                {
+                    // テキストキャスト名が空白でスキップした行インデックスを記録する
+                    textNameSkipIndexList.Add(rowIndex);
+                    continue;
+                }
+
+                var castname = cell.StringCellValue;
+                // ２回目の##を見つけた所で終了
+                if (castname.Trim().Equals("##"))
+                {
+                    tagFound = true;
+                    break;
+                }
+
+                // テキストキャスト名を収集する
+                if (!string.IsNullOrWhiteSpace(castname))
+                {
+                    bool ansiConvertable = Utils.ANSIConvertTest(castname);
+                    castname = Utils.CorrectCastNameForGrid(castname);
+                    textNameList.Add(castname);
+                    textNameANSIUnconvertableFlagList.Add(!ansiConvertable);
+                }
+                else
+                {
+                    // テキストキャスト名が空白でスキップした行インデックスを記録する
+                    textNameSkipIndexList.Add(rowIndex);
+                }
+            }
+
+            // 何行か探して##がなかったのでエラー
+            if (!tagFound)
+            {
+                MessageBox.Show("Data Terminator not found in integer MAX value rows.");
+                return false;
+            }
+
+            // テキストデータの行数と列数が確定したので、格納用データテーブルをnewする
+            textDataTable = new Import.TextData[
+                rowEndIndex - rowStartIndex - textNameSkipIndexList.Count,
+                colEnd - colStart];
+
+            // 列数が確定：言語数が確定したので、Subcast名として使えない単語が存在する言語かどうかのフラグ配列をnewする
+            unusableCharLangNameFlags = new bool[colEnd - colStart];
+
+            int targetRowIndex = 0;
+            for (int rowIndex = rowStartIndex; rowIndex < rowEndIndex; rowIndex++)
+            {
+                if (textNameSkipIndexList.Contains(rowIndex))
+                {
+                    continue;
+                }
+
+                var row = sheet.GetRow(rowIndex);
+                for (int colIndex = colStart; colIndex < colEnd; colIndex++)
+                {
+                    var dataCell = row.GetCell(colIndex);
+                    if (dataCell == null)
+                    {
+                        continue;
+                    }
+
+                    string text = null;
+
+                    switch (dataCell.CellType)
+                    {
+                        case CellType.Numeric:
+                            var val = dataCell.NumericCellValue;
+                            text = val.ToString();
+                            break;
+                        case CellType.String:
+                            text = dataCell.StringCellValue;
+                            break;
+                    }
+                    if (text != null)
+                    {
+                        // テキストにキャスト名使用不可文字含有チェック
+                        bool hasUnusableChar = Utils.CheckNameHitUnusableSymbols(text);
+                        // テキスト：ANSI変換可否チェック
+                        bool canConvToANSI = Utils.ANSIConvertTest(text);
+
+                        // テキストにキャスト名使用不可文字が含まれていたら
+                        // テキストがANSI変換不可能だったら
+                        if (hasUnusableChar || !canConvToANSI)
+                        {
+                            // その言語列はsubcast名として使えないとしてフラグを立てる
+                            unusableCharLangNameFlags[colIndex - colStart] = true;
+                        }
+
+                        var style = dataCell.CellStyle;
+                        var font = style.GetFont(book);
+                        var xssfFont = (font as XSSFFont);
+                        byte[] rgb = { 0, 0, 0 };
+                        if(xssfFont != null)
+                        {
+                            var xssfColor = xssfFont.GetXSSFColor();
+                            if(xssfColor != null)
+                            {
+                                rgb = xssfColor.RGB;
+                            }
+                        }
+                        float fontsize = (float)font.FontHeightInPoints;
+                        string fontname = font.FontName;
+                        fontname = (fontname == null ? string.Empty : fontname);
+                        Color fontColor = Color.FromArgb((int)rgb[0], (int)rgb[1], (int)rgb[2]);
+                        bool isBold = false; // RG14未使用
+                        bool isItalic = false; // RG14未使用
+                        bool isUnderline = false; // RG14未使用
+                        bool isStrike = false; // RG14未使用
+
+                        // 抽出したテキストデータをテーブルに格納する
+                        textDataTable[targetRowIndex, colIndex - colStart]
+                            = new Import.TextData(
+                                text, fontname, fontsize, fontColor,
+                                isBold, isItalic, isUnderline, isStrike, canConvToANSI
+                              );
+                    }
+                }
+
+                // 次の格納行
+                targetRowIndex++;
+            }
+
+            // テキストデータテーブルの作成完了（Excelの読み取り処理終了）
+            // 収集データをインターフェース用プロパティにセット
+            this.TextDataTable = textDataTable;
+            this.LanguageNameList = langNameList;
+            this.LangNameANSIUnconvertableFlagList = langNameANSIUnconvertableFlagList;
+            this.TextCastNameList = textNameList;
+            this.TextNameANSIUnconvertableFlagList = textNameANSIUnconvertableFlagList;
+            this.LangHasTextWithUnusableCharList = unusableCharLangNameFlags.ToList();
+
+            // 処理成功
+            return true;
         }
 
         /// <summary>
@@ -452,6 +689,36 @@ namespace MultiLangImportDotNet.TextExcel
         /// </summary>
         readonly int[] rowOffsetTableStatus = { 0, 1, 2, 3 };
 
+        public void NPOITest()
+        {
+            string filepath = @"C:\Users\Tsuge\Documents\npoi_test_many.xlsx";
 
+
+            //既存のExcelブックを読み込む
+            IWorkbook book = WorkbookFactory.Create(filepath);
+            var sheet = book.GetSheetAt(0);
+
+            for (int rowIndex = 0; rowIndex < 80; rowIndex++)
+            {
+                var row = sheet.GetRow(rowIndex);
+                for (int colIndex = 0; colIndex < 5; colIndex++)
+                {
+                    var cell = row.GetCell(colIndex);
+
+                    var str = cell.StringCellValue;
+                    var style = cell.CellStyle;
+                    var font = style.GetFont(book);
+                    var rgb = (font as XSSFFont).GetXSSFColor().RGB;
+
+                    int point = (int)font.FontHeightInPoints;
+                    string fontname = font.FontName;
+
+                    Console.WriteLine("cell({0},{1}): text:{2} size:{3} font:{4} color[{5},{6},{7}]", rowIndex, colIndex, str, point, fontname, rgb[0], rgb[1], rgb[2]);
+
+
+                }
+            }
+
+        }
     }
 }

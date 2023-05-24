@@ -317,7 +317,8 @@ namespace MultiLangImportDotNet.Import
 
             // xlsxファイルロード
             var excelReader = new TextExcel.ExcelReader();
-            if (!excelReader.OpenExcel(filename))
+            if(!excelReader.OpenExcelNPOI(filename))
+            //if (!excelReader.OpenExcel(filename))
             {
                 MessageBox.Show("Excel file: read failed.");
                 return;
