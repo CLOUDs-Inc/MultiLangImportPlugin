@@ -115,8 +115,8 @@ namespace MultiLangImportDotNet.Import
                 }
             }
 
-            // 全データ表示後に行ヘッダテキスト幅に係数を掛けて行ヘッダ幅を変える
-            dataGridViewTextMod.RowHeadersWidth = (int)(rowHeaderTextWidth * 1.2f);
+            // 全データ表示後に行ヘッダテキスト幅に余白を加えて行ヘッダ幅を変える
+            dataGridViewTextMod.RowHeadersWidth = rowHeaderTextWidth + 40;
         }
 
         /// <summary>
