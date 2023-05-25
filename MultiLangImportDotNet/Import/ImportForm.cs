@@ -430,9 +430,6 @@ namespace MultiLangImportDotNet.Import
             // フォームのチェックボックス設定をアプリ管理データにセットする
             SetImportFormSettingToAppData(this.appData);
 
-
-
-
             // フォーム呼び出し元に通知OK
             this.DialogResult = DialogResult.OK;
 

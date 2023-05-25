@@ -29,29 +29,6 @@ using namespace System::Windows::Forms;
 using namespace System::Reflection;
 using namespace System::Collections::Generic;
 
-//void DEBUG_LOG(System::String^ msg) {
-//	StreamWriter^ sw = nullptr;
-//	try{
-//		String^ path = Environment::GetFolderPath(Environment::SpecialFolder::Personal);
-//		DirectoryInfo^ dirInfo = gcnew DirectoryInfo(path);
-//		//dirInfo = dirInfo->Parent;
-//		String^ logPath = dirInfo->ToString() + "\\..\\sgwrap.log";
-//		sw = gcnew StreamWriter(logPath, true);
-//
-//		sw->WriteLine("[" + System::DateTime::Now + "]" + msg);
-//		sw->Flush();
-//	}
-//	catch (Exception^)
-//	{
-//
-//	}
-//	finally{
-//		if (sw != nullptr) {
-//			sw->Close();
-//		}
-//	}
-//}
-
 namespace MultiLangImportWrapper
 {
 
@@ -66,20 +43,14 @@ namespace MultiLangImportWrapper
 		/// <returns></returns>
 		WrapperImpl()
 		{
-			//DEBUG_LOG("WrapperImpl::WrapperImpl start");
-			//MessageBox::Show("WrapperImpl::WrapperImpl start");
-
 			System::String^ loc = Assembly::GetExecutingAssembly()->Location;
 			loc = Path::GetDirectoryName(loc) + gcnew System::String(GUI_DLL);
-			//DEBUG_LOG("Asm Location: " + loc);
-			//MessageBox::Show(loc, "Asm Location");
 
 			Assembly^ assembly;
 			try {
 				assembly = Assembly::UnsafeLoadFrom(loc);
 			}
 			catch (System::Exception^) {
-				//DEBUG_LOG("WrapperImpl::WrapperImpl LoadForm error: " + e->ToString());
 				throw std::exception("DLL Load Error");
 			}
 			Type^ type = assembly->GetType("MultiLangImportDotNet.ManagedClass");
@@ -88,8 +59,6 @@ namespace MultiLangImportWrapper
 			managedObject = obj;
 			managedType = type;
 			managedTypeTextData = assembly->GetType("MultiLangImportDotNet.Import.TextData");
-			//DEBUG_LOG("WrapperImpl::WrapperImpl end");
-			//MessageBox::Show("WrapperImpl::WrapperImpl end");
 		}
 
 		/// <summary>

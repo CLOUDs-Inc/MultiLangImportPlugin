@@ -53,13 +53,7 @@ public:
 	bool ImportTextData();
 
 	bool SetProjectMLEnable();
-
-
-
 	string GetFirstPageName();
-
-
-
 
 	void TestWriteTextCast();
 };

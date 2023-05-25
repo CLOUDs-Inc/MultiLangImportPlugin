@@ -59,15 +59,18 @@ namespace MultiLangImportDotNet
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OOXML.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OpenXml4Net.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\NPOI.OpenXmlFormats.dll");
-                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.Fonts.dll");
-                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.ImageSharp.dll");
+                // ライセンス回避のため使用しない
+                // asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.Fonts.dll");
+                // ライセンス回避のため使用しない
+                // asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\SixLabors.ImageSharp.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Buffers.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Memory.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Numerics.Vectors.dll");
                 asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Runtime.CompilerServices.Unsafe.dll");
-                asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Text.Encoding.CodePages.dll");
+                // ライセンス回避のため使用しない
+                // asm = Assembly.UnsafeLoadFrom(Path.GetDirectoryName(base_location) + "\\System.Text.Encoding.CodePages.dll");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("LoadFrom error: " + ex.Message);
                 throw ex;
@@ -183,7 +186,6 @@ namespace MultiLangImportDotNet
         {
             int rowCount = this.appData.TextDataTable.GetLength(0);
             int colCount = this.appData.TextDataTable.GetLength(1);
-            //int rowCount = this.appData.TextCastNameList.Count;
             int outputColSize = this.appData.LanguageNameListModified.Count;
 
             object[,] dlTextDataTable = new Object[rowCount, outputColSize];

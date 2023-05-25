@@ -10,8 +10,4 @@ public:
 
 	bool multiLangEnabled;
 	int langPageNumber;
-
-	vector<string> textCastNames;
-	int textCastCount{ -1 };
-
 };

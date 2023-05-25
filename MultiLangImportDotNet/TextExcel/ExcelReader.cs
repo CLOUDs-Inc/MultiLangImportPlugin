@@ -90,46 +90,30 @@ namespace MultiLangImportDotNet.TextExcel
         /// </summary>
         public string FilePathExcel { get; private set; }
 
-        /// <summary>
-        /// キャスト名索引によるテキストキャストデータ辞書
-        /// </summary>
-        public OrderedDictionary TextCastDictionary { get; private set; }
-
-        /// <summary>
-        /// 出力スクリプト文字列
-        /// </summary>
-        public string OutputCode { get; private set; }
-
         public ExcelReader()
         {
         }
 
         public bool OpenExcelNPOI(string filepath)
         {
-            bool result = false;
-
             List<string> langNameList = new List<string>();
             List<bool> langNameANSIUnconvertableFlagList = new List<bool>();
-            bool[] unusableCharLangNameFlags = null;
+            bool[] unusableCharLangNameFlags;
             List<string> textNameList = new List<string>();
             List<int> textNameSkipIndexList = new List<int>();
             List<bool> textNameANSIUnconvertableFlagList = new List<bool>();
-            Import.TextData[,] textDataTable = null;
-
-            string ML_TEXT_TABLE_SHEET_RANGE_pre = "A1:"; // Multi-lang text table 多言語テキスト対応シート使用レンジテンプレート
+            Import.TextData[,] textDataTable;
 
 
             // Multi Language Table Excelファイルパス用のファイルダイアログ展開
             this.FilePathExcel = filepath;
-
-            var textcastDictionary = new OrderedDictionary();
 
             //既存のExcelブックを読み込む
             IWorkbook book = WorkbookFactory.Create(filepath);
             var sheet = book.GetSheetAt(0);
 
             int rowLangIndex = 0;
-            int rowStartIndex = 0;
+            int rowStartIndex;
             int rowEndIndex = 0;
 
             // A列の"##"がある行を走査する
@@ -142,7 +126,7 @@ namespace MultiLangImportDotNet.TextExcel
                 if(cell == null) { continue; }
                 var text = cell.StringCellValue;
 
-                if (text.Trim().Equals("##"))
+                if (text.Trim().Equals(TAG_STRING_BASE_CELL))
                 {
                     tagFound = true;
                     rowLangIndex = rowIndex;
@@ -159,7 +143,6 @@ namespace MultiLangImportDotNet.TextExcel
             // "##"が見つかった行を走査してどの列まで言語名で埋まっているかを確認する
             int colStart = 1;
             int colEnd = 0;
-            string colEndLetter = string.Empty;
             var rowLangName = sheet.GetRow(rowLangIndex);
             for (int colIndex = colStart; colIndex < 1000; colIndex++)
             {
@@ -208,7 +191,7 @@ namespace MultiLangImportDotNet.TextExcel
 
                 var castname = cell.StringCellValue;
                 // ２回目の##を見つけた所で終了
-                if (castname.Trim().Equals("##"))
+                if (castname.Trim().Equals(TAG_STRING_BASE_CELL))
                 {
                     tagFound = true;
                     break;
@@ -302,7 +285,7 @@ namespace MultiLangImportDotNet.TextExcel
                         }
                         float fontsize = (float)font.FontHeightInPoints;
                         string fontname = font.FontName;
-                        fontname = (fontname == null ? string.Empty : fontname);
+                        fontname = fontname ?? string.Empty;
                         Color fontColor = Color.FromArgb((int)rgb[0], (int)rgb[1], (int)rgb[2]);
                         bool isBold = false; // RG14未使用
                         bool isItalic = false; // RG14未使用
@@ -337,6 +320,7 @@ namespace MultiLangImportDotNet.TextExcel
 
         /// <summary>
         /// 多言語テキストデータ定義Excelファイルの読み取り
+        /// 未使用
         /// </summary>
         /// <param name="filepath">Excelファイルパス</param>
         /// <returns>成否</returns>
@@ -354,7 +338,6 @@ namespace MultiLangImportDotNet.TextExcel
 
             string ML_TEXT_TABLE_SHEET_RANGE_pre = "A1:"; // Multi-lang text table 多言語テキスト対応シート使用レンジテンプレート
 
-            //Logger logger = Logger.GetInstance();
 
             // Multi Language Table Excelファイルパス用のファイルダイアログ展開
             this.FilePathExcel = filepath;
@@ -380,8 +363,6 @@ namespace MultiLangImportDotNet.TextExcel
                         Excel.Workbook oWorkbookMultiLang = oWBs.Open(this.FilePathExcel);
                         try
                         {
-                            //logger.Log($"Multi Lang Table Opened: {this.FilePathExcel}");
-
                             // Sheets block
                             var worksheets = oWorkbookMultiLang.Sheets;
                             try
@@ -390,8 +371,6 @@ namespace MultiLangImportDotNet.TextExcel
                                 var sheetML = worksheets[1];
                                 try
                                 {
-                                    //logger.Log("Multi Lang Sheet Opened.");
-
                                     // A列の"##"がある行を走査する
                                     int rowFirst = 0;
                                     int rowSecond = 0;
@@ -499,7 +478,6 @@ namespace MultiLangImportDotNet.TextExcel
                                             var langNameCell = usedRange[rowLang, colIndex];
                                             string langName = langNameCell.Value as string;
                                             bool ansiConvertable = Utils.ANSIConvertTest(langName);
-                                            //langName = Utils.ChangeUnusableCharToUnderscore(langName);
                                             langNameList.Add(langName);
                                             langNameANSIUnconvertableFlagList.Add(!ansiConvertable);
 
@@ -514,7 +492,6 @@ namespace MultiLangImportDotNet.TextExcel
                                         // 列数が確定：言語数が確定したので、Subcast名として使えない単語が存在する言語かどうかのフラグ配列をnewする
                                         unusableCharLangNameFlags = new bool[colEnd - colStart];
 
-                                        //for (int rowIndex = 0; rowIndex < (rowEnd - rowStart - 1); rowIndex++)
                                         int targetRowIndex = 0;
                                         for (int rowIndex = rowStart; rowIndex < rowEnd; rowIndex++)
                                         {
@@ -619,7 +596,6 @@ namespace MultiLangImportDotNet.TextExcel
                                 finally
                                 {
                                     Marshal.ReleaseComObject(sheetML);
-                                    //logger.Log("Multi Lang Sheet Closed.");
                                 }
                                 // Worksheet(MultiLang) block
                             }
@@ -659,35 +635,6 @@ namespace MultiLangImportDotNet.TextExcel
 
             return result;
         }
-
-        /// <summary>
-        /// テキスト着せ替え用Excelファイル選択用ファイルダイアログの展開
-        /// </summary>
-        /// <param name="title">ダイアログの説明用文言</param>
-        /// <returns>ファイルパス、（キャンセル時string.Empty）</returns>
-        private string GetFileNameFromOpenFileDialog(string title)
-        {
-            string fileName = string.Empty;
-
-            using (OpenFileDialog ofDialog = new OpenFileDialog())
-            {
-                ofDialog.Title = title;
-                ofDialog.Filter = "xlsx files (*.xlsx)|*.xlsx";
-                ofDialog.RestoreDirectory = true;
-
-                if (ofDialog.ShowDialog() == DialogResult.OK)
-                {
-                    fileName = ofDialog.FileName;
-                }
-            }
-
-            return fileName;
-        }
-
-        /// <summary>
-        /// 各Statusで何行ずれるかのOffsetテーブル
-        /// </summary>
-        readonly int[] rowOffsetTableStatus = { 0, 1, 2, 3 };
 
         public void NPOITest()
         {
