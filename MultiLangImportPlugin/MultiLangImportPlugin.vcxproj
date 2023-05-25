@@ -161,6 +161,7 @@
     <ClInclude Include="MultiLangTextController.h" />
     <ClInclude Include="MxPluginLib.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SdkData.h" />
     <ClInclude Include="UnicodeLogger.h" />
     <ClInclude Include="WrapperIf.h" />
@@ -180,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="UnicodeLogger.cpp" />
     <ClCompile Include="WrapperIf.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MultiLangImportPlugin.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
