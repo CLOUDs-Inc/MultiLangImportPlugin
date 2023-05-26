@@ -145,7 +145,9 @@ namespace MultiLangImportDotNet
                 bool subcastOn = 
                     this.OptionData.Flags[OptionData.FLAG_USE_SUBCAST_NAME]
                     && this.OptionData.SubcastIndex != -1;
-                string conjunctionString = this.OptionData.ConjunctionString;
+                string conjunctionString = this.OptionData.Flags[OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME]
+                    ? "_" 
+                    : this.OptionData.ConjunctionString;
 
                 List<string> modList = new List<string>();
                 for (int index = 0; index < TextCastNameListInside.Count; index++)
