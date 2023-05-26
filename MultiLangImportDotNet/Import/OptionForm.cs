@@ -14,11 +14,14 @@ namespace MultiLangImportDotNet.Import
     {
         private ApplicationData appData;
 
-        public OptionForm(ApplicationData appData)
+        private INIReadWrite iniReadWrite;
+
+        public OptionForm(ApplicationData appData, INIReadWrite iniReadWrite)
         {
             InitializeComponent();
 
             this.appData = appData;
+            this.iniReadWrite = iniReadWrite;
         }
 
 
@@ -31,7 +34,7 @@ namespace MultiLangImportDotNet.Import
             optionData.ConjunctionString = this.textBoxConjunction.Text.Trim();
 
             // 使用不可言語を選択している場合は、選択を解除(index:-1)とする
-            if(0 <= this.listBoxSubcastName.SelectedIndex)
+            if (0 <= this.listBoxSubcastName.SelectedIndex)
             {
                 optionData.SubcastIndex = appData.LangHasTextWithUnusableCharList[this.listBoxSubcastName.SelectedIndex]
                     ? -1
@@ -41,6 +44,13 @@ namespace MultiLangImportDotNet.Import
             {
                 optionData.SubcastIndex = -1;
             }
+
+            // INIへオプション設定を保存
+            this.iniReadWrite.WriteBool(OptionData.FLAG_USE_SUBCAST_NAME, this.checkBoxUseSubcastName.Checked);
+            this.iniReadWrite.WriteBool(OptionData.FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST, this.checkBoxUseSubcastNameSearching.Checked);
+            this.iniReadWrite.WriteBool(OptionData.FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST, this.checkBoxAddSubcastNameCreating.Checked);
+            this.iniReadWrite.WriteBool(OptionData.FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME, this.checkBoxUseUnderscore.Checked);
+            this.iniReadWrite.WriteString(OptionData.TAG_SUBCAST_CONJ_STRING, this.textBoxConjunction.Text.Trim());
         }
 
         private void checkBoxUseSubcastName_CheckedChanged(object sender, EventArgs e)

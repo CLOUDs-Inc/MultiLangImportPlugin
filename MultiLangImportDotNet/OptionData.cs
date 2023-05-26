@@ -8,6 +8,8 @@ namespace MultiLangImportDotNet
 {
     public class OptionData
     {
+        INIReadWrite iniReadWrite;
+
         /// <summary>
         /// 各チェックボックス名をキーにした辞書（値：各チェックボックスの状態）
         /// </summary>
@@ -33,6 +35,9 @@ namespace MultiLangImportDotNet
         /// </summary>
         public static readonly string FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME = "FlagUseUnderscoreForConjunctionInSubcastName";
 
+
+        public static readonly string TAG_SUBCAST_CONJ_STRING = "SubCastConjunctionString";
+
         /// <summary>
         /// キャスト名サブキャスト名接続文字列
         /// </summary>
@@ -46,19 +51,20 @@ namespace MultiLangImportDotNet
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public OptionData()
+        public OptionData(INIReadWrite iniReadWrite)
         {
             this.Flags = new Dictionary<string, bool>();
+            this.iniReadWrite = iniReadWrite;
             Default();
         }
 
         public void Default()
         {
-            this.Flags[FLAG_USE_SUBCAST_NAME] = false;
-            this.Flags[FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST] = false;
-            this.Flags[FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST] = true;
-            this.Flags[FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME] = true;
-            this.ConjunctionString = "_";
+            this.Flags[FLAG_USE_SUBCAST_NAME] = this.iniReadWrite.ReadBool(FLAG_USE_SUBCAST_NAME);
+            this.Flags[FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST] = this.iniReadWrite.ReadBool(FLAG_USE_SUBCAST_NAME_WHEN_SEARCHING_FOR_CAST);
+            this.Flags[FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST] = this.iniReadWrite.ReadBool(FLAG_ADD_SUBCAST_NAME_WHEN_CREATING_A_NEW_CAST);
+            this.Flags[FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME] = this.iniReadWrite.ReadBool(FLAG_USE_UNDERSCORE_FOR_CONJUNCTION_IN_SUBCAST_NAME);
+            this.ConjunctionString = this.iniReadWrite.ReadString(TAG_SUBCAST_CONJ_STRING);
             this.SubcastIndex = -1;
         }
     }

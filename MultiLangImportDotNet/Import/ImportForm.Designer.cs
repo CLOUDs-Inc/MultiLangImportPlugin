@@ -376,6 +376,7 @@ namespace MultiLangImportDotNet.Import
             this.Controls.Add(this.buttonClose);
             this.Name = "ImportForm";
             this.Text = "Multi-language import [PLUGIN]";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ImportForm_FormClosed);
             this.Load += new System.EventHandler(this.ImportForm_Load);
             this.Resize += new System.EventHandler(this.ImportForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTextMod)).EndInit();

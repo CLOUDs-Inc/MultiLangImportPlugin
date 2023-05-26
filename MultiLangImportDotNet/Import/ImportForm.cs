@@ -15,16 +15,19 @@ namespace MultiLangImportDotNet.Import
     {
         ApplicationData appData;
 
+        INIReadWrite iniReadWrite;
+
         /// <summary>
         /// テキスト修飾情報表示ラベルの右上のx座標
         /// </summary>
         int labelTextModTopRightX = -1;
 
-        public ImportForm(ApplicationData appData)
+        public ImportForm(ApplicationData appData, INIReadWrite iniReadWrite)
         {
             InitializeComponent();
 
             this.appData = appData;
+            this.iniReadWrite = iniReadWrite;
         }
 
         private string GetFileNameFromOpenFileDialog()
@@ -227,9 +230,26 @@ namespace MultiLangImportDotNet.Import
             appData.Flags[ApplicationData.FLAG_APPLY_FONT_SIZE] = this.checkBoxApplyFontSize.Checked;
             appData.Flags[ApplicationData.FLAG_APPLY_TEXT_COLOR] = this.checkBoxApplyTextColor.Checked;
             appData.Flags[ApplicationData.FLAG_APPLY_STRING] = this.checkBoxApplyString.Checked;
+
             appData.Flags[ApplicationData.FLAG_LOG_OUTPUT] = this.checkBoxLogOutput.Checked;
         }
 
+        private void WriteFormDataToINI(INIReadWrite iniReadWrite)
+        {
+            iniReadWrite.WriteBool(ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND, this.checkBoxAddLangPage.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND, this.checkBoxAddTextCast.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST, this.checkBoxCreateAsUnicode.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_NOT_UPDATE_EXISTING_TEXT_CAST, this.checkBoxNotUpdate.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE, this.checkBoxInheritProperty.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_INHERIT_ONLY_NEW_LANG_PAGE, this.checkBoxInheritOnlyNewLang.Checked);
+
+            iniReadWrite.WriteBool(ApplicationData.FLAG_APPLY_FONT_NAME, this.checkBoxApplyFontname.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_APPLY_FONT_SIZE, this.checkBoxApplyFontSize.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_APPLY_TEXT_COLOR, this.checkBoxApplyTextColor.Checked);
+            iniReadWrite.WriteBool(ApplicationData.FLAG_APPLY_STRING, this.checkBoxApplyString.Checked);
+
+            iniReadWrite.WriteBool(ApplicationData.FLAG_LOG_OUTPUT, this.checkBoxLogOutput.Checked);
+        }
 
         private void SetEnableUIAfterExcelImport()
         {
@@ -350,7 +370,7 @@ namespace MultiLangImportDotNet.Import
 
         private void buttonOption_Click(object sender, EventArgs e)
         {
-            var optionForm = new OptionForm(this.appData);
+            var optionForm = new OptionForm(this.appData, this.iniReadWrite);
             if(DialogResult.OK != optionForm.ShowDialog(this))
             {
                 return;
@@ -430,6 +450,9 @@ namespace MultiLangImportDotNet.Import
             // フォームのチェックボックス設定をアプリ管理データにセットする
             SetImportFormSettingToAppData(this.appData);
 
+            // フォームのチェックの設定をIniに記録する
+            //WriteFormDataToINI(this.appData);
+
             // フォーム呼び出し元に通知OK
             this.DialogResult = DialogResult.OK;
 
@@ -461,6 +484,21 @@ namespace MultiLangImportDotNet.Import
         {
             // テキスト修飾情報表示用ラベルの右上のx座標を取得しておく
             this.labelTextModTopRightX = GetLabelTextModTopRightXPosition();
+
+            // フォームのチェック状態をINIから取得
+            this.checkBoxAddLangPage.Checked = this.appData.Flags[ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND];
+            this.checkBoxAddTextCast.Checked = this.appData.Flags[ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND];
+            this.checkBoxCreateAsUnicode.Checked = this.appData.Flags[ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST];
+            this.checkBoxNotUpdate.Checked = this.appData.Flags[ApplicationData.FLAG_NOT_UPDATE_EXISTING_TEXT_CAST];
+            this.checkBoxInheritProperty.Checked = this.appData.Flags[ApplicationData.FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE];
+            this.checkBoxInheritOnlyNewLang.Checked = this.appData.Flags[ApplicationData.FLAG_INHERIT_ONLY_NEW_LANG_PAGE];
+
+            this.checkBoxApplyFontname.Checked = this.appData.Flags[ApplicationData.FLAG_APPLY_FONT_NAME];
+            this.checkBoxApplyFontSize.Checked = this.appData.Flags[ApplicationData.FLAG_APPLY_FONT_SIZE];
+            this.checkBoxApplyTextColor.Checked = this.appData.Flags[ApplicationData.FLAG_APPLY_TEXT_COLOR];
+            this.checkBoxApplyString.Checked = this.appData.Flags[ApplicationData.FLAG_APPLY_STRING];
+
+            this.checkBoxLogOutput.Checked = this.appData.Flags[ApplicationData.FLAG_LOG_OUTPUT];
         }
 
         private void ImportForm_Resize(object sender, EventArgs e)
@@ -481,6 +519,11 @@ namespace MultiLangImportDotNet.Import
             // "Inherit properties ..."のチェックONの時だけ
             // "Inherit only new ..."を活性状態にする
             this.checkBoxInheritOnlyNewLang.Enabled = this.checkBoxInheritProperty.Checked;
+        }
+
+        private void ImportForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.WriteFormDataToINI(this.iniReadWrite);
         }
     }
 }

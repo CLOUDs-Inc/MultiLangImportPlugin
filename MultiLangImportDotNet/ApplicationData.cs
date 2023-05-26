@@ -330,10 +330,26 @@ namespace MultiLangImportDotNet
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ApplicationData()
+        public ApplicationData(INIReadWrite iniReadWrite)
         {
             this.Flags = new Dictionary<string, bool>();
-            this.OptionData = new OptionData();
+
+            // フォームのチェック状態をINIから取得
+            this.Flags[ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND] = iniReadWrite.ReadBool(ApplicationData.FLAG_ADD_IF_LANG_PAGE_NOT_FOUND);
+            this.Flags[ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND] = iniReadWrite.ReadBool(ApplicationData.FLAG_ADD_IF_TEXT_CAST_NOT_FOUND);
+            this.Flags[ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST] = iniReadWrite.ReadBool(ApplicationData.FLAG_CREATE_AS_UNICODE_TEXT_CAST);
+            this.Flags[ApplicationData.FLAG_NOT_UPDATE_EXISTING_TEXT_CAST] = iniReadWrite.ReadBool(ApplicationData.FLAG_NOT_UPDATE_EXISTING_TEXT_CAST);
+            this.Flags[ApplicationData.FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE] = iniReadWrite.ReadBool(ApplicationData.FLAG_INHERIT_PROPS_OF_THE_FIRST_LANG_PAGE);
+            this.Flags[ApplicationData.FLAG_INHERIT_ONLY_NEW_LANG_PAGE] = iniReadWrite.ReadBool(ApplicationData.FLAG_INHERIT_ONLY_NEW_LANG_PAGE);
+
+            this.Flags[ApplicationData.FLAG_APPLY_FONT_NAME] = iniReadWrite.ReadBool(ApplicationData.FLAG_APPLY_FONT_NAME);
+            this.Flags[ApplicationData.FLAG_APPLY_FONT_SIZE] = iniReadWrite.ReadBool(ApplicationData.FLAG_APPLY_FONT_SIZE);
+            this.Flags[ApplicationData.FLAG_APPLY_TEXT_COLOR] = iniReadWrite.ReadBool(ApplicationData.FLAG_APPLY_TEXT_COLOR);
+            this.Flags[ApplicationData.FLAG_APPLY_STRING] = iniReadWrite.ReadBool(ApplicationData.FLAG_APPLY_STRING);
+
+            this.Flags[ApplicationData.FLAG_LOG_OUTPUT] = iniReadWrite.ReadBool(ApplicationData.FLAG_LOG_OUTPUT);
+
+            this.OptionData = new OptionData(iniReadWrite);
         }
     }
 }

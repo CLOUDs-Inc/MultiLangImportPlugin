@@ -37,6 +37,12 @@ namespace MultiLangImportDotNet
         /// </summary>
         ApplicationData appData;
 
+        /// <summary>
+        /// 初期設定リーダーライター
+        /// </summary>
+        INIReadWrite iniReadWrite;
+
+
         public ManagedClass()
         {
             // 当GUI dllパス
@@ -47,6 +53,11 @@ namespace MultiLangImportDotNet
             Assembly a = Assembly.LoadFrom(location);
             // TextDataクラス情報をc++/cliラッパーdllから取得する
             this.typeCLITextData = a.GetType("CLITextData");
+
+            // 初期設定リーダーライターを準備
+            string iniFilePath = Path.GetDirectoryName(base_location) + "\\MLImpPlugin.ini";
+            this.iniReadWrite = new INIReadWrite(iniFilePath);
+
             Assembly asm;
             try
             {
@@ -86,12 +97,12 @@ namespace MultiLangImportDotNet
             bool result = false;
 
             // アプリ管理データを新規化
-            this.appData = new ApplicationData();
+            this.appData = new ApplicationData(this.iniReadWrite);
             this.appData.MultiLangEnabled = this.multiLangEnabled;
             this.appData.LangPageNumberPrev = this.langPageNumberPrev;
 
             // Open form
-            Import.ImportForm importForm = new Import.ImportForm(this.appData);
+            Import.ImportForm importForm = new Import.ImportForm(this.appData, this.iniReadWrite);
             if(DialogResult.OK == importForm.ShowDialog())
             {
                 result = true;
