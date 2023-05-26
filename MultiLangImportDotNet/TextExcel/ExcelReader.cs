@@ -110,7 +110,13 @@ namespace MultiLangImportDotNet.TextExcel
 
             //既存のExcelブックを読み込む
             IWorkbook book = WorkbookFactory.Create(filepath);
-            var sheet = book.GetSheetAt(0);
+            int sheetIndex = SelectSheetNPOI(book);
+            if(sheetIndex < 0)
+            {
+                MessageBox.Show("Sheet selection stop.");
+                return false;
+            }
+            var sheet = book.GetSheetAt(sheetIndex);
 
             int rowLangIndex = 0;
             int rowStartIndex;
@@ -317,6 +323,43 @@ namespace MultiLangImportDotNet.TextExcel
             // 処理成功
             return true;
         }
+
+        /// <summary>
+        /// Excelブックからシートとそのインデックスを指定する
+        /// </summary>
+        /// <param name="workbook">Excelブック</param>
+        /// <returns>シートインデックス（-1:未選択）</returns>
+        public int SelectSheetNPOI(IWorkbook workbook)
+        {
+            int index = -1;
+            
+            if(workbook.NumberOfSheets == 1)
+            {
+                return 0;
+            }
+
+            List<string> nameList = new List<string>();
+            for(int sheetIndex = 0; sheetIndex < workbook.NumberOfSheets; sheetIndex++)
+            {
+                var sheet = workbook.GetSheetAt(sheetIndex);
+                nameList.Add(sheet.SheetName);
+            }
+
+            string explanation = "Select a worksheet to import.";
+            string windowTitle = "Select a worksheet";
+            Import.SelectTextForm selectTextForm = new Import.SelectTextForm(nameList, explanation, windowTitle);
+            if(DialogResult.OK == selectTextForm.ShowDialog())
+            {
+                index = selectTextForm.SelectedIndex;
+            }
+            else
+            {
+                index = -1;
+            }
+    
+            return index;
+        }
+
 
         /// <summary>
         /// 多言語テキストデータ定義Excelファイルの読み取り
